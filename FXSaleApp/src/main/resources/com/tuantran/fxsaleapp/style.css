@@ -1,0 +1,41 @@
+
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Mar 23, 2023, 12:29:12 PM
+    Author     : TuanTran
+*/
+
+
+
+GridPane {
+    -fx-background-color: red;
+}
+
+Text.Title {
+    -fx-fill:yellow;
+    -fx-font-weight: bold;
+    -fx-font-size: 28;
+}
+
+Text.all_text {
+    -fx-fill:yellow;
+    -fx-font-weight: bold;
+ 
+}
+
+TextFeild.TaiKhoan {
+    
+}
+
+TextFeild.MatKhau {
+    
+}
+
+Button.DangNhap {
+    -fx-background-color: yellow;
+    -fx-text-fill: red;
+    -fx-font-weight: bold;
+}
