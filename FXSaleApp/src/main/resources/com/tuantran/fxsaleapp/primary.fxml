@@ -25,7 +25,7 @@
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="all_text" text="Mật khẩu" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
       <TextField fx:id="txtTaiKhoan" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextField fx:id="txtMatKhau" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Button mnemonicParsing="false" onAction="#dangNhap" styleClass="DangNhap" text="Đăng nhập" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+      <Button fx:id="btnDangNhap" mnemonicParsing="false" onAction="#dangNhap" styleClass="DangNhap" text="Đăng nhập" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
       <TextField fx:id="txtKiemTraXiuThoi" GridPane.columnIndex="2" GridPane.rowIndex="3" />
    </children>
 </GridPane>
