@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 
 /**
  * JavaFX App
@@ -14,10 +16,17 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+  
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        double screenWidth = bounds.getWidth();
+        double screenHeight = bounds.getHeight();
+
+        scene = new Scene(loadFXML("primary"), 640, 500);
         stage.setScene(scene);
         stage.show();
     }
