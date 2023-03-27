@@ -29,7 +29,8 @@ public class FormNhanVienBanHangController implements Initializable {
     static SanPhamService sanPhamService = new SanPhamService();
     List<SanPham> sanPhamDuocChon;
     List<SanPham> spService;
-    
+    int count;
+
     @FXML
     TableView<SanPham> tbSanPhams;
     @FXML
@@ -41,17 +42,17 @@ public class FormNhanVienBanHangController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        this.loadTableColumns();
+//        this.loadTableColumnsSanPham();
         try {
             spService = sanPhamService.getSanPham();
             sanPhamDuocChon = new ArrayList<>();
             this.loadTableData(null, this.tbSanPhams);
-            this.loadTableColumns(this.tbSanPhams);
+            this.loadTableColumnsSanPham(this.tbSanPhams);
             this.loadComboBox(this.cbSanPhams);
 
             this.addTextChange(this.txtSearch, this.tbSanPhams);
 //            ==========================================================================
-            this.loadTableColumns(this.tbSanPhamDuocChon);
+            this.loadTableColumnsSanPhamDuocChon(this.tbSanPhamDuocChon);
 
 //            this.loadTableData(null, tbSanPhamDuocChon);
         } catch (SQLException ex) {
@@ -59,8 +60,8 @@ public class FormNhanVienBanHangController implements Initializable {
         }
     }
 
-    private void loadTableColumns(TableView tableView) {
-        TableColumn colIdSanPham = new TableColumn("id");
+    private void loadTableColumnsSanPham(TableView tableView) {
+        TableColumn colIdSanPham = new TableColumn("Mã sản phẩm");
         TableColumn colTenSanPham = new TableColumn("Tên sản phẩm");
         TableColumn colGia = new TableColumn("Giá sản phẩm");
         TableColumn colDonVi = new TableColumn("Đơn vị");
@@ -74,12 +75,37 @@ public class FormNhanVienBanHangController implements Initializable {
         colIdKhuyenMai.setCellValueFactory(new PropertyValueFactory("idKhuyenMai"));
 
         TableColumn colLuaChon = new TableColumn("Lựa chọn");
-//        this.themButtonVaoTableColumn(colLuaChon, "Chọn nè");
+//        this.themButtonVaoTableColumnSanPham(colLuaChon, "Chọn nè");
 
         tableView.getColumns().clear();
         tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai);
 
-        this.themButtonVaoTableColumn(tableView, colLuaChon, "Chọn nha nha");
+        this.themButtonVaoTableColumnSanPham(tableView, colLuaChon, "Chọn nha nha");
+    }
+
+    private void loadTableColumnsSanPhamDuocChon(TableView tableView) {
+        TableColumn colIdSanPham = new TableColumn("Mã sản phẩm");
+        TableColumn colTenSanPham = new TableColumn("Tên sản phẩm");
+        TableColumn colGia = new TableColumn("Giá sản phẩm");
+        TableColumn colDonVi = new TableColumn("Đơn vị");
+        TableColumn colIdKhuyenMai = new TableColumn("Khuyến Mãi");
+        TableColumn colSoLuong = new TableColumn("Số lượng");
+
+//        pojo
+        colIdSanPham.setCellValueFactory(new PropertyValueFactory("idSanPham"));
+        colTenSanPham.setCellValueFactory(new PropertyValueFactory("tenSanPham"));
+        colGia.setCellValueFactory(new PropertyValueFactory("gia"));
+        colDonVi.setCellValueFactory(new PropertyValueFactory("donVi"));
+        colIdKhuyenMai.setCellValueFactory(new PropertyValueFactory("idKhuyenMai"));
+        colSoLuong.setCellValueFactory(new PropertyValueFactory("so_luong"));
+
+        TableColumn colLuaChon = new TableColumn("Xóa");
+//        this.themButtonVaoTableColumnSanPham(colLuaChon, "Chọn nè");
+
+        tableView.getColumns().clear();
+        tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai, colSoLuong);
+
+        this.themButtonVaoTableColumnSanPhamDuocChon(tableView, colLuaChon, "Xóa");
     }
 
     private void loadTableData(String keyword, TableView tableView) throws SQLException {
@@ -93,7 +119,7 @@ public class FormNhanVienBanHangController implements Initializable {
         tableColumn.setCellFactory(r -> {
             Button btn = new Button(nameButton);
 
-            this.xuLyButton(btn);
+            this.xuLyButtonThemSanPham(btn);
 
             TableCell c = new TableCell();
             c.setGraphic(btn);
@@ -101,11 +127,11 @@ public class FormNhanVienBanHangController implements Initializable {
         });
     }
 
-    private void themButtonVaoTableColumn(TableView tableView, TableColumn tableColumn, String nameButton) {
+    private void themButtonVaoTableColumnSanPham(TableView tableView, TableColumn tableColumn, String nameButton) {
         tableColumn.setCellFactory(r -> {
             Button btn = new Button(nameButton);
 
-            this.xuLyButton(btn);
+            this.xuLyButtonThemSanPham(btn);
 
             TableCell c = new TableCell();
             c.setGraphic(btn);
@@ -116,7 +142,22 @@ public class FormNhanVienBanHangController implements Initializable {
         tableView.getColumns().add(tableColumn);
     }
 
-    private void xuLyButton(Button button) {
+    private void themButtonVaoTableColumnSanPhamDuocChon(TableView tableView, TableColumn tableColumn, String nameButton) {
+        tableColumn.setCellFactory(r -> {
+            Button btn = new Button(nameButton);
+
+            this.xuLyButtonXoaSanPham(btn);
+
+            TableCell c = new TableCell();
+            c.setGraphic(btn);
+            return c;
+
+        });
+
+        tableView.getColumns().add(tableColumn);
+    }
+
+    private void xuLyButtonThemSanPham(Button button) {
         button.setOnAction(evt -> {
             Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn chọn?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
@@ -124,19 +165,50 @@ public class FormNhanVienBanHangController implements Initializable {
                     Button btnXuLy = (Button) evt.getSource();
                     TableCell cell = (TableCell) btnXuLy.getParent();
                     SanPham s = (SanPham) cell.getTableRow().getItem();
-                    sanPhamDuocChon.add(s);
-//                    button.setDisable(true);
-//                    cell.setDisable(true);
 
-//                    if(sanPhamDuocChon.isEmpty()) {
-//                        sanPhamDuocChon.add(s);
-//                        count++;
-//                    }
-//                    else {
-//                        for (SanPham sanPham : sanPhamDuocChon) {
-//                            
-//                        }
-//                    }
+//                    THUẬT TOÁN THÊM ĐẲNG CẤP :) RESET BIẾN ĐẾM ĐÚNG CHỖ :) TỐN 4 TIẾNG RƯỠI CỦA BỐ :)
+                    if (sanPhamDuocChon.isEmpty()) {
+                        sanPhamDuocChon.add(s);
+                        count = 0;
+                        Alert b = MessageBox.getBox("Question", "count = " + count , Alert.AlertType.CONFIRMATION);
+                        b.show();
+                    } else {
+                        for (SanPham sp : sanPhamDuocChon) {
+                            if (s.getIdSanPham() == sp.getIdSanPham()) {
+                                Alert b = MessageBox.getBox("Question", "count = " + count , Alert.AlertType.CONFIRMATION);
+                                b.show();
+                                count = 0;
+                                break;
+                            }
+                            else {
+                                count++;
+                                Alert b = MessageBox.getBox("Question", "count = " + count , Alert.AlertType.CONFIRMATION);
+                                b.show();
+                            }
+                        }
+                        if (count == sanPhamDuocChon.size()) {
+                            sanPhamDuocChon.add(s);
+                            count = 0;
+                            Alert b = MessageBox.getBox("Question", "count = " + count , Alert.AlertType.CONFIRMATION);
+                            b.show();
+                        }    
+                    }
+                }
+            });
+            this.tbSanPhamDuocChon.setItems(FXCollections.observableList(sanPhamDuocChon));
+        });
+
+    }
+
+    private void xuLyButtonXoaSanPham(Button button) {
+        button.setOnAction(evt -> {
+            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn xóa?", Alert.AlertType.CONFIRMATION);
+            a.showAndWait().ifPresent(res -> {
+                if (res == ButtonType.OK) {
+                    Button btnXuLy = (Button) evt.getSource();
+                    TableCell cell = (TableCell) btnXuLy.getParent();
+                    SanPham s = (SanPham) cell.getTableRow().getItem();
+                    sanPhamDuocChon.remove(s);
                 }
             });
             this.tbSanPhamDuocChon.setItems(FXCollections.observableList(sanPhamDuocChon));
@@ -155,7 +227,7 @@ public class FormNhanVienBanHangController implements Initializable {
             try {
                 this.loadTableData(textFeild.getText(), tableView);
 //                làm sao xóa được cái nút đây :(((
-//                this.loadTableColumns(tableView);
+//                this.loadTableColumnsSanPham(tableView);
             } catch (SQLException ex) {
                 Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
             }
