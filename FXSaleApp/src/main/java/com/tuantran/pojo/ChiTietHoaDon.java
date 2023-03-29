@@ -9,8 +9,8 @@ package com.tuantran.pojo;
  * @author TuanTran
  */
 public class ChiTietHoaDon {
-
-    private int idCTHD;
+    static int count = 13;
+    private int idCTHD = count++;
     private int idSanPham;
     private int idHoaDon;
     private int soLuong;
@@ -28,6 +28,12 @@ public class ChiTietHoaDon {
     }
     
     
+        public ChiTietHoaDon(int idSanPham, int idHoaDon, int soLuong, double thanhTien) {
+        this.idSanPham = idSanPham;
+        this.idHoaDon = idHoaDon;
+        this.soLuong = soLuong;
+        this.thanhTien = thanhTien;
+    }
 
     /**
      * @return the idCTHD

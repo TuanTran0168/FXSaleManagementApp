@@ -11,7 +11,8 @@ import java.sql.Date;
  * @author TuanTran
  */
 public class HoaDon {
-    private int idHoaDon;
+    static int count = 12;
+    private int idHoaDon = count++;
     private int idNhanVien;
     private int idChiNhanh;
     private int idThanhVien;
@@ -24,6 +25,15 @@ public class HoaDon {
 
     public HoaDon(int idHoaDon, int idNhanVien, int idChiNhanh, int idThanhVien, double tongTien, double soTienNhan, Date ngayCT) {
         this.idHoaDon = idHoaDon;
+        this.idNhanVien = idNhanVien;
+        this.idChiNhanh = idChiNhanh;
+        this.idThanhVien = idThanhVien;
+        this.tongTien = tongTien;
+        this.soTienNhan = soTienNhan;
+        this.ngayCT = ngayCT;
+    }
+    
+        public HoaDon(int idNhanVien, int idChiNhanh, int idThanhVien, double tongTien, double soTienNhan, Date ngayCT) {
         this.idNhanVien = idNhanVien;
         this.idChiNhanh = idChiNhanh;
         this.idThanhVien = idThanhVien;
