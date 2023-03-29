@@ -4,21 +4,38 @@
  */
 package com.tuantran.pojo;
 
+import com.tuantran.services.HoaDonService;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author TuanTran
  */
 public class HoaDon {
-    static int count = 12;
-    private int idHoaDon = count++;
+    static HoaDonService hoaDonService = new HoaDonService();
+    
+//    static int count = 0;
+    private int idHoaDon;
     private int idNhanVien;
     private int idChiNhanh;
     private int idThanhVien;
     private double tongTien;
     private double soTienNhan;
     private Date ngayCT;
+    
+//    {
+//        try {
+//            List<HoaDon> hoaDons = hoaDonService.getHoaDon(null);
+//            
+//            count = hoaDons.size();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(ChiTietHoaDon.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public HoaDon() {
     }

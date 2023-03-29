@@ -3,6 +3,7 @@ package com.tuantran.fxsaleapp;
 import com.tuantran.pojo.*;
 import com.tuantran.pojo.SanPham;
 import com.tuantran.services.ChiNhanhService;
+import com.tuantran.services.ChiTietHoaDonService;
 import com.tuantran.services.HoaDonService;
 import com.tuantran.services.SanPhamService;
 import com.tuantran.utils.MessageBox;
@@ -40,9 +41,10 @@ public class FormNhanVienBanHangController implements Initializable {
     static SanPhamService sanPhamService = new SanPhamService();
     static HoaDonService hoaDonService = new HoaDonService();
     static ChiNhanhService chiNhanhService = new ChiNhanhService();
-    
+    static ChiTietHoaDonService chiTietHoaDonService = new ChiTietHoaDonService();
+
     List<SanPham> sanPhamDuocChon;
-    
+
     List<SanPham> spService;
     int count;
     NhanVien nhanVienDiemDanh;
@@ -63,7 +65,8 @@ public class FormNhanVienBanHangController implements Initializable {
     TextField txtTestTen;
     @FXML
     TextField txtTestHo;
-    @FXML TextField txtDiaChi;
+    @FXML
+    TextField txtDiaChi;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -74,7 +77,6 @@ public class FormNhanVienBanHangController implements Initializable {
 //            ActionEvent a = btnGetObject.fire();
 //  
 //            handleButtonAction();
-            
 
             spService = sanPhamService.getSanPham();
             sanPhamDuocChon = new ArrayList<>();
@@ -107,7 +109,7 @@ public class FormNhanVienBanHangController implements Initializable {
         nhanVienDiemDanh = (NhanVien) currentStage.getUserData();
         this.txtTestHo.setText(nhanVienDiemDanh.getHoNhanVien());
         this.txtTestTen.setText(nhanVienDiemDanh.getTenNhanVien());
-       
+
         List<ChiNhanh> cn = chiNhanhService.getChiNhanhs(String.format("", nhanVienDiemDanh.getIdChiNhanh()));
         this.txtDiaChi.setText(cn.get(0).getDiaChi());
         Alert a = MessageBox.getBox("CC", nhanVienDiemDanh.getTenNhanVien(), Alert.AlertType.CONFIRMATION);
@@ -251,6 +253,8 @@ public class FormNhanVienBanHangController implements Initializable {
                     } else {
                         for (SanPham sp : sanPhamDuocChon) {
                             if (s.getIdSanPham() == sp.getIdSanPham()) {
+                                Alert c = MessageBox.getBox("Question", "Đã tồn tại sản phẩm", Alert.AlertType.CONFIRMATION);
+                                c.show();
                                 Alert b = MessageBox.getBox("Question", "count = " + count, Alert.AlertType.CONFIRMATION);
                                 b.show();
                                 count = 0;
@@ -271,40 +275,49 @@ public class FormNhanVienBanHangController implements Initializable {
                     }
                 }
             });
-            
+
             this.tbSanPhamDuocChon.setItems(FXCollections.observableList(sanPhamDuocChon));
         });
     }
-    
+
     @FXML
     public void xuLyThemHoaDon(ActionEvent evt) throws SQLException {
-        Date ngayCT = new Date(40,10,10);
-        
+        Date ngayCT = new Date(40, 10, 10);
+
         int idNhanVien = nhanVienDiemDanh.getIdNhanVien();
         int idChiNhanh = nhanVienDiemDanh.getIdChiNhanh();
-        HoaDon hoaDon = new HoaDon(idNhanVien, idChiNhanh, 1, 0, 0, ngayCT);
-        
+
+//         Lấy Số lượng Hóa đơn hiện tại
+        int soLuongHoaDon = hoaDonService.getHoaDon(null).size();
+//         Lấy số lượng chi tiết hóa đơn hiện tại
+        int soLuongChiTietHoaDon = chiTietHoaDonService.getChiTietHoaDon(null).size();
+
+//        Tạo hóa đơn
+        HoaDon hoaDon = new HoaDon(soLuongHoaDon + 1, idNhanVien, idChiNhanh, 1, 0, 0, ngayCT);
+
         List<ChiTietHoaDon> chiTietHoaDons = new ArrayList<>();
-        
+
         double tongTien = 0;
         double soTienNhan = 500000;
         for (SanPham sp : sanPhamDuocChon) {
             int soLuong = 2;
-            ChiTietHoaDon cthd = new ChiTietHoaDon(sp.getIdSanPham(), hoaDon.getIdHoaDon(), soLuong, sp.getGia());
+            soLuongChiTietHoaDon++;
+            ChiTietHoaDon cthd = new ChiTietHoaDon(soLuongChiTietHoaDon, sp.getIdSanPham(), hoaDon.getIdHoaDon(), soLuong, sp.getGia());
             chiTietHoaDons.add(cthd);
             tongTien += sp.getGia() * soLuong;
         }
-        
+
         hoaDon.setTongTien(tongTien);
         hoaDon.setSoTienNhan(soTienNhan);
-        hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
-//        try {
-//            hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
-//            MessageBox.getBox("Question", "Thêm hóa đơn thành công", Alert.AlertType.INFORMATION).show();
-//        } catch (SQLException ex) {
-//            MessageBox.getBox("Question", "Thêm hóa đơn thất bại", Alert.AlertType.INFORMATION).show();
-//            Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
+//        hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
+        try {
+            hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
+            MessageBox.getBox("Question", "Thêm hóa đơn thành công", Alert.AlertType.INFORMATION).show();
+        } catch (SQLException ex) {
+            MessageBox.getBox("Question", "Thêm hóa đơn thất bại", Alert.AlertType.INFORMATION).show();
+            Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void xuLyButtonXoaSanPham(Button button) {

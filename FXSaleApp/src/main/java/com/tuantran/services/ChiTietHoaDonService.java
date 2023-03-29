@@ -17,7 +17,7 @@ import java.util.List;
  * @author TuanTran
  */
 public class ChiTietHoaDonService {
-    public List<ChiTietHoaDon> getSanPham(String keyword) throws SQLException {
+    public List<ChiTietHoaDon> getChiTietHoaDon(String keyword) throws SQLException {
         List<ChiTietHoaDon> chiTietHoaDons = new ArrayList<>();
 
         try (Connection conn = JdbcUtils.getConn()) {

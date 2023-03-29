@@ -4,19 +4,38 @@
  */
 package com.tuantran.pojo;
 
+import com.tuantran.services.ChiTietHoaDonService;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author TuanTran
  */
 public class ChiTietHoaDon {
-    static int count = 13;
-    private int idCTHD = count++;
+
+    static ChiTietHoaDonService chiTietHoaDonService = new ChiTietHoaDonService();
+//    static int count = 0;
+    private int idCTHD;
     private int idSanPham;
     private int idHoaDon;
     private int soLuong;
     private double thanhTien;
 
+//    static {
+//        try {
+//            List<ChiTietHoaDon> chiTietHoaDons = chiTietHoaDonService.getChiTietHoaDon(null);
+//            
+//            count = chiTietHoaDons.size();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(ChiTietHoaDon.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+
     public ChiTietHoaDon() {
+
     }
 
     public ChiTietHoaDon(int idCTHD, int idSanPham, int idHoaDon, int soLuong, double thanhTien) {
@@ -26,9 +45,8 @@ public class ChiTietHoaDon {
         this.soLuong = soLuong;
         this.thanhTien = thanhTien;
     }
-    
-    
-        public ChiTietHoaDon(int idSanPham, int idHoaDon, int soLuong, double thanhTien) {
+
+    public ChiTietHoaDon(int idSanPham, int idHoaDon, int soLuong, double thanhTien) {
         this.idSanPham = idSanPham;
         this.idHoaDon = idHoaDon;
         this.soLuong = soLuong;
