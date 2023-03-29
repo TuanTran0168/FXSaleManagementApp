@@ -17,6 +17,19 @@ public class ThanhVien {
     private Date ngaySinhThanhVien;
     private String soDienThoai;
 
+    public ThanhVien() {
+    }
+
+    public ThanhVien(int idThanhVien, String hoThanhVien, String tenThanhVien, Date ngaySinhThanhVien, String soDienThoai) {
+        this.idThanhVien = idThanhVien;
+        this.hoThanhVien = hoThanhVien;
+        this.tenThanhVien = tenThanhVien;
+        this.ngaySinhThanhVien = ngaySinhThanhVien;
+        this.soDienThoai = soDienThoai;
+    }
+    
+    
+
     /**
      * @return the idThanhVien
      */

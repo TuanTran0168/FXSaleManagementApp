@@ -12,9 +12,30 @@ import java.sql.Date;
  */
 public class KhuyenMai {
     private int idKhuyenMai;
+    private String tenKhuyenMai;
     private double giaTri;
     private Date ngayBatDau;
     private Date ngayKetThuc;
+
+    public KhuyenMai() {
+    }
+
+    public KhuyenMai(int idKhuyenMai, double giaTri, Date ngayBatDau, Date ngayKetThuc) {
+        this.idKhuyenMai = idKhuyenMai;
+        this.giaTri = giaTri;
+        this.ngayBatDau = ngayBatDau;
+        this.ngayKetThuc = ngayKetThuc;
+    }
+
+    public KhuyenMai(int idKhuyenMai, String tenKhuyenMai, double giaTri, Date ngayBatDau, Date ngayKetThuc) {
+        this.idKhuyenMai = idKhuyenMai;
+        this.tenKhuyenMai = tenKhuyenMai;
+        this.giaTri = giaTri;
+        this.ngayBatDau = ngayBatDau;
+        this.ngayKetThuc = ngayKetThuc;
+    }
+    
+    
     /**
      * @return the idKhuyenMai
      */
@@ -70,5 +91,19 @@ public class KhuyenMai {
     public void setNgayKetThuc(Date ngayKetThuc) {
         this.ngayKetThuc = ngayKetThuc;
     }
+
+    /**
+     * @return the tenKhuyenMai
+     */
+    public String getTenKhuyenMai() {
+        return tenKhuyenMai;
+    }
+
+    /**
+     * @param tenKhuyenMai the tenKhuyenMai to set
+     */
+    public void setTenKhuyenMai(String tenKhuyenMai) {
+        this.tenKhuyenMai = tenKhuyenMai;
+    } 
     
 }

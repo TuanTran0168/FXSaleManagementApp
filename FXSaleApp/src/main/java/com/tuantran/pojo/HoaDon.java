@@ -4,13 +4,21 @@
  */
 package com.tuantran.pojo;
 
+import com.tuantran.services.HoaDonService;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author TuanTran
  */
 public class HoaDon {
+    static HoaDonService hoaDonService = new HoaDonService();
+    
+//    static int count = 0;
     private int idHoaDon;
     private int idNhanVien;
     private int idChiNhanh;
@@ -18,12 +26,31 @@ public class HoaDon {
     private double tongTien;
     private double soTienNhan;
     private Date ngayCT;
+    
+//    {
+//        try {
+//            List<HoaDon> hoaDons = hoaDonService.getHoaDon(null);
+//            
+//            count = hoaDons.size();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(ChiTietHoaDon.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public HoaDon() {
     }
 
     public HoaDon(int idHoaDon, int idNhanVien, int idChiNhanh, int idThanhVien, double tongTien, double soTienNhan, Date ngayCT) {
         this.idHoaDon = idHoaDon;
+        this.idNhanVien = idNhanVien;
+        this.idChiNhanh = idChiNhanh;
+        this.idThanhVien = idThanhVien;
+        this.tongTien = tongTien;
+        this.soTienNhan = soTienNhan;
+        this.ngayCT = ngayCT;
+    }
+    
+        public HoaDon(int idNhanVien, int idChiNhanh, int idThanhVien, double tongTien, double soTienNhan, Date ngayCT) {
         this.idNhanVien = idNhanVien;
         this.idChiNhanh = idChiNhanh;
         this.idThanhVien = idThanhVien;

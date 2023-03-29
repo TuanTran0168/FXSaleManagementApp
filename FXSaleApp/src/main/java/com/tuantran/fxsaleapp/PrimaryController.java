@@ -54,17 +54,21 @@ public class PrimaryController implements Initializable{
                     {
                         test = "Đây là quản lý nha";
                         String formName = "FormNhanVienBanHang";
-                        String formTilte = "Nhân viên bán hàng";
+                        String formTilte = "Quản lý bán hàng";
                         
-                        FORM_UTILS.newForm(formName, formTilte);
-                        Stage oldStage = (Stage) btnDangNhap.getScene().getWindow(); oldStage.close();
+//                        FORM_UTILS.newForm(formName, formTilte);
+                        FORM_UTILS.newForm(formName, formTilte, nv);
+                        Stage oldStage = (Stage) btnDangNhap.getScene().getWindow(); 
+                        
+                        oldStage.close();
                     }
                     else {
                         String formName = "FormNhanVienBanHang";
                         String formTilte = "Nhân viên bán hàng";
                         
-                        FORM_UTILS.newForm(formName, formTilte);
-                        Stage oldStage = (Stage) btnDangNhap.getScene().getWindow(); oldStage.close();
+                        FORM_UTILS.newForm(formName, formTilte, nv);
+                        Stage oldStage = (Stage) btnDangNhap.getScene().getWindow(); 
+                        oldStage.close();
                     }
 
                     break;

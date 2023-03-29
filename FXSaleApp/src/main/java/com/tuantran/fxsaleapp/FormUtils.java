@@ -47,6 +47,29 @@ public class FormUtils {
         formStage.setTitle(titleForm);
         formStage.setWidth(width);
         formStage.setHeight(height);
+        
+        formStage.show();
+    }
+    
+    
+    public void newForm(String formName, String titleForm, Object object) throws IOException {
+        formName = formName + ".fxml";
+        
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        double screenWidth = bounds.getWidth();
+        double screenHeight = bounds.getHeight();
+        
+        Parent form = FXMLLoader.load(getClass().getResource(formName));
+        Scene formScene = new Scene(form);
+        Stage formStage = new Stage();
+        formStage.setScene(formScene);
+
+        formStage.setTitle(titleForm);
+        formStage.setWidth(screenWidth);
+        formStage.setHeight(screenHeight);
+        formStage.setUserData(object);
         formStage.show();
     }
 }
