@@ -21,7 +21,7 @@ public class ChiTietHoaDon {
     private int idCTHD;
     private int idSanPham;
     private int idHoaDon;
-    private int soLuong;
+    private double soLuong;
     private double thanhTien;
 
 //    static {
@@ -38,7 +38,7 @@ public class ChiTietHoaDon {
 
     }
 
-    public ChiTietHoaDon(int idCTHD, int idSanPham, int idHoaDon, int soLuong, double thanhTien) {
+    public ChiTietHoaDon(int idCTHD, int idSanPham, int idHoaDon, double soLuong, double thanhTien) {
         this.idCTHD = idCTHD;
         this.idSanPham = idSanPham;
         this.idHoaDon = idHoaDon;
@@ -46,7 +46,7 @@ public class ChiTietHoaDon {
         this.thanhTien = thanhTien;
     }
 
-    public ChiTietHoaDon(int idSanPham, int idHoaDon, int soLuong, double thanhTien) {
+    public ChiTietHoaDon(int idSanPham, int idHoaDon, double soLuong, double thanhTien) {
         this.idSanPham = idSanPham;
         this.idHoaDon = idHoaDon;
         this.soLuong = soLuong;
@@ -98,14 +98,14 @@ public class ChiTietHoaDon {
     /**
      * @return the soLuong
      */
-    public int getSoLuong() {
+    public double getSoLuong() {
         return soLuong;
     }
 
     /**
      * @param soLuong the soLuong to set
      */
-    public void setSoLuong(int soLuong) {
+    public void setSoLuong(double soLuong) {
         this.soLuong = soLuong;
     }
 
