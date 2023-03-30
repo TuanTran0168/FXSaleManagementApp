@@ -10,12 +10,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 
 
-GridPane {
-    -fx-background-color: red;
+VBox {
+    -fx-background-color: linear-gradient(#02aab0, #00cdac);
 }
 
-Text.Title {
-    -fx-fill:yellow;
+Label.Title {
+    -fx-text-fill:#336699;
     -fx-font-weight: bold;
     -fx-font-size: 28;
 }
@@ -35,7 +35,7 @@ TextFeild.MatKhau {
 }
 
 Button.DangNhap {
-    -fx-background-color: yellow;
-    -fx-text-fill: red;
+    -fx-background-color: linear-gradient(#005bea, #00c6fb);
+    -fx-text-fill: white;
     -fx-font-weight: bold;
 }
