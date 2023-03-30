@@ -204,7 +204,7 @@
                                                 <Insets right="44.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <TextField prefHeight="25.0" prefWidth="119.0" HBox.hgrow="ALWAYS" />
+                                          <TextField fx:id="txtTienThoi" prefHeight="25.0" prefWidth="119.0" HBox.hgrow="ALWAYS" />
                                        </children>
                                     </HBox>
                                  </children>

@@ -41,7 +41,6 @@ public class PrimaryController implements Initializable{
     public void dangNhap(ActionEvent evt) throws IOException {
         String tk = this.txtTaiKhoan.getText();
         String mk = this.txtMatKhau.getText();
-        String test = "FAIL";
         NhanVienService nhanVienService = new NhanVienService();
         
         List<NhanVien> nhanViens;
@@ -51,8 +50,7 @@ public class PrimaryController implements Initializable{
                 if (nv.getTaiKhoan().equals(tk) && nv.getMatKhau().equals(mk)) {
                     if (nv.isQuanLy())
                     {
-                        test = "Đây là quản lý nha";
-                        String formName = "FormNhanVienBanHang";
+                        String formName = "FormQuanLyBanHang";
                         String formTilte = "Quản lý bán hàng";
                         
 //                        FORM_UTILS.newForm(formName, formTilte);
