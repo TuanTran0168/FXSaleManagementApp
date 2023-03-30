@@ -84,8 +84,8 @@ public class HoaDonService {
 
                 PreparedStatement stm1 = conn.prepareCall(query);
 
-                Alert d = MessageBox.getBox("Question", "BUG" + query, Alert.AlertType.CONFIRMATION);
-                d.show();
+//                Alert d = MessageBox.getBox("Question", "BUG" + query, Alert.AlertType.CONFIRMATION);
+//                d.show();
 
                 for (ChiTietHoaDon cthd : chiTietHoaDons) {
                     stm1.setInt(1, cthd.getIdCTHD());

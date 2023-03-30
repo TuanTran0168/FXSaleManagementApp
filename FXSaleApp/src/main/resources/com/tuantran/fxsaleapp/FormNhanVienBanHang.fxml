@@ -1,31 +1,287 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="814.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tuantran.fxsaleapp.FormNhanVienBanHangController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="856.0" stylesheets="@FormNhanVienBanHang.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tuantran.fxsaleapp.FormNhanVienBanHangController">
    <children>
-      <TextField fx:id="txtSearch" />
-      <TableView fx:id="tbSanPhams" prefHeight="200.0" prefWidth="200.0" />
-      <HBox prefHeight="40.0" prefWidth="814.0">
+      <HBox alignment="CENTER" layoutX="-29.0" layoutY="-21.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="82.0" prefWidth="856.0" styleClass="hbTitle" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#luuSoLuongSanPham" text="Lưu số lượng" />
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="63.0" prefWidth="610.0" text="THANH TOÁN HÓA ĐƠN" textAlignment="CENTER" textFill="#f20000" textOverrun="CENTER_ELLIPSIS">
+               <font>
+                  <Font name="System Bold" size="48.0" />
+               </font>
+            </Label>
          </children>
       </HBox>
-      <ComboBox fx:id="cbSanPhams" prefWidth="150.0" />
-      <TableView fx:id="tbSanPhamDuocChon" prefHeight="200.0" prefWidth="200.0" />
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox layoutX="14.0" layoutY="91.0" prefHeight="389.0" prefWidth="856.0" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
          <children>
-            <Button fx:id="btnGetObject" mnemonicParsing="false" onAction="#xuLyDiemDanh" text="Lấy object" />
-            <TextField fx:id="txtTestHo" />
-            <TextField fx:id="txtTestTen" />
-            <TextField fx:id="txtDiaChi" />
-            <Button mnemonicParsing="false" onAction="#xuLyThemHoaDon" text="Thêm Hóa Đơn" />
+            <VBox prefHeight="369.0" prefWidth="459.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="97.0">
+                           <children>
+                              <Label text="Nhân viên: " textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font></Label>
+                              <Label text="Chi nhánh:" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font></Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="7.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="46.0" prefWidth="298.0" spacing="2.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="8.0" prefWidth="377.0">
+                                 <children>
+                                    <Label fx:id="txtTestHo" text="Họ" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets right="2.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="txtTestTen" text="Tên" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <Label fx:id="txtDiaChi" alignment="CENTER" text="Địa chỉ" VBox.vgrow="ALWAYS">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font></Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <Button mnemonicParsing="false" onAction="#xuLyDiemDanh" prefHeight="42.0" prefWidth="106.0" text="Nhận ca" textFill="#e50505" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets left="15.0" top="15.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets right="10.0" top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Thông tin các mặt hàng:" textAlignment="CENTER" textFill="#3f1386" textOverrun="CENTER_ELLIPSIS">
+                     <font>
+                        <Font name="System Bold Italic" size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="txtSearchSanPham" promptText="Nhập tên sản phẩm..." VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets right="10.0" top="20.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <TableView fx:id="tbSanPhams" editable="true" prefHeight="125.0" prefWidth="501.0" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="5.0" right="10.0" top="5.0" />
+                     </VBox.margin>
+                  </TableView>
+                  <TableView fx:id="tbSanPhamDuocChon" editable="true" prefHeight="149.0" prefWidth="507.0" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets right="10.0" />
+                     </VBox.margin>
+                  </TableView>
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="180.0">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Separator>
+            <VBox alignment="BASELINE_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="369.0" prefWidth="163.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="160.0" text="Thông tin hóa đơn" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox prefHeight="378.0" prefWidth="253.0" spacing="5.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <VBox alignment="CENTER_LEFT" prefHeight="139.0" prefWidth="271.0" spacing="5.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Label text="Thông tin thành viên:" VBox.vgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="txtSearchThanhVien" promptText="Nhập thông tin thành viên" VBox.vgrow="ALWAYS">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                              <TableView fx:id="tbThanhVien" prefHeight="199.0" prefWidth="272.0" />
+                              <VBox prefHeight="231.0" prefWidth="222.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="35.0" prefHeight="22.0" prefWidth="222.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Thành tiền:" HBox.hgrow="ALWAYS">
+                                             <HBox.margin>
+                                                <Insets right="37.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField fx:id="txtThanhTien" disable="true" prefHeight="25.0" prefWidth="101.0" HBox.hgrow="ALWAYS">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="22.0" prefWidth="222.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <Label text="KH áp dụng:" HBox.hgrow="ALWAYS">
+                                             <HBox.margin>
+                                                <Insets right="30.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField fx:id="txtThanhVienApDung" disable="true" HBox.hgrow="ALWAYS">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </TextField>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <Separator prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                    <HBox alignment="CENTER" prefHeight="22.0" prefWidth="222.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Tiền khách đưa:" HBox.hgrow="ALWAYS">
+                                             <HBox.margin>
+                                                <Insets right="15.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField fx:id="txtTienNhan" prefHeight="25.0" prefWidth="101.0" HBox.hgrow="ALWAYS">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="89.0" prefHeight="22.0" prefWidth="222.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Tiền thừa:" HBox.hgrow="ALWAYS">
+                                             <HBox.margin>
+                                                <Insets right="44.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField prefHeight="25.0" prefWidth="119.0" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </children>
+         <padding>
+            <Insets left="30.0" right="30.0" />
+         </padding>
       </HBox>
+      <VBox alignment="CENTER_LEFT" layoutX="127.0" layoutY="443.0" prefHeight="75.0" prefWidth="856.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Label text="Tiện ích:" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER_LEFT" prefHeight="48.0" prefWidth="905.0" spacing="20.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="btnThanhToan" mnemonicParsing="false" onAction="#xuLyThemHoaDon" prefHeight="25.0" prefWidth="117.0" styleClass="btnUtilities" text="Thanh toán" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" styleClass="btnUtilities" text="In hóa đơn" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></Button>
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" styleClass="btnUtilities" text=" Làm tươi" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></Button>
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" styleClass="btnUtilities" text="Khác" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></Button>
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" styleClass="btnUtilities" text="Lịch sử" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></Button>
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" styleClass="btnLogout" text="Đăng xuất" textAlignment="CENTER" textFill="WHITE" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="30.0" right="30.0" />
+         </padding>
+      </VBox>
    </children>
-</VBox>
+</AnchorPane>

@@ -27,7 +27,6 @@ import javafx.stage.Stage;
 public class PrimaryController implements Initializable{
     @FXML private TextField txtTaiKhoan;
     @FXML private TextField txtMatKhau;
-    @FXML private TextField txtKiemTraXiuThoi;
     @FXML private Button btnDangNhap;
     
     private static Scene scene;
@@ -74,8 +73,6 @@ public class PrimaryController implements Initializable{
                     break;
                 }
             }
-            
-            txtKiemTraXiuThoi.setText(test);
         } catch (SQLException ex) {
             Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
         }

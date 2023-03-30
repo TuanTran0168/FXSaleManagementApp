@@ -3,18 +3,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to c
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
 */
 /* 
-    Created on : Mar 25, 2023, 10:45:33 AM
-    Author     : TuanTran
+    Created on : Mar 29, 2023, 4:50:27 PM
+    Author     : Sy_Tuan
 */
 
-HBox.hbTitle {
-    -fx-background-color: lightblue;
-}
-
-Button.btnUtilities {
-    -fx-background-color: lightblue;
-}
-
-Button.btnLogout {
+Hbox.btnLogout {
     -fx-background-color: red;
 }
+
