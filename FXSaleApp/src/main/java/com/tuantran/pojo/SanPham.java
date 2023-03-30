@@ -14,6 +14,8 @@ public class SanPham {
     private double gia;
     private String donVi;
     private int idKhuyenMai;
+    
+    private double soLuongTemp = 1;
 
     @Override
     public String toString() {
@@ -100,5 +102,19 @@ public class SanPham {
      */
     public void setIdKhuyenMai(int idKhuyenMai) {
         this.idKhuyenMai = idKhuyenMai;
+    }
+
+    /**
+     * @return the soLuongTemp
+     */
+    public double getSoLuongTemp() {
+        return soLuongTemp;
+    }
+
+    /**
+     * @param soLuongTemp the soLuongTemp to set
+     */
+    public void setSoLuongTemp(double soLuongTemp) {
+        this.soLuongTemp = soLuongTemp;
     }
 }

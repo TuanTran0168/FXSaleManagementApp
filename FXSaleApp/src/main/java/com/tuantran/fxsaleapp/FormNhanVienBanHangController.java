@@ -13,11 +13,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,11 +35,15 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.converter.DoubleStringConverter;
 
 public class FormNhanVienBanHangController implements Initializable {
 
@@ -44,6 +53,7 @@ public class FormNhanVienBanHangController implements Initializable {
     static ChiTietHoaDonService chiTietHoaDonService = new ChiTietHoaDonService();
 
     List<SanPham> sanPhamDuocChon;
+    List<String> listSoLuongSanPhamDuocChon;
 
     List<SanPham> spService;
     int count;
@@ -70,16 +80,13 @@ public class FormNhanVienBanHangController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        this.loadTableColumnsSanPham();
         try {
-//            Alert a = MessageBox.getBox("CC", nv.getTenNhanVien(), Alert.AlertType.CONFIRMATION);
-//            a.show();
-//            ActionEvent a = btnGetObject.fire();
-//  
-//            handleButtonAction();
+            
+            this.tbSanPhamDuocChon.setEditable(true);
+            sanPhamDuocChon = new ArrayList<>();
+            listSoLuongSanPhamDuocChon = new ArrayList<>();
 
             spService = sanPhamService.getSanPham();
-            sanPhamDuocChon = new ArrayList<>();
             this.loadTableDataSanPham(null, this.tbSanPhams);
             this.loadTableColumnsSanPham(this.tbSanPhams);
             this.loadComboBox(this.cbSanPhams);
@@ -127,8 +134,6 @@ public class FormNhanVienBanHangController implements Initializable {
     }
 
     public void showThongTin_1() {
-//        Scene currentScene = ((Node) btnGetObject.getScene());
-
         Scene currentScene = ((Node) this.btnGetObject).getScene();
         Stage currentStage = (Stage) currentScene.getWindow();
         NhanVien nv = (NhanVien) currentStage.getUserData();
@@ -159,13 +164,14 @@ public class FormNhanVienBanHangController implements Initializable {
         this.themButtonVaoTableColumnSanPham(tableView, colLuaChon, "Chọn nha nha");
     }
 
+//    TableColumn colSoLuong = new TableColumn("Số lượng");
     private void loadTableColumnsSanPhamDuocChon(TableView tableView) {
         TableColumn colIdSanPham = new TableColumn("Mã sản phẩm");
         TableColumn colTenSanPham = new TableColumn("Tên sản phẩm");
         TableColumn colGia = new TableColumn("Giá sản phẩm");
         TableColumn colDonVi = new TableColumn("Đơn vị");
         TableColumn colIdKhuyenMai = new TableColumn("Khuyến Mãi");
-        TableColumn colSoLuong = new TableColumn("Số lượng");
+        TableColumn<SanPham, Double> colSoLuong = new TableColumn<>("Số lượng");
 
 //        pojo
         colIdSanPham.setCellValueFactory(new PropertyValueFactory("idSanPham"));
@@ -173,16 +179,85 @@ public class FormNhanVienBanHangController implements Initializable {
         colGia.setCellValueFactory(new PropertyValueFactory("gia"));
         colDonVi.setCellValueFactory(new PropertyValueFactory("donVi"));
         colIdKhuyenMai.setCellValueFactory(new PropertyValueFactory("idKhuyenMai"));
-        colSoLuong.setCellValueFactory(new PropertyValueFactory("so_luong"));
-//        colSoLuong.setEditable(true);
+        colSoLuong.setCellValueFactory(new PropertyValueFactory("soLuongTemp"));
+        colSoLuong.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        
+        
+        colSoLuong.setOnEditCommit((TableColumn.CellEditEvent<SanPham, Double> event) -> {
+            SanPham sp = event.getTableView().getItems().get(event.getTablePosition().getRow());
+            
+            sp.setSoLuongTemp(event.getNewValue());
+        });
+        
+        colSoLuong.setEditable(true);
+
+//        String title = "Thay đổi số lượng của sản phẩm";
+//        String headerText = "Số lượng";
+//        String contentText = "Mời bạn nhập số lượng: ";
+//        this.chinhSuaColumnTrongTableView(tableView, colSoLuong, title, headerText, contentText);
 
         TableColumn colLuaChon = new TableColumn("Xóa");
-//        this.themButtonVaoTableColumnSanPham(colLuaChon, "Chọn nè");
 
         tableView.getColumns().clear();
         tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai, colSoLuong);
 
         this.themButtonVaoTableColumnSanPhamDuocChon(tableView, colLuaChon, "Xóa");
+//        String nameTextField = "1";
+//        this.themTextFieldVaoTableColumnSanPhamDuocChon(tableView, colSoLuong, nameTextField);
+    }
+
+    private void chinhSuaColumnTrongTableView(TableView tableView, TableColumn tableColumn, String title, String headerText, String contentText) {
+        tableColumn.setCellFactory(column -> {
+            return new TableCell<SanPham, String>() {
+                @Override
+                public void startEdit() {
+                    super.startEdit();
+                    
+                    TextInputDialog dialog = new TextInputDialog(getItem());
+                    dialog.setTitle(title);
+                    dialog.setHeaderText(headerText);
+                    dialog.setContentText(contentText);
+
+                    Optional<String> result = dialog.showAndWait();
+
+                    if (result.isPresent()) {
+                        commitEdit(result.get());
+                        listSoLuongSanPhamDuocChon.add(result.get());
+                    } else {
+                        cancelEdit();
+                    }
+                }
+
+                @Override
+                public void cancelEdit() {
+                    super.cancelEdit();
+                }
+
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (empty) {
+                        setText(null);
+                    } else {
+                        setText(item);
+                    }
+                }
+            };
+        });
+
+        tableView.setEditable(true);
+    }
+
+    @FXML
+    public void luuSoLuongSanPham(ActionEvent evt) throws SQLException {
+        
+//        SanPham sp = (SanPham) this.tbSanPhamDuocChon.getItems().get(0);
+        this.listSoLuongSanPhamDuocChon = new ArrayList<String>();
+        for (SanPham s : this.tbSanPhamDuocChon.getItems()) {
+            
+            this.listSoLuongSanPhamDuocChon.add(Double.toString(s.getSoLuongTemp()));
+        }
     }
 
     private void loadTableDataSanPham(String keyword, TableView tableView) throws SQLException {
@@ -234,6 +309,23 @@ public class FormNhanVienBanHangController implements Initializable {
         tableView.getColumns().add(tableColumn);
     }
 
+    private void themTextFieldVaoTableColumnSanPhamDuocChon(TableView tableView, TableColumn tableColumn, String nameTextField) {
+        tableColumn.setCellFactory(r -> {
+            TextField txt = new TextField(nameTextField);
+
+            TableCell c = new TableCell();
+            c.setGraphic(txt);
+            return c;
+        });
+
+        tableView.getColumns().add(tableColumn);
+    }
+
+    private void themTextFieldVaoTableCellSanPhamDuocChon(TableView tableView, TableCell tableCell, String nameTextField) {
+        tableCell.setGraphic(new TextField(nameTextField));
+        tableView.getColumns().add(tableCell);
+    }
+
     private void xuLyButtonThemSanPham(Button button) {
         button.setOnAction(evt -> {
             Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn chọn?", Alert.AlertType.CONFIRMATION);
@@ -282,6 +374,7 @@ public class FormNhanVienBanHangController implements Initializable {
 
     @FXML
     public void xuLyThemHoaDon(ActionEvent evt) throws SQLException {
+        this.luuSoLuongSanPham(evt);
         Date ngayCT = new Date(40, 10, 10);
 
         int idNhanVien = nhanVienDiemDanh.getIdNhanVien();
@@ -299,8 +392,10 @@ public class FormNhanVienBanHangController implements Initializable {
 
         double tongTien = 0;
         double soTienNhan = 500000;
+        int countSL = 0;
         for (SanPham sp : sanPhamDuocChon) {
-            int soLuong = 2;
+            double soLuong = Double.parseDouble(listSoLuongSanPhamDuocChon.get(countSL));
+            countSL++;
             soLuongChiTietHoaDon++;
             ChiTietHoaDon cthd = new ChiTietHoaDon(soLuongChiTietHoaDon, sp.getIdSanPham(), hoaDon.getIdHoaDon(), soLuong, sp.getGia());
             chiTietHoaDons.add(cthd);
@@ -339,13 +434,13 @@ public class FormNhanVienBanHangController implements Initializable {
     private void loadComboBox(ComboBox comboBox) throws SQLException {
 //        List<SanPham> sp = sanPhamService.getSanPham();
 
-        comboBox.setItems(FXCollections.observableList(spService));
+        comboBox.setItems(FXCollections.observableList(listSoLuongSanPhamDuocChon));
     }
 
-    private void addTextChange(TextField textFeild, TableView tableView) {
-        textFeild.textProperty().addListener(e -> {
+    private void addTextChange(TextField textField, TableView tableView) {
+        textField.textProperty().addListener(e -> {
             try {
-                this.loadTableDataSanPham(textFeild.getText(), tableView);
+                this.loadTableDataSanPham(textField.getText(), tableView);
 //                làm sao xóa được cái nút đây :(((
 //                this.loadTableColumnsSanPham(tableView);
             } catch (SQLException ex) {

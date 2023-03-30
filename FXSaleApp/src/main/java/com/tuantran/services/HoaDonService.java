@@ -91,7 +91,7 @@ public class HoaDonService {
                     stm1.setInt(1, cthd.getIdCTHD());
                     stm1.setInt(2, cthd.getIdSanPham());
                     stm1.setInt(3, cthd.getIdHoaDon());
-                    stm1.setInt(4, cthd.getSoLuong());
+                    stm1.setDouble(4, cthd.getSoLuong());
                     stm1.setDouble(5, cthd.getThanhTien());
                     stm1.executeUpdate();
                 }
