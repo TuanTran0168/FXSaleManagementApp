@@ -13,6 +13,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -70,7 +71,7 @@ public class FormNhanVienBanHangController implements Initializable {
     TableView<SanPham> tbSanPhams;
     @FXML
     TableView<SanPham> tbSanPhamDuocChon;
- 
+
     @FXML
     TextField txtSearchSanPham;
     @FXML
@@ -91,17 +92,19 @@ public class FormNhanVienBanHangController implements Initializable {
     TextField txtThanhTien;
     @FXML
     TextField txtTienNhan;
-    @FXML Button btnThanhToan;
+    @FXML
+    Button btnThanhToan;
+    @FXML
+    TextField txtTienThoi;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            
+
             if (this.nhanVienDiemDanh == null) {
                 this.btnThanhToan.setDisable(true);
             }
-            
-            
+
             this.tbSanPhamDuocChon.setEditable(true);
             this.sanPhamDuocChon = new ArrayList<>();
 
@@ -128,6 +131,9 @@ public class FormNhanVienBanHangController implements Initializable {
             };
             TextFormatter<String> formatter = new TextFormatter<>(filter);
             this.txtTienNhan.setTextFormatter(formatter);
+            
+            this.addTextChangeTienThoi(this.txtTienNhan, this.txtTienThoi);
+            
         } catch (SQLException ex) {
             Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -157,23 +163,6 @@ public class FormNhanVienBanHangController implements Initializable {
         a.show();
     }
 
-//    public void showThongTin(Button button) {
-//        Scene currentScene = Window.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null).getScene();
-//
-////        Scene currentScene = ((Node) event.getSource()).getScene();
-//        Stage currentStage = (Stage) currentScene.getWindow();
-//        NhanVien nv = (NhanVien) currentStage.getUserData();
-//        Alert a = MessageBox.getBox("CC", nv.getTenNhanVien(), Alert.AlertType.CONFIRMATION);
-//        a.show();
-//    }
-//
-//    public void showThongTin_1() {
-//        Scene currentScene = ((Node) this.btnGetObject).getScene();
-//        Stage currentStage = (Stage) currentScene.getWindow();
-//        NhanVien nv = (NhanVien) currentStage.getUserData();
-//        Alert a = MessageBox.getBox("CC", nv.getTenNhanVien(), Alert.AlertType.CONFIRMATION);
-//        a.show();
-//    }
     private void loadTableColumnsSanPham(TableView tableView) {
         TableColumn colIdSanPham = new TableColumn("Mã sản phẩm");
         TableColumn colTenSanPham = new TableColumn("Tên sản phẩm");
@@ -189,7 +178,6 @@ public class FormNhanVienBanHangController implements Initializable {
         colIdKhuyenMai.setCellValueFactory(new PropertyValueFactory("idKhuyenMai"));
 
         TableColumn colLuaChon = new TableColumn("Lựa chọn");
-//        this.themButtonVaoTableColumnSanPham(colLuaChon, "Chọn nè");
 
         tableView.getColumns().clear();
         tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai);
@@ -197,7 +185,6 @@ public class FormNhanVienBanHangController implements Initializable {
         this.themButtonVaoTableColumnSanPham(tableView, colLuaChon, "Chọn nha nha");
     }
 
-//    TableColumn colSoLuong = new TableColumn("Số lượng");
     private void loadTableColumnsSanPhamDuocChon(TableView tableView) {
         TableColumn colIdSanPham = new TableColumn("Mã sản phẩm");
         TableColumn colTenSanPham = new TableColumn("Tên sản phẩm");
@@ -218,11 +205,10 @@ public class FormNhanVienBanHangController implements Initializable {
         colSoLuong.setOnEditCommit((TableColumn.CellEditEvent<SanPham, Double> event) -> {
             SanPham sp = event.getTableView().getItems().get(event.getTablePosition().getRow());
 
-            if(event.getNewValue() > 0) {
+            if (event.getNewValue() > 0) {
                 sp.setSoLuongTemp(event.getNewValue());
                 this.txtThanhTien.setText(" " + this.tinhTongTien());
-            }
-            else {
+            } else {
                 MessageBox.getBox("Question", "Số lượng phải lớn hơn 0", Alert.AlertType.INFORMATION).show();
                 sp.setSoLuongTemp(1);
             }
@@ -230,18 +216,13 @@ public class FormNhanVienBanHangController implements Initializable {
 
         colSoLuong.setEditable(true);
 
-//        String title = "Thay đổi số lượng của sản phẩm";
-//        String headerText = "Số lượng";
-//        String contentText = "Mời bạn nhập số lượng: ";
-//        this.chinhSuaColumnTrongTableView(tableView, colSoLuong, title, headerText, contentText);
         TableColumn colLuaChon = new TableColumn("Xóa");
 
         tableView.getColumns().clear();
         tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai, colSoLuong);
 
         this.themButtonVaoTableColumnSanPhamDuocChon(tableView, colLuaChon, "Xóa");
-//        String nameTextField = "1";
-//        this.themTextFieldVaoTableColumnSanPhamDuocChon(tableView, colSoLuong, nameTextField);
+
     }
 
     private void loadTableColumnsThanhVien(TableView tableView) {
@@ -262,51 +243,8 @@ public class FormNhanVienBanHangController implements Initializable {
         this.themButtonVaoTableColumnThanhVien(tableView, colLayId, "Áp dụng");
     }
 
-//    private void chinhSuaColumnTrongTableView(TableView tableView, TableColumn tableColumn, String title, String headerText, String contentText) {
-//        tableColumn.setCellFactory(column -> {
-//            return new TableCell<SanPham, String>() {
-//                @Override
-//                public void startEdit() {
-//                    super.startEdit();
-//                    
-//                    TextInputDialog dialog = new TextInputDialog(getItem());
-//                    dialog.setTitle(title);
-//                    dialog.setHeaderText(headerText);
-//                    dialog.setContentText(contentText);
-//                    
-//                    Optional<String> result = dialog.showAndWait();
-//                    
-//                    if (result.isPresent()) {
-//                        commitEdit(result.get());
-////                        listSoLuongSanPhamDuocChon.add(result.get());
-//                    } else {
-//                        cancelEdit();
-//                    }
-//                }
-//                
-//                @Override
-//                public void cancelEdit() {
-//                    super.cancelEdit();
-//                }
-//                
-//                @Override
-//                public void updateItem(String item, boolean empty) {
-//                    super.updateItem(item, empty);
-//                    
-//                    if (empty) {
-//                        setText(null);
-//                    } else {
-//                        setText(item);
-//                    }
-//                }
-//            };
-//        });
-//        
-//        tableView.setEditable(true);
-//    }
     @FXML
     public void luuSoLuongSanPham(ActionEvent evt) throws SQLException {
-//        SanPham sp = (SanPham) this.tbSanPhamDuocChon.getItems().get(0);
         this.listSoLuongSanPhamDuocChon = new ArrayList<>();
         for (SanPham s : this.tbSanPhamDuocChon.getItems()) {
             this.listSoLuongSanPhamDuocChon.add(Double.toString(s.getSoLuongTemp()));
@@ -327,17 +265,6 @@ public class FormNhanVienBanHangController implements Initializable {
         tableView.setItems(FXCollections.observableList(thanhViens));
     }
 
-//    private void themButtonVaoTableColumn(TableColumn tableColumn, String nameButton) {
-//        tableColumn.setCellFactory(r -> {
-//            Button btn = new Button(nameButton);
-//            
-//            this.xuLyButtonThemSanPham(btn);
-//            
-//            TableCell c = new TableCell();
-//            c.setGraphic(btn);
-//            return c;
-//        });
-//    }
     private void themButtonVaoTableColumnSanPham(TableView tableView, TableColumn tableColumn, String nameButton) {
         tableColumn.setCellFactory(r -> {
             Button btn = new Button(nameButton);
@@ -372,7 +299,6 @@ public class FormNhanVienBanHangController implements Initializable {
         tableColumn.setCellFactory(r -> {
             Button btn = new Button(nameButton);
 
-//            this.xuLyButtonThemSanPham(btn);
             this.xuLyButtonThemIdThanhVien(btn);
 
             TableCell c = new TableCell();
@@ -384,21 +310,6 @@ public class FormNhanVienBanHangController implements Initializable {
         tableView.getColumns().add(tableColumn);
     }
 
-//    private void themTextFieldVaoTableColumnSanPhamDuocChon(TableView tableView, TableColumn tableColumn, String nameTextField) {
-//        tableColumn.setCellFactory(r -> {
-//            TextField txt = new TextField(nameTextField);
-//            
-//            TableCell c = new TableCell();
-//            c.setGraphic(txt);
-//            return c;
-//        });
-//        
-//        tableView.getColumns().add(tableColumn);
-//    }
-//    private void themTextFieldVaoTableCellSanPhamDuocChon(TableView tableView, TableCell tableCell, String nameTextField) {
-//        tableCell.setGraphic(new TextField(nameTextField));
-//        tableView.getColumns().add(tableCell);
-//    }
     private void xuLyButtonThemSanPham(Button button) {
         button.setOnAction(evt -> {
             Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn chọn?", Alert.AlertType.CONFIRMATION);
@@ -413,28 +324,20 @@ public class FormNhanVienBanHangController implements Initializable {
                     if (sanPhamDuocChon.isEmpty()) {
                         sanPhamDuocChon.add(s);
                         count = 0;
-//                        Alert b = MessageBox.getBox("Question", "count = " + count, Alert.AlertType.CONFIRMATION);
-//                        b.show();
                     } else {
                         for (SanPham sp : sanPhamDuocChon) {
                             if (s.getIdSanPham() == sp.getIdSanPham()) {
                                 Alert c = MessageBox.getBox("Question", "Đã tồn tại sản phẩm", Alert.AlertType.CONFIRMATION);
                                 c.show();
-//                                Alert b = MessageBox.getBox("Question", "count = " + count, Alert.AlertType.CONFIRMATION);
-//                                b.show();
                                 count = 0;
                                 break;
                             } else {
                                 count++;
-//                                Alert b = MessageBox.getBox("Question", "count = " + count, Alert.AlertType.CONFIRMATION);
-//                                b.show();
                             }
                         }
                         if (count == sanPhamDuocChon.size()) {
                             sanPhamDuocChon.add(s);
                             count = 0;
-//                            Alert b = MessageBox.getBox("Question", "count = " + count, Alert.AlertType.CONFIRMATION);
-//                            b.show();
                         }
                     }
                 }
@@ -449,8 +352,6 @@ public class FormNhanVienBanHangController implements Initializable {
         long tong = 0;
         ObservableList<SanPham> listSP = FXCollections.observableArrayList();
         listSP.addAll(tbSanPhamDuocChon.getItems());
-//         Alert b = MessageBox.getBox("Question", listSP.get(0).getTenSanPham(), Alert.AlertType.CONFIRMATION);
-//         b.show();
         for (SanPham sp : listSP) {
             tong += sp.getGia() * sp.getSoLuongTemp();
         }
@@ -461,7 +362,10 @@ public class FormNhanVienBanHangController implements Initializable {
     @FXML
     public void xuLyThemHoaDon(ActionEvent evt) throws SQLException {
         this.luuSoLuongSanPham(evt);
-        Date ngayCT = new Date(40, 10, 10);
+        
+        LocalDate ngayCTTemp = LocalDate.now();
+        Date ngayCTReal = Date.valueOf(ngayCTTemp);
+//        Date ngayCT = new Date(40, 10, 10);
 
         int idNhanVien = this.nhanVienDiemDanh.getIdNhanVien();
         int idChiNhanh = this.nhanVienDiemDanh.getIdChiNhanh();
@@ -479,7 +383,7 @@ public class FormNhanVienBanHangController implements Initializable {
         }
 
 //        Tạo hóa đơn
-        HoaDon hoaDon = new HoaDon(soLuongHoaDon + 1, idNhanVien, idChiNhanh, idThanhVien, 0, 0, ngayCT);
+        HoaDon hoaDon = new HoaDon(soLuongHoaDon + 1, idNhanVien, idChiNhanh, idThanhVien, 0, 0, ngayCTReal);
 
 //        Danh sách chứa sản phẩm được chọn không có
         if (!this.txtTienNhan.getText().isEmpty()) {
@@ -557,8 +461,6 @@ public class FormNhanVienBanHangController implements Initializable {
         textField.textProperty().addListener(e -> {
             try {
                 this.loadTableDataSanPham(textField.getText(), tableView);
-//                làm sao xóa được cái nút đây :(((
-//                this.loadTableColumnsSanPham(tableView);
             } catch (SQLException ex) {
                 Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -569,11 +471,17 @@ public class FormNhanVienBanHangController implements Initializable {
         textField.textProperty().addListener(e -> {
             try {
                 this.loadTableDataThanhVien(textField.getText(), tableView);
-//                làm sao xóa được cái nút đây :(((
-//                this.loadTableColumnsSanPham(tableView);
             } catch (SQLException ex) {
                 Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
             }
+        });
+    }
+    
+       private void addTextChangeTienThoi(TextField textField_1, TextField textField_2) {
+        textField_1.textProperty().addListener(e -> {
+            double thanhTien = Double.parseDouble(this.txtThanhTien.getText());
+            double soTienNhan = Double.parseDouble(textField_1.getText());
+            textField_2.setText(" " + (soTienNhan - thanhTien));
         });
     }
 }
