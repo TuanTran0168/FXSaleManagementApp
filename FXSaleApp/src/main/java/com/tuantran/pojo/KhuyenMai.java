@@ -34,7 +34,11 @@ public class KhuyenMai {
         this.ngayBatDau = ngayBatDau;
         this.ngayKetThuc = ngayKetThuc;
     }
-    
+
+    @Override
+    public String toString() {
+        return this.tenKhuyenMai;
+    }
     
     /**
      * @return the idKhuyenMai

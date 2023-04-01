@@ -15,16 +15,19 @@ import com.tuantran.services.SanPhamService;
 import com.tuantran.utils.MessageBox;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -82,6 +85,20 @@ public class FormQuanLyBanHangController implements Initializable {
     @FXML
     private TextField txtSanPham_gia;
 
+    @FXML
+    ComboBox<ChiNhanh> cbChiNhanh;
+    @FXML
+    ComboBox<String> cbNhanVien;
+    @FXML
+    ComboBox<KhuyenMai> cbKhuyenMai;
+    
+//    @FXML
+//    ComboBox<String> cbChiNhanh;
+//    @FXML
+//    ComboBox<String> cbNhanVien;
+//    @FXML
+//    ComboBox<String> cbKhuyenMai;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -100,6 +117,21 @@ public class FormQuanLyBanHangController implements Initializable {
             this.addTextChangeNhanVien(this.txtNhanVien_hoNhanVien, this.txtNhanVien_tenNhanVien, this.txtNhanVien_taiKhoan, this.txtNhanVien_matKhau, tbNhanVien);
             this.addTextChangeKhuyenMai(this.txtKhuyenMai_tenKhuyenMai, this.txtKhuyenMai_giaTri, tbKhuyenMai);
             this.addTextChangeSanPham(null, this.txtSanPham_tenSanPham, this.txtSanPham_gia, this.txtSanPham_donVi, this.tbSanPham);
+
+            List<ChiNhanh> listChiNhanh = chiNhanhService.getChiNhanhs(null);
+            List<String> listLoaiNhanVien = new ArrayList<>();
+            listLoaiNhanVien.add("Quản lý");
+            listLoaiNhanVien.add("Nhân viên");
+            List<KhuyenMai> listKhuyenMai = khuyenMaiService.getKhuyenMai(null);
+            
+//            List<String> listChiNhanhString = listChiNhanh.stream().flatMap(cn -> cn.getDiaChi().lines()).collect(Collectors.toList());
+            
+            this.cbChiNhanh.setItems(FXCollections.observableList(listChiNhanh));
+            this.cbNhanVien.setItems(FXCollections.observableList(listLoaiNhanVien));
+            this.cbKhuyenMai.setItems(FXCollections.observableList(listKhuyenMai));
+            
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -426,19 +458,6 @@ public class FormQuanLyBanHangController implements Initializable {
     }
 
     public void updateChiNhanh(ActionEvent evt) throws SQLException {
-//        String idChiNhanh = this.txtChiNhanh_id.getText();
-//        String tenChiNhanhNew = this.txtChiNhanh_diaChi.getText();
-//        MessageBox.getBox("Question", "" + idChiNhanh + tenChiNhanhNew, Alert.AlertType.INFORMATION).show();
-//        try {
-//            chiNhanhService.updateChiNhanh(idChiNhanh, tenChiNhanhNew);
-//            this.loadTableDataChiNhanh(this.tbChiNhanh, null);
-//            MessageBox.getBox("Question", "Cập nhật chi nhánh thành công", Alert.AlertType.INFORMATION).show();
-//            this.txtChiNhanh_id.setText("");
-//        } catch (SQLException ex) {
-//            MessageBox.getBox("Question", "Cập nhật chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
-//            Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
         if (!this.txtChiNhanh_id.getText().isEmpty()) {
 
             Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
@@ -463,6 +482,5 @@ public class FormQuanLyBanHangController implements Initializable {
         } else {
             MessageBox.getBox("Question", "Hãy chọn chi nhánh cần cập nhật", Alert.AlertType.INFORMATION).show();
         }
-
     }
 }

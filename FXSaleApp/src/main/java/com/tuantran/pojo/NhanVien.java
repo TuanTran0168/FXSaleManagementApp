@@ -30,6 +30,16 @@ public class NhanVien {
         this.quanLy = quanLy;
     }
 
+    @Override
+    public String toString() {
+        if (this.quanLy == true) {
+            return "Quản lý";
+        }
+        else {
+            return "Nhân viên";
+        }
+    }
+
     /**
      * @return the idNhanVien
      */

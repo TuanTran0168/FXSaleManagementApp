@@ -19,6 +19,11 @@ public class ChiNhanh {
         this.idChiNhanh = idChiNhanh;
         this.diaChi = diaChi;
     }
+
+    @Override
+    public String toString() {
+        return this.diaChi;
+    }
     
     
 

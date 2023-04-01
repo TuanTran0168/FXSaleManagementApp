@@ -138,7 +138,7 @@
                                                       <Insets right="25.0" />
                                                    </HBox.margin>
                                                 </Label>
-                                                <ComboBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                                <ComboBox fx:id="cbChiNhanh" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
                                        </children>
@@ -172,7 +172,7 @@
                                                       <Insets right="20.0" />
                                                    </HBox.margin>
                                                 </Label>
-                                                <ComboBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="cbNhanVien" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                                                    <HBox.margin>
                                                       <Insets />
                                                    </HBox.margin>
@@ -319,7 +319,7 @@
                                                 <Insets right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <ComboBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                          <ComboBox fx:id="cbKhuyenMai" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin>
