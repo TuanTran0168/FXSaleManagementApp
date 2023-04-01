@@ -53,49 +53,47 @@ import javafx.util.converter.DoubleStringConverter;
 
 public class FormNhanVienBanHangController implements Initializable {
 
-    static SanPhamService sanPhamService = new SanPhamService();
-    static HoaDonService hoaDonService = new HoaDonService();
-    static ChiNhanhService chiNhanhService = new ChiNhanhService();
-    static ChiTietHoaDonService chiTietHoaDonService = new ChiTietHoaDonService();
-    static ThanhVienService thanhVienService = new ThanhVienService();
+    private static final SanPhamService sanPhamService = new SanPhamService();
+    private static final HoaDonService hoaDonService = new HoaDonService();
+    private static final ChiNhanhService chiNhanhService = new ChiNhanhService();
+    private static final ChiTietHoaDonService chiTietHoaDonService = new ChiTietHoaDonService();
+    private static final ThanhVienService thanhVienService = new ThanhVienService();
 
-    List<SanPham> sanPhamDuocChon;
-    List<String> listSoLuongSanPhamDuocChon;
+    private List<SanPham> sanPhamDuocChon;
+    private List<String> listSoLuongSanPhamDuocChon;
 
-    int count;
-    NhanVien nhanVienDiemDanh;
+    private int count;
+    private NhanVien nhanVienDiemDanh;
 
-    ThanhVien thanhVienTrongHeThongDuocChon;
-
-    @FXML
-    TableView<SanPham> tbSanPhams;
-    @FXML
-    TableView<SanPham> tbSanPhamDuocChon;
+    private ThanhVien thanhVienTrongHeThongDuocChon;
 
     @FXML
-    TextField txtSearchSanPham;
+    private TableView<SanPham> tbSanPhams;
     @FXML
-    TextField txtSearchThanhVien;
+    private TableView<SanPham> tbSanPhamDuocChon;
+
     @FXML
-    Button btnGetObject;
+    private TextField txtSearchSanPham;
     @FXML
-    Label txtTestTen;
+    private TextField txtSearchThanhVien;
     @FXML
-    Label txtTestHo;
+    private Label txtTestTen;
     @FXML
-    Label txtDiaChi;
+    private Label txtTestHo;
     @FXML
-    TableView<ThanhVien> tbThanhVien;
+    private Label txtDiaChi;
     @FXML
-    TextField txtThanhVienApDung;
+    private TableView<ThanhVien> tbThanhVien;
     @FXML
-    TextField txtThanhTien;
+    private TextField txtThanhVienApDung;
     @FXML
-    TextField txtTienNhan;
+    private TextField txtThanhTien;
     @FXML
-    Button btnThanhToan;
+    private TextField txtTienNhan;
     @FXML
-    TextField txtTienThoi;
+    private Button btnThanhToan;
+    @FXML
+    private TextField txtTienThoi;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -131,9 +129,9 @@ public class FormNhanVienBanHangController implements Initializable {
             };
             TextFormatter<String> formatter = new TextFormatter<>(filter);
             this.txtTienNhan.setTextFormatter(formatter);
-            
+
             this.addTextChangeTienThoi(this.txtTienNhan, this.txtTienThoi);
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -362,7 +360,7 @@ public class FormNhanVienBanHangController implements Initializable {
     @FXML
     public void xuLyThemHoaDon(ActionEvent evt) throws SQLException {
         this.luuSoLuongSanPham(evt);
-        
+
         LocalDate ngayCTTemp = LocalDate.now();
         Date ngayCTReal = Date.valueOf(ngayCTTemp);
 //        Date ngayCT = new Date(40, 10, 10);
@@ -476,8 +474,8 @@ public class FormNhanVienBanHangController implements Initializable {
             }
         });
     }
-    
-       private void addTextChangeTienThoi(TextField textField_1, TextField textField_2) {
+
+    private void addTextChangeTienThoi(TextField textField_1, TextField textField_2) {
         textField_1.textProperty().addListener(e -> {
             double thanhTien = Double.parseDouble(this.txtThanhTien.getText());
             double soTienNhan = Double.parseDouble(textField_1.getText());
