@@ -12,15 +12,22 @@ import com.tuantran.services.ChiNhanhService;
 import com.tuantran.services.KhuyenMaiService;
 import com.tuantran.services.NhanVienService;
 import com.tuantran.services.SanPhamService;
+import com.tuantran.utils.MessageBox;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -47,7 +54,12 @@ public class FormQuanLyBanHangController implements Initializable {
     private TableView<SanPham> tbSanPham;
 
     @FXML
-    private TextField txtChiNhanh;
+    private TextField txtChiNhanh_id;
+    @FXML
+    private TextField txtChiNhanh_diaChi;
+
+    @FXML
+    private TextField txtNhanVien_id;
     @FXML
     private TextField txtNhanVien_hoNhanVien;
     @FXML
@@ -58,16 +70,34 @@ public class FormQuanLyBanHangController implements Initializable {
     private TextField txtNhanVien_matKhau;
 
     @FXML
+    private TextField txtKhuyenMai_id;
+    @FXML
     private TextField txtKhuyenMai_tenKhuyenMai;
     @FXML
     private TextField txtKhuyenMai_giaTri;
 
+    @FXML
+    private TextField txtSanPham_id;
     @FXML
     private TextField txtSanPham_tenSanPham;
     @FXML
     private TextField txtSanPham_donVi;
     @FXML
     private TextField txtSanPham_gia;
+
+    @FXML
+    ComboBox<ChiNhanh> cbChiNhanh;
+    @FXML
+    ComboBox<String> cbNhanVien;
+    @FXML
+    ComboBox<KhuyenMai> cbKhuyenMai;
+    
+//    @FXML
+//    ComboBox<String> cbChiNhanh;
+//    @FXML
+//    ComboBox<String> cbNhanVien;
+//    @FXML
+//    ComboBox<String> cbKhuyenMai;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -83,10 +113,25 @@ public class FormQuanLyBanHangController implements Initializable {
             this.loadTableDataKhuyenMai(tbKhuyenMai, null);
             this.loadTableDataSanPham(tbSanPham, null);
 
-            this.addTextChangeChiNhanh(this.txtChiNhanh, tbChiNhanh);
+            this.addTextChangeChiNhanh(this.txtChiNhanh_diaChi, tbChiNhanh);
             this.addTextChangeNhanVien(this.txtNhanVien_hoNhanVien, this.txtNhanVien_tenNhanVien, this.txtNhanVien_taiKhoan, this.txtNhanVien_matKhau, tbNhanVien);
             this.addTextChangeKhuyenMai(this.txtKhuyenMai_tenKhuyenMai, this.txtKhuyenMai_giaTri, tbKhuyenMai);
             this.addTextChangeSanPham(null, this.txtSanPham_tenSanPham, this.txtSanPham_gia, this.txtSanPham_donVi, this.tbSanPham);
+
+            List<ChiNhanh> listChiNhanh = chiNhanhService.getChiNhanhs(null);
+            List<String> listLoaiNhanVien = new ArrayList<>();
+            listLoaiNhanVien.add("Quản lý");
+            listLoaiNhanVien.add("Nhân viên");
+            List<KhuyenMai> listKhuyenMai = khuyenMaiService.getKhuyenMai(null);
+            
+//            List<String> listChiNhanhString = listChiNhanh.stream().flatMap(cn -> cn.getDiaChi().lines()).collect(Collectors.toList());
+            
+            this.cbChiNhanh.setItems(FXCollections.observableList(listChiNhanh));
+            this.cbNhanVien.setItems(FXCollections.observableList(listLoaiNhanVien));
+            this.cbKhuyenMai.setItems(FXCollections.observableList(listKhuyenMai));
+            
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -357,6 +402,85 @@ public class FormQuanLyBanHangController implements Initializable {
                     Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
+        }
+    }
+
+    @FXML
+    public void addChiNhanh(ActionEvent evt) throws SQLException {
+        List<ChiNhanh> chiNhanhs = chiNhanhService.getChiNhanhs(null);
+        int idChiNhanh = chiNhanhs.get(chiNhanhs.size() - 1).getIdChiNhanh() + 1;
+        String diaChi = this.txtChiNhanh_diaChi.getText();
+        ChiNhanh chiNhanh = new ChiNhanh(idChiNhanh, diaChi);
+
+        try {
+            chiNhanhService.addChiNhanh(chiNhanh);
+            this.loadTableDataChiNhanh(this.tbChiNhanh, null);
+            MessageBox.getBox("Question", "Thêm chi nhánh thành công", Alert.AlertType.INFORMATION).show();
+        } catch (SQLException ex) {
+            MessageBox.getBox("Question", "Thêm chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
+            Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    public void deleteChiNhanh(ActionEvent evt) {
+        Object selectedObject = this.tbChiNhanh.getSelectionModel().getSelectedItem();
+
+        if (selectedObject != null) {
+
+            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
+            a.showAndWait().ifPresent(res -> {
+                if (res == ButtonType.OK) {
+                    ChiNhanh chiNhanh = (ChiNhanh) selectedObject;
+                    int idChiNhanh = chiNhanh.getIdChiNhanh();
+
+                    try {
+                        chiNhanhService.deleteChiNhanh(Integer.toString(idChiNhanh));
+                        this.loadTableDataChiNhanh(this.tbChiNhanh, null);
+                        MessageBox.getBox("Question", "Xóa chi nhánh thành công", Alert.AlertType.INFORMATION).show();
+                    } catch (SQLException ex) {
+                        MessageBox.getBox("Question", "Xóa chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
+                        Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        }
+    }
+
+    @FXML
+    public void editChiNhanh(ActionEvent evt) {
+        Object selectedObject = this.tbChiNhanh.getSelectionModel().getSelectedItem();
+        if (selectedObject != null) {
+            ChiNhanh chiNhanh = (ChiNhanh) selectedObject;
+            this.txtChiNhanh_diaChi.setText(chiNhanh.getDiaChi());
+            this.txtChiNhanh_id.setText(Integer.toString(chiNhanh.getIdChiNhanh()));
+        }
+    }
+
+    public void updateChiNhanh(ActionEvent evt) throws SQLException {
+        if (!this.txtChiNhanh_id.getText().isEmpty()) {
+
+            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
+            a.showAndWait().ifPresent(res -> {
+                if (res == ButtonType.OK) {
+                    String idChiNhanh = this.txtChiNhanh_id.getText();
+                    String tenChiNhanhNew = this.txtChiNhanh_diaChi.getText();
+
+                    try {
+                        chiNhanhService.updateChiNhanh(idChiNhanh, tenChiNhanhNew);
+                        this.loadTableDataChiNhanh(this.tbChiNhanh, null);
+                        MessageBox.getBox("Question", "Cập nhật chi nhánh thành công", Alert.AlertType.INFORMATION).show();
+                        this.loadTableDataChiNhanh(this.tbChiNhanh, null);
+                        this.txtChiNhanh_id.setText("");
+                    } catch (SQLException ex) {
+                        MessageBox.getBox("Question", "Cập nhật chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
+                        Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+
+        } else {
+            MessageBox.getBox("Question", "Hãy chọn chi nhánh cần cập nhật", Alert.AlertType.INFORMATION).show();
         }
     }
 }

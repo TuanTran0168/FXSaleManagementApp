@@ -84,4 +84,49 @@ public class ChiNhanhService {
 
         return chiNhanhs;
     }
+    
+    public boolean addChiNhanh(ChiNhanh chiNhanh) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            conn.setAutoCommit(false);
+            String query = "INSERT INTO ChiNhanh(id_chi_nhanh, dia_chi)"
+                    + " VALUES(?, ?)";
+
+
+            PreparedStatement stm = conn.prepareCall(query);
+
+            stm.setInt(1, chiNhanh.getIdChiNhanh());
+            stm.setString(2, chiNhanh.getDiaChi());
+            stm.executeUpdate();
+            
+            try {
+                conn.commit();
+                return true;
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+                return false;
+            }
+
+        }
+    }
+    
+    public boolean deleteChiNhanh(String id) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "DELETE FROM ChiNhanh WHERE id_chi_nhanh = ?";
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setString(1, id);
+            
+            return stm.executeUpdate() > 0;
+        }
+    }
+    
+    public boolean updateChiNhanh(String id, String tenChiNhanh) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "UPDATE ChiNhanh SET dia_chi = ? WHERE id_chi_nhanh = ?";
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setString(1, tenChiNhanh);
+            stm.setString(2, id);
+            
+            return stm.executeUpdate() > 0;
+        }
+    }
 }
