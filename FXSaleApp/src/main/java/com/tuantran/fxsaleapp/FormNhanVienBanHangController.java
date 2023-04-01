@@ -368,10 +368,13 @@ public class FormNhanVienBanHangController implements Initializable {
         int idNhanVien = this.nhanVienDiemDanh.getIdNhanVien();
         int idChiNhanh = this.nhanVienDiemDanh.getIdChiNhanh();
 
-//         Lấy Số lượng Hóa đơn hiện tại
-        int soLuongHoaDon = hoaDonService.getHoaDon(null).size();
-//         Lấy số lượng chi tiết hóa đơn hiện tại
-        int soLuongChiTietHoaDon = chiTietHoaDonService.getChiTietHoaDon(null).size();
+        
+        List<HoaDon> listHoaDon = hoaDonService.getHoaDon(null);
+        int idHoaDon = listHoaDon.get(listHoaDon.size() - 1).getIdHoaDon() + 1;
+
+
+        List<ChiTietHoaDon> listChiTietHoaDon = chiTietHoaDonService.getChiTietHoaDon(null);
+        int idChiTietHoaDon = listChiTietHoaDon.get(listChiTietHoaDon.size() - 1).getIdCTHD();
 
 //        Lấy id thành viên được chọn trong hệ thống
         int idThanhVien = 0;
@@ -381,7 +384,8 @@ public class FormNhanVienBanHangController implements Initializable {
         }
 
 //        Tạo hóa đơn
-        HoaDon hoaDon = new HoaDon(soLuongHoaDon + 1, idNhanVien, idChiNhanh, idThanhVien, 0, 0, ngayCTReal);
+        HoaDon hoaDon = new HoaDon(idHoaDon, idNhanVien, idChiNhanh, idThanhVien, 0, 0, ngayCTReal);
+        MessageBox.getBox("Question", "SIze = " + listHoaDon.size() + "id = " + idHoaDon, Alert.AlertType.INFORMATION).show();
 
 //        Danh sách chứa sản phẩm được chọn không có
         if (!this.txtTienNhan.getText().isEmpty()) {
@@ -394,9 +398,9 @@ public class FormNhanVienBanHangController implements Initializable {
                 for (SanPham sp : sanPhamDuocChon) {
                     double soLuong = Double.parseDouble(listSoLuongSanPhamDuocChon.get(countSL));
                     countSL++;
-                    soLuongChiTietHoaDon++;
+                    idChiTietHoaDon++;
                     double thanhTien = sp.getGia() * soLuong;
-                    ChiTietHoaDon cthd = new ChiTietHoaDon(soLuongChiTietHoaDon, sp.getIdSanPham(), hoaDon.getIdHoaDon(), soLuong, thanhTien);
+                    ChiTietHoaDon cthd = new ChiTietHoaDon(idChiTietHoaDon, sp.getIdSanPham(), hoaDon.getIdHoaDon(), soLuong, thanhTien);
                     chiTietHoaDons.add(cthd);
                     tongTien += thanhTien;
                 }
