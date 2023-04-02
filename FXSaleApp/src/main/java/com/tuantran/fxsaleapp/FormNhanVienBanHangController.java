@@ -58,14 +58,14 @@ public class FormNhanVienBanHangController implements Initializable {
     private static final ChiNhanhService chiNhanhService = new ChiNhanhService();
     private static final ChiTietHoaDonService chiTietHoaDonService = new ChiTietHoaDonService();
     private static final ThanhVienService thanhVienService = new ThanhVienService();
+    private final FormUtils FORM_UTILS = new FormUtils();
 
     private List<SanPham> sanPhamDuocChon;
     private List<String> listSoLuongSanPhamDuocChon;
 
     private int count;
     private NhanVien nhanVienDiemDanh;
-
-    private ThanhVien thanhVienTrongHeThongDuocChon;
+    private ThanhVien thanhVienDuocKhuyenMai;
 
     @FXML
     private TableView<SanPham> tbSanPhams;
@@ -94,15 +94,20 @@ public class FormNhanVienBanHangController implements Initializable {
     private Button btnThanhToan;
     @FXML
     private TextField txtTienThoi;
+    @FXML
+    private Button btnDiemDanh;
+    @FXML
+    private Button btnDangXuat;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        if (this.nhanVienDiemDanh == null) {
+            this.btnThanhToan.setDisable(true);
+        }
+    }
+
+    public void loadALL() {
         try {
-
-            if (this.nhanVienDiemDanh == null) {
-                this.btnThanhToan.setDisable(true);
-            }
-
             this.tbSanPhamDuocChon.setEditable(true);
             this.sanPhamDuocChon = new ArrayList<>();
 
@@ -112,23 +117,13 @@ public class FormNhanVienBanHangController implements Initializable {
             this.addTextChangeSanPham(this.txtSearchSanPham, this.tbSanPhams);
 //            ==========================================================================
             this.loadTableColumnsSanPhamDuocChon(this.tbSanPhamDuocChon);
+            this.tbSanPhamDuocChon.setItems(FXCollections.observableList(this.sanPhamDuocChon));
 //            ==========================================================================
             this.loadTableColumnsThanhVien(tbThanhVien);
             this.loadTableDataThanhVien(null, tbThanhVien);
             this.addTextChangeThanhVien(txtSearchThanhVien, tbThanhVien);
 
-            UnaryOperator<Change> filter = change -> {
-                String text = change.getText();
-                if (text.matches("[0-9]*")) { // Chỉ cho phép nhập số
-                    return change;
-                } else {
-                    Alert a = MessageBox.getBox("Cảnh báo", "Vui lòng nhập số!!", Alert.AlertType.WARNING);
-                    a.show();
-                }
-                return null;
-            };
-            TextFormatter<String> formatter = new TextFormatter<>(filter);
-            this.txtTienNhan.setTextFormatter(formatter);
+            this.onlyNumbers(this.txtTienNhan);
 
             this.addTextChangeTienThoi(this.txtTienNhan, this.txtTienThoi);
 
@@ -151,14 +146,31 @@ public class FormNhanVienBanHangController implements Initializable {
         Scene currentScene = ((Node) event.getSource()).getScene();
         Stage currentStage = (Stage) currentScene.getWindow();
         nhanVienDiemDanh = (NhanVien) currentStage.getUserData();
-        this.txtTestHo.setText(nhanVienDiemDanh.getHoNhanVien());
-        this.txtTestTen.setText(nhanVienDiemDanh.getTenNhanVien());
 
-        List<ChiNhanh> cn = chiNhanhService.getChiNhanhs(String.format("", nhanVienDiemDanh.getIdChiNhanh()));
-        this.txtDiaChi.setText(cn.get(0).getDiaChi());
-        btnThanhToan.setDisable(false);
-        Alert a = MessageBox.getBox("Question", nhanVienDiemDanh.getTenNhanVien(), Alert.AlertType.CONFIRMATION);
-        a.show();
+        if (nhanVienDiemDanh != null) {
+            this.btnDiemDanh.setDisable(true);
+
+            this.txtTestHo.setText(nhanVienDiemDanh.getHoNhanVien());
+            this.txtTestTen.setText(nhanVienDiemDanh.getTenNhanVien());
+
+            List<ChiNhanh> cn = chiNhanhService.getChiNhanhs(String.format("", nhanVienDiemDanh.getIdChiNhanh()));
+            this.txtDiaChi.setText(cn.get(0).getDiaChi());
+            btnThanhToan.setDisable(false);
+            Alert a = MessageBox.getBox("Question", nhanVienDiemDanh.getTenNhanVien(), Alert.AlertType.CONFIRMATION);
+            a.show();
+
+            this.loadALL();
+        }
+    }
+
+    @FXML
+    private void dangXuat() throws IOException {
+        String formName = "Primary";
+        String titleForm = "Đăng nhập";
+        FORM_UTILS.newForm(formName, titleForm);
+        Stage oldStage = (Stage) btnDangXuat.getScene().getWindow();
+
+        oldStage.close();
     }
 
     private void loadTableColumnsSanPham(TableView tableView) {
@@ -368,10 +380,8 @@ public class FormNhanVienBanHangController implements Initializable {
         int idNhanVien = this.nhanVienDiemDanh.getIdNhanVien();
         int idChiNhanh = this.nhanVienDiemDanh.getIdChiNhanh();
 
-        
         List<HoaDon> listHoaDon = hoaDonService.getHoaDon(null);
         int idHoaDon = listHoaDon.get(listHoaDon.size() - 1).getIdHoaDon() + 1;
-
 
         List<ChiTietHoaDon> listChiTietHoaDon = chiTietHoaDonService.getChiTietHoaDon(null);
         int idChiTietHoaDon = listChiTietHoaDon.get(listChiTietHoaDon.size() - 1).getIdCTHD();
@@ -379,13 +389,14 @@ public class FormNhanVienBanHangController implements Initializable {
 //        Lấy id thành viên được chọn trong hệ thống
         int idThanhVien = 0;
 
-        if (this.thanhVienTrongHeThongDuocChon != null) {
-            idThanhVien = this.thanhVienTrongHeThongDuocChon.getIdThanhVien();
+        if (this.thanhVienDuocKhuyenMai != null) {
+            idThanhVien = this.thanhVienDuocKhuyenMai.getIdThanhVien();
         }
 
 //        Tạo hóa đơn
         HoaDon hoaDon = new HoaDon(idHoaDon, idNhanVien, idChiNhanh, idThanhVien, 0, 0, ngayCTReal);
-        MessageBox.getBox("Question", "SIze = " + listHoaDon.size() + "id = " + idHoaDon, Alert.AlertType.INFORMATION).show();
+        
+//        MessageBox.getBox("Question", "SIze = " + listHoaDon.size() + "id = " + idHoaDon, Alert.AlertType.INFORMATION).show();
 
 //        Danh sách chứa sản phẩm được chọn không có
         if (!this.txtTienNhan.getText().isEmpty()) {
@@ -411,6 +422,7 @@ public class FormNhanVienBanHangController implements Initializable {
                 try {
                     hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
                     MessageBox.getBox("Question", "Thêm hóa đơn thành công", Alert.AlertType.INFORMATION).show();
+                    this.loadALL();
                 } catch (SQLException ex) {
                     MessageBox.getBox("Question", "Thêm hóa đơn thất bại", Alert.AlertType.INFORMATION).show();
                     Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
@@ -447,11 +459,11 @@ public class FormNhanVienBanHangController implements Initializable {
                 if (res == ButtonType.OK) {
                     Button btnXuLy = (Button) evt.getSource();
                     TableCell cell = (TableCell) btnXuLy.getParent();
-                    thanhVienTrongHeThongDuocChon = (ThanhVien) cell.getTableRow().getItem();
+                    thanhVienDuocKhuyenMai = (ThanhVien) cell.getTableRow().getItem();
 
-                    Alert b = MessageBox.getBox("CC", thanhVienTrongHeThongDuocChon.getHoThanhVien() + " " + thanhVienTrongHeThongDuocChon.getTenThanhVien(), Alert.AlertType.CONFIRMATION);
+                    Alert b = MessageBox.getBox("CC", thanhVienDuocKhuyenMai.getHoThanhVien() + " " + thanhVienDuocKhuyenMai.getTenThanhVien(), Alert.AlertType.CONFIRMATION);
                     b.show();
-                    this.txtThanhVienApDung.setText(thanhVienTrongHeThongDuocChon.getHoThanhVien() + " " + thanhVienTrongHeThongDuocChon.getTenThanhVien());
+                    this.txtThanhVienApDung.setText(thanhVienDuocKhuyenMai.getHoThanhVien() + " " + thanhVienDuocKhuyenMai.getTenThanhVien());
                 }
             });
 
@@ -485,5 +497,20 @@ public class FormNhanVienBanHangController implements Initializable {
             double soTienNhan = Double.parseDouble(textField_1.getText());
             textField_2.setText(" " + (soTienNhan - thanhTien));
         });
+    }
+
+    private void onlyNumbers(TextField textField) {
+        UnaryOperator<Change> filter = change -> {
+            String text = change.getText();
+            if (text.matches("[0-9]*")) { // Chỉ cho phép nhập số
+                return change;
+            } else {
+                Alert a = MessageBox.getBox("Cảnh báo", "Vui lòng nhập số!!", Alert.AlertType.WARNING);
+                a.show();
+            }
+            return null;
+        };
+        TextFormatter<String> formatter = new TextFormatter<>(filter);
+        textField.setTextFormatter(formatter);
     }
 }

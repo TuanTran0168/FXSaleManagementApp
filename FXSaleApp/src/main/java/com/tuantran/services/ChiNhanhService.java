@@ -54,7 +54,7 @@ public class ChiNhanhService {
             String query = "SELECT * FROM ChiNhanh";
 
             if (keyword_id != null && !keyword_id.isEmpty()) {
-                query += " WHERE id_chi_nhanh LIKE concat('%', ?, '%')";
+                query += " WHERE id_chi_nhanh = ?";
             }
             
             if (keyword_diaChi != null && !keyword_diaChi.isEmpty()) {
@@ -105,7 +105,6 @@ public class ChiNhanhService {
                 System.err.println(ex.getMessage());
                 return false;
             }
-
         }
     }
     
