@@ -158,4 +158,66 @@ public class NhanVienService {
         return nhanVienQuanLys;
     }
     
+    public boolean addNhanVien(NhanVien nhanVien) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            conn.setAutoCommit(false);
+            String query = "INSERT INTO NhanVien(id_nhan_vien, ho_nhan_vien, ten_nhan_vien, id_chi_nhanh, tai_khoan, mat_khau, quan_ly)"
+                    + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+
+
+            PreparedStatement stm = conn.prepareCall(query);
+
+            stm.setInt(1, nhanVien.getIdNhanVien());
+            stm.setString(2, nhanVien.getHoNhanVien());
+            stm.setString(3, nhanVien.getTenNhanVien());
+            stm.setInt(4, nhanVien.getIdChiNhanh());
+            stm.setString(5, nhanVien.getTaiKhoan());
+            stm.setString(6, nhanVien.getMatKhau());
+            stm.setBoolean(7, nhanVien.isQuanLy());
+           
+            stm.executeUpdate();
+            
+            try {
+                conn.commit();
+                return true;
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+                return false;
+            }
+        }
+    }
+    
+    public boolean deleteNhanVien(String id) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "DELETE FROM NhanVien WHERE id_nhan_vien = ?";
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setString(1, id);
+            
+            return stm.executeUpdate() > 0;
+        }
+    }
+    
+    public boolean updateNhanVien(String id, String hoNhanVien, String tenNhanVien, int idChiNhanh, String taiKhoan, String matKhau, boolean quanLy) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "UPDATE NhanVien SET ho_nhan_vien = ?, "
+                                                + "ten_nhan_vien = ?, "
+                                                + "id_chi_nhanh = ?, "
+                                                + "tai_khoan = ?, "
+                                                + "mat_khau = ?, "
+                                                + "quan_ly = ? "
+                                                + "WHERE id_nhan_vien = ?";
+            
+            
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setString(1, hoNhanVien);
+            stm.setString(2, tenNhanVien);
+            stm.setInt(3, idChiNhanh);
+            stm.setString(4, taiKhoan);
+            stm.setString(5, matKhau);
+            stm.setBoolean(6, quanLy);
+            stm.setString(7, id);
+            
+            return stm.executeUpdate() > 0;
+        }
+    }
 }

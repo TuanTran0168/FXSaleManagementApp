@@ -71,7 +71,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </VBox>
-                        <Button mnemonicParsing="false" onAction="#xuLyDiemDanh" prefHeight="42.0" prefWidth="106.0" text="Nhận ca" textFill="#e50505" HBox.hgrow="ALWAYS">
+                        <Button fx:id="btnDiemDanh" mnemonicParsing="false" onAction="#xuLyDiemDanh" prefHeight="42.0" prefWidth="106.0" text="Nhận ca" textFill="#e50505" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets left="15.0" top="15.0" />
                            </HBox.margin>
@@ -268,7 +268,7 @@
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font></Button>
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" styleClass="btnLogout" text="Đăng xuất" textAlignment="CENTER" textFill="WHITE" HBox.hgrow="ALWAYS">
+                  <Button fx:id="btnDangXuat" mnemonicParsing="false" onAction="#dangXuat" prefHeight="25.0" prefWidth="117.0" styleClass="btnLogout" text="Đăng xuất" textAlignment="CENTER" textFill="WHITE" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="5.0" />
                      </HBox.margin>
