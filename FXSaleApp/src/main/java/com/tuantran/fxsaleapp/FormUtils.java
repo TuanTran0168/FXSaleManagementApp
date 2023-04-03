@@ -17,12 +17,13 @@ import javafx.stage.Stage;
  * @author TuanTran
  */
 public class FormUtils {
+
     public void newForm(String formName, String titleForm) throws IOException {
         formName = formName + ".fxml";
         
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
-
+        
         double screenWidth = bounds.getWidth();
         double screenHeight = bounds.getHeight();
         
@@ -30,7 +31,7 @@ public class FormUtils {
         Scene formScene = new Scene(form);
         Stage formStage = new Stage();
         formStage.setScene(formScene);
-
+        
         formStage.setTitle(titleForm);
         formStage.setWidth(screenWidth);
         formStage.setHeight(screenHeight);
@@ -43,7 +44,7 @@ public class FormUtils {
         Scene formScene = new Scene(form);
         Stage formStage = new Stage();
         formStage.setScene(formScene);
-
+        
         formStage.setTitle(titleForm);
         formStage.setWidth(width);
         formStage.setHeight(height);
@@ -51,13 +52,12 @@ public class FormUtils {
         formStage.show();
     }
     
-    
     public void newForm(String formName, String titleForm, Object object) throws IOException {
         formName = formName + ".fxml";
         
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
-
+        
         double screenWidth = bounds.getWidth();
         double screenHeight = bounds.getHeight();
         
@@ -65,10 +65,11 @@ public class FormUtils {
         Scene formScene = new Scene(form);
         Stage formStage = new Stage();
         formStage.setScene(formScene);
-
+        
         formStage.setTitle(titleForm);
         formStage.setWidth(screenWidth);
         formStage.setHeight(screenHeight);
+//        formStage.setFullScreen(true);
         formStage.setUserData(object);
         formStage.show();
     }

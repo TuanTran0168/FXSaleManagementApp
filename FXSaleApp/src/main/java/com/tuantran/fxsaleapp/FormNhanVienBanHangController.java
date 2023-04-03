@@ -373,8 +373,8 @@ public class FormNhanVienBanHangController implements Initializable {
     public void xuLyThemHoaDon(ActionEvent evt) throws SQLException {
         this.luuSoLuongSanPham(evt);
 
-        LocalDate ngayCTTemp = LocalDate.now();
-        Date ngayCTReal = Date.valueOf(ngayCTTemp);
+        LocalDate ngayCT_LocalDate = LocalDate.now();
+        Date ngayCT_Date = Date.valueOf(ngayCT_LocalDate);
 //        Date ngayCT = new Date(40, 10, 10);
 
         int idNhanVien = this.nhanVienDiemDanh.getIdNhanVien();
@@ -394,7 +394,7 @@ public class FormNhanVienBanHangController implements Initializable {
         }
 
 //        Tạo hóa đơn
-        HoaDon hoaDon = new HoaDon(idHoaDon, idNhanVien, idChiNhanh, idThanhVien, 0, 0, ngayCTReal);
+        HoaDon hoaDon = new HoaDon(idHoaDon, idNhanVien, idChiNhanh, idThanhVien, 0, 0, ngayCT_Date);
         
 //        MessageBox.getBox("Question", "SIze = " + listHoaDon.size() + "id = " + idHoaDon, Alert.AlertType.INFORMATION).show();
 
