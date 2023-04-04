@@ -17,16 +17,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,6 +37,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -109,12 +108,6 @@ public class FormQuanLyBanHangController implements Initializable {
     @FXML
     DatePicker dpKhuyenMai_ngayBatDau;
 
-//    @FXML
-//    ComboBox<String> cbChiNhanh;
-//    @FXML
-//    ComboBox<String> cbNhanVien;
-//    @FXML
-//    ComboBox<String> cbKhuyenMai;
     @FXML
     private Button btnDangXuat;
 
@@ -122,6 +115,8 @@ public class FormQuanLyBanHangController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.formatDate(MY_DATE_FORMAT, dpKhuyenMai_ngayBatDau);
         this.formatDate(MY_DATE_FORMAT, dpKhuyenMai_ngayKetThuc);
+        FORM_UTILS.onlyDoubleNumbers(this.txtSanPham_gia);
+        FORM_UTILS.onlyDoubleNumbers(this.txtKhuyenMai_giaTri);
 
 //        LocalDate localDate = LocalDate.of(2023, 4, 3);
 //        this.dpKhuyenMai_ngayBatDau.setValue(localDate);
@@ -180,6 +175,8 @@ public class FormQuanLyBanHangController implements Initializable {
             dpKhuyenMai_ngayBatDau.setValue(null);
             dpKhuyenMai_ngayKetThuc.setValue(null);
             this.addTextChangeDatePickerKhuyenMai(dpKhuyenMai_ngayBatDau, dpKhuyenMai_ngayKetThuc);
+            
+//            this.cbKhuyenMai.setValue(listKhuyenMai.get(0));
 
         } catch (SQLException ex) {
             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
