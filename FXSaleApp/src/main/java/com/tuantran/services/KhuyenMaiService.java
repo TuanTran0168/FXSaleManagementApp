@@ -51,11 +51,15 @@ public class KhuyenMaiService {
         return khuyenMais;
     }
 
-    public List<KhuyenMai> getKhuyenMai(String keyword_tenKhuyenMai, String keyword_giaTri) throws SQLException {
+    public List<KhuyenMai> getKhuyenMai(String keyword_id, String keyword_tenKhuyenMai, String keyword_giaTri) throws SQLException {
         List<KhuyenMai> khuyenMais = new ArrayList<>();
         try (Connection conn = JdbcUtils.getConn()) {
 
             String query = "SELECT * FROM KhuyenMai";
+            
+            if (keyword_id != null && !keyword_id.isEmpty()) {
+                query += " WHERE id_khuyen_mai = ?";
+            }
 
             if (keyword_tenKhuyenMai != null && !keyword_tenKhuyenMai.isEmpty()) {
                 query += " WHERE ten_khuyen_mai LIKE concat('%', ?, '%')";
@@ -67,6 +71,10 @@ public class KhuyenMaiService {
 
             PreparedStatement stm = conn.prepareCall(query);
 
+             if (keyword_id != null && !keyword_id.isEmpty()) {
+                stm.setString(1, keyword_id);
+            }
+             
             if (keyword_tenKhuyenMai != null && !keyword_tenKhuyenMai.isEmpty()) {
                 stm.setString(1, keyword_tenKhuyenMai);
             }
