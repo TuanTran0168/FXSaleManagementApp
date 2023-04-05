@@ -2,6 +2,7 @@ package com.tuantran.fxsaleapp;
 
 import com.tuantran.pojo.NhanVien;
 import com.tuantran.services.NhanVienService;
+import com.tuantran.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -18,6 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -28,6 +30,7 @@ public class PrimaryController implements Initializable{
     @FXML private TextField txtTaiKhoan;
     @FXML private TextField txtMatKhau;
     @FXML private Button btnDangNhap;
+    int countLogin;
     
     private static Scene scene;
     private final FormUtils FORM_UTILS = new FormUtils();
@@ -39,6 +42,7 @@ public class PrimaryController implements Initializable{
     }
     
     public void dangNhap(ActionEvent evt) throws IOException {
+        this.countLogin = 0;
         String tk = this.txtTaiKhoan.getText();
         String mk = this.txtMatKhau.getText();
         NhanVienService nhanVienService = new NhanVienService();
@@ -70,6 +74,12 @@ public class PrimaryController implements Initializable{
 
                     break;
                 }
+                else {
+                    this.countLogin++;
+                }
+            }
+            if (this.countLogin == nhanViens.size()) {
+                MessageBox.getBox("Cảnh báo", "Sai tài khoản hoặc mật khẩu", Alert.AlertType.INFORMATION).show();
             }
         } catch (SQLException ex) {
             Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);

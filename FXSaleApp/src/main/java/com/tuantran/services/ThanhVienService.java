@@ -49,4 +49,60 @@ public class ThanhVienService {
         }
         return thanhViens;
     }
+    
+    public boolean addThanhVien(ThanhVien thanhVien) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            conn.setAutoCommit(false);
+            String query = "INSERT INTO ThanhVien(id_thanh_vien, ho_thanh_vien, ten_thanh_vien, ngay_sinh_thanh_vien, so_dien_thoai)"
+                    + " VALUES(?, ?, ?, ?, ?)";
+
+
+            PreparedStatement stm = conn.prepareCall(query);
+
+            stm.setInt(1, thanhVien.getIdThanhVien());
+            stm.setString(2, thanhVien.getHoThanhVien());
+            stm.setString(3, thanhVien.getTenThanhVien());
+            stm.setDate(4, thanhVien.getNgaySinhThanhVien());
+            stm.setString(5, thanhVien.getSoDienThoai());
+           
+            stm.executeUpdate();
+            
+            try {
+                conn.commit();
+                return true;
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+                return false;
+            }
+        }
+    }
+    
+    public boolean deleteNhanVien(String id) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "DELETE FROM ThanhVien WHERE id_thanh_vien = ?";
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setString(1, id);
+            
+            return stm.executeUpdate() > 0;
+        }
+    }
+    
+    public boolean updateNhanVien(String id, String hoThanhVien, String tenThanhVien, Date ngaySinh, String soDienThoai) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "UPDATE ThanhVien SET ho_thanh_vien = ?, "
+                                                + "ten_thanh_vien = ?, "
+                                                + "ngay_sinh_thanh_vien = ?, "
+                                                + "so_dien_thoai = ? "
+                                                + "WHERE id_thanh_vien = ?";
+            
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setString(1, hoThanhVien);
+            stm.setString(2, tenThanhVien);
+            stm.setDate(3, ngaySinh);
+            stm.setString(4, soDienThoai);
+            stm.setString(5, id);
+            
+            return stm.executeUpdate() > 0;
+        }
+    }
 }

@@ -134,4 +134,61 @@ public class SanPhamService {
 
         return sanPhams;
     }
+    
+    public boolean addSanPham(SanPham sanPham) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            conn.setAutoCommit(false);
+            String query = "INSERT INTO SanPham(id_san_pham, ten_san_pham, gia, don_vi, id_khuyen_mai)"
+                    + " VALUES(?, ?, ?, ?, ?)";
+
+
+            PreparedStatement stm = conn.prepareCall(query);
+
+            stm.setInt(1, sanPham.getIdSanPham());
+            stm.setString(2, sanPham.getTenSanPham());
+            stm.setDouble(3, sanPham.getGia());
+            stm.setString(4, sanPham.getDonVi());
+            stm.setInt(5, sanPham.getIdKhuyenMai());
+           
+            stm.executeUpdate();
+            
+            try {
+                conn.commit();
+                return true;
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+                return false;
+            }
+        }
+    }
+    
+    public boolean deleteSanPham(String id) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "DELETE FROM SanPham WHERE id_san_pham = ?";
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setString(1, id);
+            
+            return stm.executeUpdate() > 0;
+        }
+    }
+    
+    public boolean updateSanPham(String id, String tenSanPham, double gia, String donVi, int idKhuyenMai) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "UPDATE SanPham SET ten_san_pham = ?, "
+                                                + "gia = ?, "
+                                                + "don_vi = ?, "
+                                                + "id_khuyen_mai = ? "
+                                                + "WHERE id_san_pham = ?";
+            
+            
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setString(1, tenSanPham);
+            stm.setDouble(2, gia);
+            stm.setString(3, donVi);
+            stm.setInt(4, idKhuyenMai);
+            stm.setString(5, id);
+            
+            return stm.executeUpdate() > 0;
+        }
+    }
 }

@@ -17,16 +17,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,6 +37,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -109,12 +108,6 @@ public class FormQuanLyBanHangController implements Initializable {
     @FXML
     DatePicker dpKhuyenMai_ngayBatDau;
 
-//    @FXML
-//    ComboBox<String> cbChiNhanh;
-//    @FXML
-//    ComboBox<String> cbNhanVien;
-//    @FXML
-//    ComboBox<String> cbKhuyenMai;
     @FXML
     private Button btnDangXuat;
 
@@ -122,6 +115,8 @@ public class FormQuanLyBanHangController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.formatDate(MY_DATE_FORMAT, dpKhuyenMai_ngayBatDau);
         this.formatDate(MY_DATE_FORMAT, dpKhuyenMai_ngayKetThuc);
+        FORM_UTILS.onlyDoubleNumbers(this.txtSanPham_gia);
+        FORM_UTILS.onlyDoubleNumbers(this.txtKhuyenMai_giaTri);
 
 //        LocalDate localDate = LocalDate.of(2023, 4, 3);
 //        this.dpKhuyenMai_ngayBatDau.setValue(localDate);
@@ -137,16 +132,16 @@ public class FormQuanLyBanHangController implements Initializable {
             this.txtNhanVien_tenNhanVien.setText("");
             this.txtNhanVien_taiKhoan.setText("");
             this.txtNhanVien_matKhau.setText("");
-            
+
             this.txtKhuyenMai_id.setText("");
             this.txtKhuyenMai_tenKhuyenMai.setText("");
             this.txtKhuyenMai_giaTri.setText("");
-            
+
             this.txtSanPham_id.setText("");
             this.txtSanPham_tenSanPham.setText("");
             this.txtSanPham_gia.setText("");
             this.txtSanPham_donVi.setText("");
-            
+
             this.loadTableColumnChiNhanh(tbChiNhanh);
             this.loadTableColumnNhanVien(tbNhanVien);
             this.loadTableColumnKhuyenMai(tbKhuyenMai);
@@ -180,6 +175,8 @@ public class FormQuanLyBanHangController implements Initializable {
             dpKhuyenMai_ngayBatDau.setValue(null);
             dpKhuyenMai_ngayKetThuc.setValue(null);
             this.addTextChangeDatePickerKhuyenMai(dpKhuyenMai_ngayBatDau, dpKhuyenMai_ngayKetThuc);
+            
+//            this.cbKhuyenMai.setValue(listKhuyenMai.get(0));
 
         } catch (SQLException ex) {
             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,25 +231,25 @@ public class FormQuanLyBanHangController implements Initializable {
     }
 
     private void loadTableColumnNhanVien(TableView tableView) {
-        TableColumn colIdThanhVien = new TableColumn("Mã nhân viên");
-        TableColumn colHoThanhVien = new TableColumn("Họ nhân viên");
-        TableColumn colTenThanhVien = new TableColumn("Tên nhân viên");
+        TableColumn colIdNhanVien = new TableColumn("Mã nhân viên");
+        TableColumn colHoNhanVien = new TableColumn("Họ nhân viên");
+        TableColumn colTenNhanVien = new TableColumn("Tên nhân viên");
         TableColumn colIdChiNhanh = new TableColumn("Mã chi nhánh");
         TableColumn colTaiKhoan = new TableColumn("Tài khoản");
         TableColumn colMatKhau = new TableColumn("Mật khẩu");
         TableColumn colQuanLy = new TableColumn("Loại tài khoản");
 
 //        pojo
-        colIdThanhVien.setCellValueFactory(new PropertyValueFactory("idNhanVien"));
-        colHoThanhVien.setCellValueFactory(new PropertyValueFactory("hoNhanVien"));
-        colTenThanhVien.setCellValueFactory(new PropertyValueFactory("tenNhanVien"));
+        colIdNhanVien.setCellValueFactory(new PropertyValueFactory("idNhanVien"));
+        colHoNhanVien.setCellValueFactory(new PropertyValueFactory("hoNhanVien"));
+        colTenNhanVien.setCellValueFactory(new PropertyValueFactory("tenNhanVien"));
         colIdChiNhanh.setCellValueFactory(new PropertyValueFactory("idChiNhanh"));
         colTaiKhoan.setCellValueFactory(new PropertyValueFactory("taiKhoan"));
         colMatKhau.setCellValueFactory(new PropertyValueFactory("matKhau"));
         colQuanLy.setCellValueFactory(new PropertyValueFactory("quanLy"));
 
         tableView.getColumns().clear();
-        tableView.getColumns().addAll(colIdThanhVien, colHoThanhVien, colTenThanhVien, colIdChiNhanh, colTaiKhoan, colMatKhau, colQuanLy);
+        tableView.getColumns().addAll(colIdNhanVien, colHoNhanVien, colTenNhanVien, colIdChiNhanh, colTaiKhoan, colMatKhau, colQuanLy);
     }
 
     private void loadTableColumnKhuyenMai(TableView tableView) {
@@ -320,7 +317,7 @@ public class FormQuanLyBanHangController implements Initializable {
     }
 
     private void loadTableDataKhuyenMai(TableView tableView, String keyword_tenKhuyenMai, String keyword_giaTri) throws SQLException {
-        List<KhuyenMai> khuyenMais = khuyenMaiService.getKhuyenMai(keyword_tenKhuyenMai, keyword_giaTri);
+        List<KhuyenMai> khuyenMais = khuyenMaiService.getKhuyenMai(null, keyword_tenKhuyenMai, keyword_giaTri);
 
         tableView.getItems().clear();
         tableView.setItems(FXCollections.observableList(khuyenMais));
@@ -496,7 +493,7 @@ public class FormQuanLyBanHangController implements Initializable {
         if (!this.txtChiNhanh_diaChi.getText().isEmpty()) {
             List<ChiNhanh> chiNhanhs = chiNhanhService.getChiNhanhs(null);
             int idChiNhanh = chiNhanhs.get(chiNhanhs.size() - 1).getIdChiNhanh() + 1;
-            String diaChi = this.txtChiNhanh_diaChi.getText();
+            String diaChi = this.txtChiNhanh_diaChi.getText().trim();
             ChiNhanh chiNhanh = new ChiNhanh(idChiNhanh, diaChi);
 
             try {
@@ -597,8 +594,8 @@ public class FormQuanLyBanHangController implements Initializable {
             List<NhanVien> nhanViens = nhanVienService.getNhanViens(null);
             int idNhanVien = nhanViens.get(nhanViens.size() - 1).getIdNhanVien() + 1;
 
-            String hoNhanVien = this.txtNhanVien_hoNhanVien.getText();
-            String tenNhanVien = this.txtNhanVien_tenNhanVien.getText();
+            String hoNhanVien = this.txtNhanVien_hoNhanVien.getText().trim();
+            String tenNhanVien = this.txtNhanVien_tenNhanVien.getText().trim();
             int idChiNhanh = this.cbChiNhanh.getSelectionModel().getSelectedItem().getIdChiNhanh();
             String taiKhoan = this.txtNhanVien_taiKhoan.getText();
             String matKhau = this.txtNhanVien_matKhau.getText();
@@ -717,9 +714,9 @@ public class FormQuanLyBanHangController implements Initializable {
             List<KhuyenMai> khuyenMais = khuyenMaiService.getKhuyenMai(null);
             int idKhuyenMai = khuyenMais.get(khuyenMais.size() - 1).getIdKhuyenMai() + 1;
 
-            String tenKhuyenMai = this.txtKhuyenMai_tenKhuyenMai.getText();
+            String tenKhuyenMai = this.txtKhuyenMai_tenKhuyenMai.getText().trim();
             double giaTri = Double.parseDouble(this.txtKhuyenMai_giaTri.getText());
-            
+
             // Exception ngay chỗ valueOf() vì nó không thể lấy được tham số truyền vào (null)
             // Mà null thì sao qua được cái if ở trên được :) ?
             // Nhưng nó vẫn chạy được và chuyển được từ LocalDate sang Date bình thường :)))
@@ -777,15 +774,18 @@ public class FormQuanLyBanHangController implements Initializable {
         Object selectedObject = this.tbKhuyenMai.getSelectionModel().getSelectedItem();
         if (selectedObject != null) {
             KhuyenMai khuyenMai = (KhuyenMai) selectedObject;
-            this.txtKhuyenMai_id.setText(Integer.toString(khuyenMai.getIdKhuyenMai()));
-            this.txtKhuyenMai_tenKhuyenMai.setText(khuyenMai.getTenKhuyenMai());
-            this.txtKhuyenMai_giaTri.setText(Double.toString(khuyenMai.getGiaTri()));
+            if (khuyenMai.getIdKhuyenMai() == 0) {
+                MessageBox.getBox("Question", "Bạn không được sửa giá trị này!", Alert.AlertType.INFORMATION).show();
+            } else {
+                this.txtKhuyenMai_id.setText(Integer.toString(khuyenMai.getIdKhuyenMai()));
+                this.txtKhuyenMai_tenKhuyenMai.setText(khuyenMai.getTenKhuyenMai());
+                this.txtKhuyenMai_giaTri.setText(Double.toString(khuyenMai.getGiaTri()));
 
 //            Instant instantNgayBatDau = khuyenMai.getNgayBatDau().toInstant();
 //            LocalDate ngayBatDau = instantNgayBatDau.atZone(ZoneId.systemDefault()).toLocalDate();
-            this.dpKhuyenMai_ngayBatDau.setValue(khuyenMai.getNgayBatDau().toLocalDate());
-            this.dpKhuyenMai_ngayKetThuc.setValue(khuyenMai.getNgayKetThuc().toLocalDate());
-
+                this.dpKhuyenMai_ngayBatDau.setValue(khuyenMai.getNgayBatDau().toLocalDate());
+                this.dpKhuyenMai_ngayKetThuc.setValue(khuyenMai.getNgayKetThuc().toLocalDate());
+            }
         } else {
             MessageBox.getBox("Question", "Hãy chọn khuyến mãi cần sửa!", Alert.AlertType.INFORMATION).show();
         }
@@ -837,7 +837,6 @@ public class FormQuanLyBanHangController implements Initializable {
                 Date ngayKetThuc = Date.valueOf(datePicker2.getValue());
                 if (ngayBatDau.compareTo(ngayKetThuc) > 0) {
                     MessageBox.getBox("Question", "Ngày bắt đầu phải nhỏ hơn ngày kết thúc", Alert.AlertType.INFORMATION).show();
-//                    this.dpKhuyenMai_ngayBatDau.setValue(LocalDate.now());
                     this.dpKhuyenMai_ngayBatDau.setValue(ngayKetThuc.toLocalDate().minusDays(1));
                 }
             }
@@ -853,5 +852,116 @@ public class FormQuanLyBanHangController implements Initializable {
                 }
             }
         });
+    }
+
+    @FXML
+    public void addSanPham(ActionEvent evt) throws SQLException {
+        if (!this.txtSanPham_donVi.getText().isEmpty() && !this.txtSanPham_tenSanPham.getText().isEmpty()
+                && !this.txtSanPham_gia.getText().isEmpty() && this.cbKhuyenMai.getValue() != null) {
+
+            List<SanPham> sanPhams = sanPhamService.getSanPham(null);
+            int idSanPham = sanPhams.get(sanPhams.size() - 1).getIdSanPham() + 1;
+//            MessageBox.getBox(Integer.toString(idSanPham), Integer.toString(idSanPham), Alert.AlertType.CONFIRMATION);
+
+            String tenSanPham = this.txtSanPham_tenSanPham.getText().trim();
+            double giaTri = Double.parseDouble(this.txtSanPham_gia.getText());
+            String donVi = this.txtSanPham_donVi.getText();
+
+            int idKhuyenMai = this.cbKhuyenMai.getSelectionModel().getSelectedItem().getIdKhuyenMai();
+
+//            MessageBox.getBox(Integer.toString(idSanPham), Integer.toString(idKhuyenMai), Alert.AlertType.CONFIRMATION);
+            SanPham sanPham = new SanPham(idSanPham, tenSanPham, giaTri, donVi, idKhuyenMai);
+
+            try {
+                sanPhamService.addSanPham(sanPham);
+                this.loadTableDataSanPham(this.tbSanPham, null);
+                MessageBox.getBox("Question", "Thêm sản phẩm thành công", Alert.AlertType.INFORMATION).show();
+                this.loadALL();
+            } catch (SQLException ex) {
+                MessageBox.getBox("Question", "Thêm sản phẩm thất bại", Alert.AlertType.INFORMATION).show();
+                Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
+        }
+    }
+
+    @FXML
+    public void deleteSanPham(ActionEvent evt) {
+        Object selectedObject = this.tbSanPham.getSelectionModel().getSelectedItem();
+
+        if (selectedObject != null) {
+            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
+            a.showAndWait().ifPresent(res -> {
+                if (res == ButtonType.OK) {
+                    SanPham sanPham = (SanPham) selectedObject;
+                    int idSanPham = sanPham.getIdSanPham();
+
+                    try {
+                        sanPhamService.deleteSanPham(Integer.toString(idSanPham));
+                        this.loadTableDataSanPham(this.tbSanPham, null);
+                        MessageBox.getBox("Question", "Xóa khuyến mãi thành công", Alert.AlertType.INFORMATION).show();
+                    } catch (SQLException ex) {
+                        MessageBox.getBox("Question", "Xóa khuyến mãi thất bại", Alert.AlertType.INFORMATION).show();
+                        Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        } else {
+            MessageBox.getBox("Question", "Hãy chọn khuyến mãi cần xóa!", Alert.AlertType.INFORMATION).show();
+        }
+    }
+
+    @FXML
+    public void editSanPham(ActionEvent evt) throws SQLException {
+        Object selectedObject = this.tbSanPham.getSelectionModel().getSelectedItem();
+        if (selectedObject != null) {
+            SanPham sanPham = (SanPham) selectedObject;
+            this.txtSanPham_id.setText(Integer.toString(sanPham.getIdSanPham()));
+            this.txtSanPham_tenSanPham.setText(sanPham.getTenSanPham());
+            this.txtSanPham_gia.setText(Double.toString(sanPham.getGia()));
+            this.txtSanPham_donVi.setText(sanPham.getDonVi());
+            List<KhuyenMai> khuyenMai = khuyenMaiService.getKhuyenMai(Integer.toString(sanPham.getIdKhuyenMai()), null, null);
+            this.cbKhuyenMai.setValue(khuyenMai.get(0));
+        } else {
+            MessageBox.getBox("Question", "Hãy chọn sản phẩm cần sửa!", Alert.AlertType.INFORMATION).show();
+        }
+    }
+
+    @FXML
+    public void updateSanPham(ActionEvent evt) {
+        if (!this.txtSanPham_id.getText().isEmpty()) {
+            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
+            a.showAndWait().ifPresent(res -> {
+                if (res == ButtonType.OK) {
+
+                    if (!this.txtSanPham_donVi.getText().isEmpty() && !this.txtSanPham_tenSanPham.getText().isEmpty()
+                            && !this.txtSanPham_gia.getText().isEmpty() && this.cbKhuyenMai.getValue() != null) {
+
+                        String idSanPham = this.txtSanPham_id.getText();
+                        String tenSanPham = this.txtSanPham_tenSanPham.getText();
+                        double gia = Double.parseDouble(this.txtSanPham_gia.getText());
+                        String donVi = this.txtSanPham_donVi.getText();
+                        int idKhuyenMai = this.cbKhuyenMai.getValue().getIdKhuyenMai();
+
+                        try {
+                            sanPhamService.updateSanPham(idSanPham, tenSanPham, gia, donVi, idKhuyenMai);
+                            this.loadTableDataKhuyenMai(this.tbKhuyenMai, null);
+                            MessageBox.getBox("Question", "Cập nhật sản phẩm thành công", Alert.AlertType.INFORMATION).show();
+                            this.loadALL();
+                        } catch (SQLException ex) {
+                            MessageBox.getBox("Question", "Cập nhật sản phẩm thất bại", Alert.AlertType.INFORMATION).show();
+                            Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
+                    }
+                }
+            });
+
+        } else {
+            MessageBox.getBox("Question", "Hãy chọn sản phẩm cần cập nhật", Alert.AlertType.INFORMATION).show();
+        }
     }
 }

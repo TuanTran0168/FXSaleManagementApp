@@ -135,11 +135,12 @@
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="txtSearchThanhVien" promptText="Nhập thông tin thành viên" VBox.vgrow="ALWAYS">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </TextField>
+                                    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="242.0" spacing="5.0">
+                                       <children>
+                                          <TextField fx:id="txtSearchThanhVien" promptText="Nhập thông tin thành viên..." HBox.hgrow="ALWAYS" />
+                                          <Button fx:id="btnDangKyThanhVien" mnemonicParsing="false" onAction="#OpenQuanLyThanhVien" text="Đăng ký mới" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
                                  </children>
                               </VBox>
                               <TableView fx:id="tbThanhVien" prefHeight="199.0" prefWidth="272.0" />

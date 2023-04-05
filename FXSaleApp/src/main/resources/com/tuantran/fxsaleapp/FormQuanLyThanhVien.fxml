@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="718.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tuantran.fxsaleapp.QuanLyThanhVienController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="67.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label text="QUẢN LÝ THÀNH VIÊN" textFill="#c11f1f" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold" size="26.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <VBox layoutX="14.0" layoutY="116.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+         <children>
+            <HBox maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="115.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox prefHeight="95.0" prefWidth="359.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label text="Mã thành viên:" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin></Label>
+                              <TextField fx:id="txtThanhVien_id" disable="true" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="95.0" prefWidth="200.0" spacing="5.0">
+                           <children>
+                              <Label text="Họ:" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets right="65.0" />
+                                 </HBox.margin></Label>
+                              <TextField fx:id="txtThanhVien_hoThanhVien" HBox.hgrow="ALWAYS" />
+                              <Label text="Tên:" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets left="10.0" right="65.0" />
+                                 </HBox.margin></Label>
+                              <TextField fx:id="txtThanhVien_tenThanhVien" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox prefHeight="95.0" prefWidth="359.0">
+                           <children>
+                              <Label text="Ngày sinh:" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets right="27.0" />
+                                 </HBox.margin></Label>
+                              <DatePicker fx:id="dpThanhVien_ngaySinh" maxWidth="1.7976931348623157E308" promptText="Nhập ngày sinh..." HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="95.0" prefWidth="200.0">
+                           <children>
+                              <Label text="Số điện thoại:" HBox.hgrow="ALWAYS">
+                                 <padding>
+                                    <Insets right="10.0" />
+                                 </padding></Label>
+                              <TextField fx:id="txtThanhVien_soDienThoai" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="tbThanhVien" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="120.0" prefWidth="718.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#addThanhVien" prefHeight="25.0" prefWidth="90.0" text="Thêm" HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#deleteThanhVien" prefHeight="25.0" prefWidth="90.0" text="Xóa" HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#editThanhVien" prefHeight="25.0" prefWidth="90.0" text="Sửa" HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#updateThanhVien" prefHeight="25.0" prefWidth="90.0" text="Cập nhật" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnThoat" mnemonicParsing="false" onAction="#exit" prefHeight="25.0" prefWidth="90.0" text="Đóng" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>
