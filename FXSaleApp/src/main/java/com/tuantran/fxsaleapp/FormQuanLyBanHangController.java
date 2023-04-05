@@ -231,25 +231,25 @@ public class FormQuanLyBanHangController implements Initializable {
     }
 
     private void loadTableColumnNhanVien(TableView tableView) {
-        TableColumn colIdThanhVien = new TableColumn("Mã nhân viên");
-        TableColumn colHoThanhVien = new TableColumn("Họ nhân viên");
-        TableColumn colTenThanhVien = new TableColumn("Tên nhân viên");
+        TableColumn colIdNhanVien = new TableColumn("Mã nhân viên");
+        TableColumn colHoNhanVien = new TableColumn("Họ nhân viên");
+        TableColumn colTenNhanVien = new TableColumn("Tên nhân viên");
         TableColumn colIdChiNhanh = new TableColumn("Mã chi nhánh");
         TableColumn colTaiKhoan = new TableColumn("Tài khoản");
         TableColumn colMatKhau = new TableColumn("Mật khẩu");
         TableColumn colQuanLy = new TableColumn("Loại tài khoản");
 
 //        pojo
-        colIdThanhVien.setCellValueFactory(new PropertyValueFactory("idNhanVien"));
-        colHoThanhVien.setCellValueFactory(new PropertyValueFactory("hoNhanVien"));
-        colTenThanhVien.setCellValueFactory(new PropertyValueFactory("tenNhanVien"));
+        colIdNhanVien.setCellValueFactory(new PropertyValueFactory("idNhanVien"));
+        colHoNhanVien.setCellValueFactory(new PropertyValueFactory("hoNhanVien"));
+        colTenNhanVien.setCellValueFactory(new PropertyValueFactory("tenNhanVien"));
         colIdChiNhanh.setCellValueFactory(new PropertyValueFactory("idChiNhanh"));
         colTaiKhoan.setCellValueFactory(new PropertyValueFactory("taiKhoan"));
         colMatKhau.setCellValueFactory(new PropertyValueFactory("matKhau"));
         colQuanLy.setCellValueFactory(new PropertyValueFactory("quanLy"));
 
         tableView.getColumns().clear();
-        tableView.getColumns().addAll(colIdThanhVien, colHoThanhVien, colTenThanhVien, colIdChiNhanh, colTaiKhoan, colMatKhau, colQuanLy);
+        tableView.getColumns().addAll(colIdNhanVien, colHoNhanVien, colTenNhanVien, colIdChiNhanh, colTaiKhoan, colMatKhau, colQuanLy);
     }
 
     private void loadTableColumnKhuyenMai(TableView tableView) {
@@ -493,7 +493,7 @@ public class FormQuanLyBanHangController implements Initializable {
         if (!this.txtChiNhanh_diaChi.getText().isEmpty()) {
             List<ChiNhanh> chiNhanhs = chiNhanhService.getChiNhanhs(null);
             int idChiNhanh = chiNhanhs.get(chiNhanhs.size() - 1).getIdChiNhanh() + 1;
-            String diaChi = this.txtChiNhanh_diaChi.getText();
+            String diaChi = this.txtChiNhanh_diaChi.getText().trim();
             ChiNhanh chiNhanh = new ChiNhanh(idChiNhanh, diaChi);
 
             try {
@@ -594,8 +594,8 @@ public class FormQuanLyBanHangController implements Initializable {
             List<NhanVien> nhanViens = nhanVienService.getNhanViens(null);
             int idNhanVien = nhanViens.get(nhanViens.size() - 1).getIdNhanVien() + 1;
 
-            String hoNhanVien = this.txtNhanVien_hoNhanVien.getText();
-            String tenNhanVien = this.txtNhanVien_tenNhanVien.getText();
+            String hoNhanVien = this.txtNhanVien_hoNhanVien.getText().trim();
+            String tenNhanVien = this.txtNhanVien_tenNhanVien.getText().trim();
             int idChiNhanh = this.cbChiNhanh.getSelectionModel().getSelectedItem().getIdChiNhanh();
             String taiKhoan = this.txtNhanVien_taiKhoan.getText();
             String matKhau = this.txtNhanVien_matKhau.getText();
@@ -714,7 +714,7 @@ public class FormQuanLyBanHangController implements Initializable {
             List<KhuyenMai> khuyenMais = khuyenMaiService.getKhuyenMai(null);
             int idKhuyenMai = khuyenMais.get(khuyenMais.size() - 1).getIdKhuyenMai() + 1;
 
-            String tenKhuyenMai = this.txtKhuyenMai_tenKhuyenMai.getText();
+            String tenKhuyenMai = this.txtKhuyenMai_tenKhuyenMai.getText().trim();
             double giaTri = Double.parseDouble(this.txtKhuyenMai_giaTri.getText());
 
             // Exception ngay chỗ valueOf() vì nó không thể lấy được tham số truyền vào (null)
@@ -863,7 +863,7 @@ public class FormQuanLyBanHangController implements Initializable {
             int idSanPham = sanPhams.get(sanPhams.size() - 1).getIdSanPham() + 1;
 //            MessageBox.getBox(Integer.toString(idSanPham), Integer.toString(idSanPham), Alert.AlertType.CONFIRMATION);
 
-            String tenSanPham = this.txtSanPham_tenSanPham.getText();
+            String tenSanPham = this.txtSanPham_tenSanPham.getText().trim();
             double giaTri = Double.parseDouble(this.txtSanPham_gia.getText());
             String donVi = this.txtSanPham_donVi.getText();
 

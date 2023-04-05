@@ -5,6 +5,7 @@ import com.tuantran.pojo.SanPham;
 import com.tuantran.services.ChiNhanhService;
 import com.tuantran.services.ChiTietHoaDonService;
 import com.tuantran.services.HoaDonService;
+import com.tuantran.services.KhuyenMaiService;
 import com.tuantran.services.SanPhamService;
 import com.tuantran.services.ThanhVienService;
 import com.tuantran.utils.MessageBox;
@@ -58,6 +59,7 @@ public class FormNhanVienBanHangController implements Initializable {
     private static final ChiNhanhService chiNhanhService = new ChiNhanhService();
     private static final ChiTietHoaDonService chiTietHoaDonService = new ChiTietHoaDonService();
     private static final ThanhVienService thanhVienService = new ThanhVienService();
+    private static final KhuyenMaiService khuyenMaiService = new KhuyenMaiService();
     private final FormUtils FORM_UTILS = new FormUtils();
 
     private List<SanPham> sanPhamDuocChon;
@@ -116,6 +118,11 @@ public class FormNhanVienBanHangController implements Initializable {
 
     public void loadALL() {
         try {
+            this.txtTienNhan.setText("");
+            this.txtTienNhan.setDisable(true);
+            this.txtTienThoi.setText("");
+            this.txtThanhTien.setText("");
+
             this.tbSanPhamDuocChon.setEditable(true);
             this.sanPhamDuocChon = new ArrayList<>();
 
@@ -168,7 +175,7 @@ public class FormNhanVienBanHangController implements Initializable {
             this.txtTestHo.setText(nhanVienDiemDanh.getHoNhanVien());
             this.txtTestTen.setText(nhanVienDiemDanh.getTenNhanVien());
 
-            List<ChiNhanh> cn = chiNhanhService.getChiNhanhs(String.format("", nhanVienDiemDanh.getIdChiNhanh()));
+            List<ChiNhanh> cn = chiNhanhService.getChiNhanhs(Integer.toString(nhanVienDiemDanh.getIdChiNhanh()), null);
             this.txtDiaChi.setText(cn.get(0).getDiaChi());
             this.btnThanhToan.setDisable(false);
             this.btnDangKyThanhVien.setDisable(false);
@@ -180,7 +187,7 @@ public class FormNhanVienBanHangController implements Initializable {
     }
 
     @FXML
-    private void dangXuat() throws IOException {
+    public void dangXuat() throws IOException {
         String formName = "Primary";
         String titleForm = "Đăng nhập";
         FORM_UTILS.newForm(formName, titleForm);
@@ -286,7 +293,7 @@ public class FormNhanVienBanHangController implements Initializable {
 
     private void loadTableDataThanhVien(String keyword, TableView tableView) throws SQLException {
         List<ThanhVien> thanhViens = thanhVienService.getThanhVien(keyword);
-
+        thanhViens.remove(0);
         tableView.getItems().clear();
         tableView.setItems(FXCollections.observableList(thanhViens));
     }
@@ -336,45 +343,160 @@ public class FormNhanVienBanHangController implements Initializable {
         tableView.getColumns().add(tableColumn);
     }
 
+//    private void xuLyButtonThemSanPham(Button button) {
+//        button.setOnAction(evt -> {
+//            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn chọn?", Alert.AlertType.CONFIRMATION);
+//            a.showAndWait().ifPresent(res -> {
+//                if (res == ButtonType.OK) {
+//                    Button btnXuLy = (Button) evt.getSource();
+//                    TableCell cell = (TableCell) btnXuLy.getParent();
+//                    SanPham s = (SanPham) cell.getTableRow().getItem();
+//                    s.setSoLuongTemp(1);
+//
+////                    THUẬT TOÁN THÊM ĐẲNG CẤP :) RESET BIẾN ĐẾM ĐÚNG CHỖ :) TỐN 4 TIẾNG RƯỠI CỦA BỐ :)
+//                    if (sanPhamDuocChon.isEmpty()) {
+//                        sanPhamDuocChon.add(s);
+//                        count = 0;
+//                    } else {
+//                        for (SanPham sp : sanPhamDuocChon) {
+//                            if (s.getIdSanPham() == sp.getIdSanPham()) {
+//                                Alert c = MessageBox.getBox("Question", "Đã tồn tại sản phẩm", Alert.AlertType.CONFIRMATION);
+//                                c.show();
+//                                count = 0;
+//                                break;
+//                            } else {
+//                                count++;
+//                            }
+//                        }
+//                        if (count == sanPhamDuocChon.size()) {
+//                            sanPhamDuocChon.add(s);
+//                            count = 0;
+//                        }
+//                    }
+//                }
+//            });
+//
+//            for (SanPham sanPham : sanPhamDuocChon) {
+//                try {
+//                    int idKhuyenMai = sanPham.getIdKhuyenMai();
+//                    List<KhuyenMai> khuyenMais = khuyenMaiService.getKhuyenMai(Integer.toString(idKhuyenMai), null, null);
+//                    KhuyenMai khuyenMaiCuaSanPham = khuyenMais.get(0);
+//                    double giaDaGiam = sanPham.getGia() - khuyenMaiCuaSanPham.getGiaTri();
+//                    if (giaDaGiam < 0) {
+//                        sanPham.setGia(0);
+//                    } else {
+//                        sanPham.setGia(giaDaGiam);
+//                    }
+//
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//
+//            this.tbSanPhamDuocChon.setItems(FXCollections.observableList(sanPhamDuocChon));
+//
+//            this.txtThanhTien.setText(" " + this.tinhTongTien());
+//            if (!this.txtThanhTien.getText().isEmpty() || !this.txtThanhTien.getText().equals("0")) {
+//                this.txtTienNhan.setDisable(false);
+//            }
+//        });
+//    }
     private void xuLyButtonThemSanPham(Button button) {
         button.setOnAction(evt -> {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn chọn?", Alert.AlertType.CONFIRMATION);
-            a.showAndWait().ifPresent(res -> {
-                if (res == ButtonType.OK) {
-                    Button btnXuLy = (Button) evt.getSource();
-                    TableCell cell = (TableCell) btnXuLy.getParent();
-                    SanPham s = (SanPham) cell.getTableRow().getItem();
-                    s.setSoLuongTemp(1);
+
+            Button btnXuLy = (Button) evt.getSource();
+            TableCell cell = (TableCell) btnXuLy.getParent();
+            SanPham s = (SanPham) cell.getTableRow().getItem();
+            s.setSoLuongTemp(1);
 
 //                    THUẬT TOÁN THÊM ĐẲNG CẤP :) RESET BIẾN ĐẾM ĐÚNG CHỖ :) TỐN 4 TIẾNG RƯỠI CỦA BỐ :)
-                    if (sanPhamDuocChon.isEmpty()) {
-                        sanPhamDuocChon.add(s);
+            if (sanPhamDuocChon.isEmpty()) {
+                sanPhamDuocChon.add(s);
+                // Áp khuyến mãi
+                this.applyKhuyenMai(s);
+                count = 0;
+            } else {
+                for (SanPham sp : sanPhamDuocChon) {
+                    if (s.getIdSanPham() == sp.getIdSanPham()) {
+                        Alert c = MessageBox.getBox("Question", "Đã tồn tại sản phẩm", Alert.AlertType.CONFIRMATION);
+                        c.show();
                         count = 0;
+                        break;
                     } else {
-                        for (SanPham sp : sanPhamDuocChon) {
-                            if (s.getIdSanPham() == sp.getIdSanPham()) {
-                                Alert c = MessageBox.getBox("Question", "Đã tồn tại sản phẩm", Alert.AlertType.CONFIRMATION);
-                                c.show();
-                                count = 0;
-                                break;
-                            } else {
-                                count++;
-                            }
-                        }
-                        if (count == sanPhamDuocChon.size()) {
-                            sanPhamDuocChon.add(s);
-                            count = 0;
-                        }
+                        count++;
                     }
                 }
-            });
+                if (count == sanPhamDuocChon.size()) {
+                    sanPhamDuocChon.add(s);
+                    // Áp khuyến mãi
+                    this.applyKhuyenMai(s);
+                    count = 0;
+                }
+            }
 
+            try {
+                this.loadTableDataSanPham(null, this.tbSanPhams); //Load lại cho nó đỡ bị ngáo
+            } catch (SQLException ex) {
+                Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             this.tbSanPhamDuocChon.setItems(FXCollections.observableList(sanPhamDuocChon));
+
             this.txtThanhTien.setText(" " + this.tinhTongTien());
             if (!this.txtThanhTien.getText().isEmpty() || !this.txtThanhTien.getText().equals("0")) {
                 this.txtTienNhan.setDisable(false);
             }
         });
+    }
+
+//    private void applyKhuyenMai() {
+//        for (SanPham sanPham : sanPhamDuocChon) {
+//            try {
+//                int idKhuyenMai = sanPham.getIdKhuyenMai();
+//                List<KhuyenMai> khuyenMais = khuyenMaiService.getKhuyenMai(Integer.toString(idKhuyenMai), null, null);
+//                KhuyenMai khuyenMaiCuaSanPham = khuyenMais.get(0);
+//
+//                LocalDate ngayBatDau = khuyenMaiCuaSanPham.getNgayBatDau().toLocalDate();
+//                LocalDate ngayKetThuc = khuyenMaiCuaSanPham.getNgayKetThuc().toLocalDate();
+//                LocalDate ngayHienTai = LocalDate.now();
+//
+//                if (ngayHienTai.compareTo(ngayBatDau) > 0 && ngayHienTai.compareTo(ngayKetThuc) < 0) {
+//                    double giaDaGiam = sanPham.getGia() - khuyenMaiCuaSanPham.getGiaTri();
+//                    if (giaDaGiam < 0) {
+//                        sanPham.setGia(0);
+//                    } else {
+//                        sanPham.setGia(giaDaGiam);
+//                    }
+//                    MessageBox.getBox("Thông báo", "Sản phẩm đang trong thời gian giảm giá!", Alert.AlertType.CONFIRMATION).show();
+//                }
+//
+//            } catch (SQLException ex) {
+//                Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//    }
+    private void applyKhuyenMai(SanPham sanPham) {
+        try {
+            int idKhuyenMai = sanPham.getIdKhuyenMai();
+            List<KhuyenMai> khuyenMais = khuyenMaiService.getKhuyenMai(Integer.toString(idKhuyenMai), null, null);
+            KhuyenMai khuyenMaiCuaSanPham = khuyenMais.get(0);
+
+            LocalDate ngayBatDau = khuyenMaiCuaSanPham.getNgayBatDau().toLocalDate();
+            LocalDate ngayKetThuc = khuyenMaiCuaSanPham.getNgayKetThuc().toLocalDate();
+            LocalDate ngayHienTai = LocalDate.now();
+
+            if (ngayHienTai.compareTo(ngayBatDau) >= 0 && ngayHienTai.compareTo(ngayKetThuc) <= 0) {
+                double giaDaGiam = sanPham.getGia() - khuyenMaiCuaSanPham.getGiaTri();
+                if (giaDaGiam < 0) {
+                    sanPham.setGia(0);
+                } else {
+                    sanPham.setGia(giaDaGiam);
+                }
+                MessageBox.getBox("Thông báo", "Sản phẩm đang trong thời gian giảm giá!", Alert.AlertType.CONFIRMATION).show();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private long tinhTongTien() {
@@ -399,7 +521,6 @@ public class FormNhanVienBanHangController implements Initializable {
 
         LocalDate ngayCT_LocalDate = LocalDate.now();
         Date ngayCT_Date = Date.valueOf(ngayCT_LocalDate);
-//        Date ngayCT = new Date(40, 10, 10);
 
         int idNhanVien = this.nhanVienDiemDanh.getIdNhanVien();
         int idChiNhanh = this.nhanVienDiemDanh.getIdChiNhanh();
@@ -410,7 +531,7 @@ public class FormNhanVienBanHangController implements Initializable {
         List<ChiTietHoaDon> listChiTietHoaDon = chiTietHoaDonService.getChiTietHoaDon(null);
         int idChiTietHoaDon = listChiTietHoaDon.get(listChiTietHoaDon.size() - 1).getIdCTHD();
 
-//        Lấy id thành viên được chọn trong hệ thống
+//        Lấy id thành viên được chọn trong hệ thống để tiến hành giảm giá
         int idThanhVien = 0;
 
         if (this.thanhVienDuocKhuyenMai != null) {
@@ -439,17 +560,22 @@ public class FormNhanVienBanHangController implements Initializable {
                     tongTien += thanhTien;
                 }
 
-                hoaDon.setTongTien(tongTien);
-                hoaDon.setSoTienNhan(soTienNhan);
+                if (soTienNhan > tongTien) {
+                    hoaDon.setTongTien(tongTien);
+                    hoaDon.setSoTienNhan(soTienNhan);
 
-                try {
-                    hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
-                    MessageBox.getBox("Question", "Thêm hóa đơn thành công", Alert.AlertType.INFORMATION).show();
-                    this.loadALL();
-                } catch (SQLException ex) {
-                    MessageBox.getBox("Question", "Thêm hóa đơn thất bại", Alert.AlertType.INFORMATION).show();
-                    Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                    try {
+                        hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
+                        MessageBox.getBox("Question", "Thêm hóa đơn thành công", Alert.AlertType.INFORMATION).show();
+                        this.loadALL();
+                    } catch (SQLException ex) {
+                        MessageBox.getBox("Question", "Thêm hóa đơn thất bại", Alert.AlertType.INFORMATION).show();
+                        Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    MessageBox.getBox("Question", "Số tiền nhận từ khách phải lớn hơn tổng tiền!", Alert.AlertType.INFORMATION).show();
                 }
+
             } else {
                 MessageBox.getBox("Question", "Hãy chọn sản phẩm", Alert.AlertType.INFORMATION).show();
             }
@@ -468,7 +594,8 @@ public class FormNhanVienBanHangController implements Initializable {
                     SanPham s = (SanPham) cell.getTableRow().getItem();
                     sanPhamDuocChon.remove(s);
                     this.txtThanhTien.setText(" " + this.tinhTongTien());
-                    if (!this.txtThanhTien.getText().isEmpty() || !this.txtThanhTien.getText().equals("0")) {
+
+                    if (this.tinhTongTien() == 0) {
                         this.txtTienNhan.setDisable(true);
                         this.txtTienNhan.setText("0");
                     }
@@ -489,8 +616,7 @@ public class FormNhanVienBanHangController implements Initializable {
                     TableCell cell = (TableCell) btnXuLy.getParent();
                     thanhVienDuocKhuyenMai = (ThanhVien) cell.getTableRow().getItem();
 
-                    Alert b = MessageBox.getBox("CC", thanhVienDuocKhuyenMai.getHoThanhVien() + " " + thanhVienDuocKhuyenMai.getTenThanhVien(), Alert.AlertType.CONFIRMATION);
-                    b.show();
+                    MessageBox.getBox("Thông báo", "Đã chọn thành viên: " + thanhVienDuocKhuyenMai.getHoThanhVien() + " " + thanhVienDuocKhuyenMai.getTenThanhVien(), Alert.AlertType.CONFIRMATION).show();
                     this.txtThanhVienApDung.setText(thanhVienDuocKhuyenMai.getHoThanhVien() + " " + thanhVienDuocKhuyenMai.getTenThanhVien());
                 }
             });
@@ -521,9 +647,11 @@ public class FormNhanVienBanHangController implements Initializable {
 
     private void addTextChangeTienThoi(TextField textField_1, TextField textField_2) {
         textField_1.textProperty().addListener(e -> {
-            double thanhTien = Double.parseDouble(this.txtThanhTien.getText());
-            double soTienNhan = Double.parseDouble(textField_1.getText());
-            textField_2.setText(" " + (soTienNhan - thanhTien));
+            if (!textField_1.getText().isEmpty()) {
+                double thanhTien = Double.parseDouble(this.txtThanhTien.getText());
+                double soTienNhan = Double.parseDouble(textField_1.getText());
+                textField_2.setText(" " + (soTienNhan - thanhTien));
+            }
         });
     }
 }

@@ -34,7 +34,7 @@
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin></Label>
-                              <TextField fx:id="txtThanhVien_id" HBox.hgrow="ALWAYS" />
+                              <TextField fx:id="txtThanhVien_id" disable="true" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox prefHeight="95.0" prefWidth="200.0" spacing="5.0">
