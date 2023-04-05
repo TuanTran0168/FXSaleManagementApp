@@ -48,7 +48,7 @@ import javafx.util.StringConverter;
  */
 public class FormQuanLyBanHangController implements Initializable {
 
-    private static final String MY_DATE_FORMAT = "dd/MM/yyyy";
+//    private static final String MY_DATE_FORMAT = "dd/MM/yyyy";
     static final ChiNhanhService chiNhanhService = new ChiNhanhService();
     static final NhanVienService nhanVienService = new NhanVienService();
     static final KhuyenMaiService khuyenMaiService = new KhuyenMaiService();
@@ -113,8 +113,8 @@ public class FormQuanLyBanHangController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.formatDate(MY_DATE_FORMAT, dpKhuyenMai_ngayBatDau);
-        this.formatDate(MY_DATE_FORMAT, dpKhuyenMai_ngayKetThuc);
+        FORM_UTILS.formatDate(FORM_UTILS.MY_DATE_FORMAT, dpKhuyenMai_ngayBatDau);
+        FORM_UTILS.formatDate(FORM_UTILS.MY_DATE_FORMAT, dpKhuyenMai_ngayKetThuc);
         FORM_UTILS.onlyDoubleNumbers(this.txtSanPham_gia);
         FORM_UTILS.onlyDoubleNumbers(this.txtKhuyenMai_giaTri);
 
@@ -183,31 +183,31 @@ public class FormQuanLyBanHangController implements Initializable {
         }
     }
 
-    private void formatDate(String yourDateFormat, DatePicker datePicker) {
-
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(yourDateFormat);
-
-        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        };
-        datePicker.setConverter(converter);
-    }
+//    private void formatDate(String yourDateFormat, DatePicker datePicker) {
+//
+//        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(yourDateFormat);
+//
+//        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+//            @Override
+//            public String toString(LocalDate date) {
+//                if (date != null) {
+//                    return dateFormatter.format(date);
+//                } else {
+//                    return "";
+//                }
+//            }
+//
+//            @Override
+//            public LocalDate fromString(String string) {
+//                if (string != null && !string.isEmpty()) {
+//                    return LocalDate.parse(string, dateFormatter);
+//                } else {
+//                    return null;
+//                }
+//            }
+//        };
+//        datePicker.setConverter(converter);
+//    }
 
     @FXML
     private void dangXuat() throws IOException {
