@@ -6,23 +6,32 @@ package com.tuantran.fxsaleapp;
 
 import com.tuantran.utils.MessageBox;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.function.UnaryOperator;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 /**
  *
  * @author TuanTran
  */
 public class FormUtils {
+
+    public final String MY_DATE_FORMAT = "dd/MM/yyyy";
+    public final double SO_TIEN_GIAM_GIA_THEO_QUY_DINH = 1000000;
+    public final double PHAN_TRAM_DISCOUNT = 10 / (100 * 1.0);
+    public final String PHAN_TRAM_DISCOUNT_TEXT = this.PHAN_TRAM_DISCOUNT * 100 + "%";
 
     public void newForm(String formName, String titleForm) throws IOException {
         formName = formName + ".fxml";
@@ -99,25 +108,49 @@ public class FormUtils {
             String newText = change.getControlNewText();
             if (newText.matches("^[0-9]*(\\.[0-9]*)?$")) {
                 return change;
-            } 
-            else {
+            } else {
                 MessageBox.getBox("Cảnh báo", "Bạn chỉ có thể nhập số vào ô này!", Alert.AlertType.WARNING).show();
             }
             return null;
         }));
     }
-    
+
     public void onlyNumbers(TextField textField) {
         textField.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
             if (newText.matches("^[0-9]*")) {
                 return change;
-            } 
-            else {
+            } else {
                 MessageBox.getBox("Cảnh báo", "Bạn chỉ có thể nhập số vào ô này!", Alert.AlertType.WARNING).show();
             }
             return null;
         }));
+    }
+
+    public void formatDate(String yourDateFormat, DatePicker datePicker) {
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(yourDateFormat);
+
+        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };
+        datePicker.setConverter(converter);
     }
 
 }

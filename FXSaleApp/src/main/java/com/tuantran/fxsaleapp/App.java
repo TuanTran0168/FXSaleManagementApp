@@ -26,7 +26,7 @@ public class App extends Application {
         double screenWidth = bounds.getWidth();
         double screenHeight = bounds.getHeight();
 
-        scene = new Scene(loadFXML("primary"), 640, 500);
+        scene = new Scene(loadFXML("primary"), screenWidth, screenHeight);
         stage.setScene(scene);
         stage.show();
     }

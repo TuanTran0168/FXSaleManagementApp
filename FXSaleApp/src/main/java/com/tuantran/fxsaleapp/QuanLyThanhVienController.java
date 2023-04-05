@@ -63,6 +63,7 @@ public class QuanLyThanhVienController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         FORM_UTILS.onlyNumbers(this.txtThanhVien_soDienThoai);
+        FORM_UTILS.formatDate(FORM_UTILS.MY_DATE_FORMAT, dpThanhVien_ngaySinh);
         this.loadALL();
     }
 
@@ -75,6 +76,8 @@ public class QuanLyThanhVienController implements Initializable {
             this.dpThanhVien_ngaySinh.setValue(null);
             this.loadTableColumnThanhVien(this.tbThanhVien);
             this.loadTableDataThanhVien(this.tbThanhVien, null);
+
+            this.addTextChangeThanhVien(txtThanhVien_hoThanhVien, txtThanhVien_tenThanhVien, txtThanhVien_soDienThoai, tbThanhVien);
 
         } catch (SQLException ex) {
             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,6 +109,13 @@ public class QuanLyThanhVienController implements Initializable {
 
     private void loadTableDataThanhVien(TableView tableView, String keyword) throws SQLException {
         List<ThanhVien> thanhViens = thanhVienService.getThanhVien(keyword);
+
+        tableView.getItems().clear();
+        tableView.setItems(FXCollections.observableList(thanhViens));
+    }
+
+    private void loadTableDataThanhVien(TableView tableView, String keyword_id, String keyword_hoThanhVien, String keyword_tenThanhVien, String keyword_soDienThoai) throws SQLException {
+        List<ThanhVien> thanhViens = thanhVienService.getThanhViens(keyword_id, keyword_hoThanhVien, keyword_tenThanhVien, keyword_soDienThoai);
 
         tableView.getItems().clear();
         tableView.setItems(FXCollections.observableList(thanhViens));
@@ -152,13 +162,17 @@ public class QuanLyThanhVienController implements Initializable {
                     ThanhVien thanhVien = (ThanhVien) selectedObject;
                     int idThanhVien = thanhVien.getIdThanhVien();
 
-                    try {
-                        thanhVienService.deleteNhanVien(Integer.toString(idThanhVien));
-                        this.loadTableDataThanhVien(this.tbThanhVien, null);
-                        MessageBox.getBox("Question", "Xóa thành viên thành công", Alert.AlertType.INFORMATION).show();
-                    } catch (SQLException ex) {
-                        MessageBox.getBox("Question", "Xóa thành viên thất bại", Alert.AlertType.INFORMATION).show();
-                        Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                    if (idThanhVien == 0) {
+                        MessageBox.getBox("Question", "Bạn không được sửa giá trị này!", Alert.AlertType.INFORMATION).show();
+                    } else {
+                        try {
+                            thanhVienService.deleteNhanVien(Integer.toString(idThanhVien));
+                            this.loadTableDataThanhVien(this.tbThanhVien, null);
+                            MessageBox.getBox("Question", "Xóa thành viên thành công", Alert.AlertType.INFORMATION).show();
+                        } catch (SQLException ex) {
+                            MessageBox.getBox("Question", "Xóa thành viên thất bại", Alert.AlertType.INFORMATION).show();
+                            Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
             });
@@ -173,7 +187,7 @@ public class QuanLyThanhVienController implements Initializable {
         if (selectedObject != null) {
             ThanhVien thanhVien = (ThanhVien) selectedObject;
             if (thanhVien.getIdThanhVien() == 0) {
-                MessageBox.getBox("Question", "Bạn không được sửa giá trị này!", Alert.AlertType.INFORMATION).show();
+                MessageBox.getBox("Question", "Bạn không được xóa giá trị này!", Alert.AlertType.INFORMATION).show();
             } else {
 
                 this.txtThanhVien_id.setText(Integer.toString(thanhVien.getIdThanhVien()));
@@ -222,6 +236,38 @@ public class QuanLyThanhVienController implements Initializable {
 
         } else {
             MessageBox.getBox("Question", "Hãy chọn sản phẩm cần cập nhật", Alert.AlertType.INFORMATION).show();
+        }
+    }
+
+    private void addTextChangeThanhVien(TextField keyword_hoThanhVien, TextField keyword_tenThanhVien, TextField keyword_soDienThoai, TableView tableView) {
+        if (keyword_hoThanhVien != null) {
+            keyword_hoThanhVien.textProperty().addListener(e -> {
+                try {
+                    this.loadTableDataThanhVien(tableView, null, keyword_hoThanhVien.getText(), null, null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+
+        if (keyword_tenThanhVien != null) {
+            keyword_tenThanhVien.textProperty().addListener(e -> {
+                try {
+                    this.loadTableDataThanhVien(tableView, null, null, keyword_tenThanhVien.getText(), null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+
+        if (keyword_soDienThoai != null) {
+            keyword_soDienThoai.textProperty().addListener(e -> {
+                try {
+                    this.loadTableDataThanhVien(tableView, null, null, null, keyword_soDienThoai.getText());
+                } catch (SQLException ex) {
+                    Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
         }
     }
 }

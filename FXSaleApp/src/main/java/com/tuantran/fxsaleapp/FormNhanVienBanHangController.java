@@ -61,6 +61,8 @@ public class FormNhanVienBanHangController implements Initializable {
     private static final ThanhVienService thanhVienService = new ThanhVienService();
     private static final KhuyenMaiService khuyenMaiService = new KhuyenMaiService();
     private final FormUtils FORM_UTILS = new FormUtils();
+//    private final double SO_TIEN_GIAM_GIA_THEO_QUY_DINH = 1000000;
+//    private final double PHAN_TRAM_DISCOUNT = 10 / (100 * 1.0);
 
     private List<SanPham> sanPhamDuocChon;
     private List<String> listSoLuongSanPhamDuocChon;
@@ -122,6 +124,7 @@ public class FormNhanVienBanHangController implements Initializable {
             this.txtTienNhan.setDisable(true);
             this.txtTienThoi.setText("");
             this.txtThanhTien.setText("");
+            this.txtThanhVienApDung.setText("");
 
             this.tbSanPhamDuocChon.setEditable(true);
             this.sanPhamDuocChon = new ArrayList<>();
@@ -293,7 +296,11 @@ public class FormNhanVienBanHangController implements Initializable {
 
     private void loadTableDataThanhVien(String keyword, TableView tableView) throws SQLException {
         List<ThanhVien> thanhViens = thanhVienService.getThanhVien(keyword);
-        thanhViens.remove(0);
+        if (!thanhViens.isEmpty()) {
+            if (thanhViens.get(0).getIdThanhVien() == 0) {
+                thanhViens.remove(0);
+            }
+        }
         tableView.getItems().clear();
         tableView.setItems(FXCollections.observableList(thanhViens));
     }
@@ -499,12 +506,23 @@ public class FormNhanVienBanHangController implements Initializable {
         }
     }
 
-    private long tinhTongTien() {
-        long tong = 0;
+    private double tinhTongTien() {
+        double tong = 0;
+        LocalDate today = LocalDate.now();
         ObservableList<SanPham> listSP = FXCollections.observableArrayList();
         listSP.addAll(tbSanPhamDuocChon.getItems());
         for (SanPham sp : listSP) {
             tong += sp.getGia() * sp.getSoLuongTemp();
+        }
+
+        if (thanhVienDuocKhuyenMai != null) {
+            LocalDate ngaySinhThanhVien = thanhVienDuocKhuyenMai.getNgaySinhThanhVien().toLocalDate();
+            if ((ngaySinhThanhVien.getMonthValue() == today.getMonthValue()
+                    && ngaySinhThanhVien.getDayOfMonth() == today.getDayOfMonth())
+                    && tong > FORM_UTILS.SO_TIEN_GIAM_GIA_THEO_QUY_DINH) {
+                tong = tong - tong * FORM_UTILS.PHAN_TRAM_DISCOUNT;
+                MessageBox.getBox("Thông báo", "BẠN ĐÃ ĐƯỢC GIẢM " + FORM_UTILS.PHAN_TRAM_DISCOUNT_TEXT + ", SỐ TIỀN CỦA BẠN LÀ = " + tong, Alert.AlertType.CONFIRMATION).show();
+            }
         }
 
 //        if (this.txtThanhTien.getText().isEmpty() || this.txtThanhTien.getText().compareTo("0") == 1) {
@@ -560,6 +578,15 @@ public class FormNhanVienBanHangController implements Initializable {
                     tongTien += thanhTien;
                 }
 
+//                if (idThanhVien != 0) {
+//                    LocalDate ngaySinhThanhVien = thanhVienDuocKhuyenMai.getNgaySinhThanhVien().toLocalDate();
+//                    if ((ngaySinhThanhVien.getMonthValue() == ngayCT_LocalDate.getMonthValue()
+//                            && ngaySinhThanhVien.getDayOfMonth() == ngayCT_LocalDate.getDayOfMonth())
+//                            && tongTien > this.SO_TIEN_GIAM_GIA_THEO_QUY_DINH) {
+//                        tongTien = tongTien - tongTien * this.PHAN_TRAM_DISCOUNT;
+//                        MessageBox.getBox("Thông báo", "BẠN ĐÃ ĐƯỢC GIẢM 10% = " + this.PHAN_TRAM_DISCOUNT, Alert.AlertType.CONFIRMATION).show();
+//                    }
+//                }
                 if (soTienNhan > tongTien) {
                     hoaDon.setTongTien(tongTien);
                     hoaDon.setSoTienNhan(soTienNhan);
@@ -615,9 +642,11 @@ public class FormNhanVienBanHangController implements Initializable {
                     Button btnXuLy = (Button) evt.getSource();
                     TableCell cell = (TableCell) btnXuLy.getParent();
                     thanhVienDuocKhuyenMai = (ThanhVien) cell.getTableRow().getItem();
-
-                    MessageBox.getBox("Thông báo", "Đã chọn thành viên: " + thanhVienDuocKhuyenMai.getHoThanhVien() + " " + thanhVienDuocKhuyenMai.getTenThanhVien(), Alert.AlertType.CONFIRMATION).show();
+                    
                     this.txtThanhVienApDung.setText(thanhVienDuocKhuyenMai.getHoThanhVien() + " " + thanhVienDuocKhuyenMai.getTenThanhVien());
+                    this.txtThanhTien.setText(this.tinhTongTien() +"");
+                    MessageBox.getBox("Thông báo", "Đã chọn thành viên: " + thanhVienDuocKhuyenMai.getHoThanhVien() + " " + thanhVienDuocKhuyenMai.getTenThanhVien(), Alert.AlertType.CONFIRMATION).show();
+                    
                 }
             });
 
