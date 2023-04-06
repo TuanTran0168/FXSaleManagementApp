@@ -596,6 +596,9 @@ public class FormNhanVienBanHangController implements Initializable {
                     hoaDon.setTongTien(tongTien);
                     hoaDon.setSoTienNhan(soTienNhan);
 
+//                    hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
+//                        MessageBox.getBox("Question", "Thêm hóa đơn thành công", Alert.AlertType.INFORMATION).show();
+//                    this.loadALL();
                     try {
                         hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
                         MessageBox.getBox("Question", "Thêm hóa đơn thành công", Alert.AlertType.INFORMATION).show();

@@ -9,13 +9,14 @@ package com.tuantran.pojo;
  * @author TuanTran
  */
 public class SanPham {
+
     private int idSanPham;
     private String tenSanPham;
     private double gia;
     private String donVi;
     private int idKhuyenMai;
     private int idChiNhanh;
-    
+
     private double soLuongTemp = 1;
 
     @Override
@@ -33,7 +34,6 @@ public class SanPham {
 //        this.donVi = donVi;
 //        this.idKhuyenMai = idKhuyenMai;
 //    }
-
     public SanPham(int idSanPham, String tenSanPham, double gia, String donVi, int idKhuyenMai, int idChiNhanh) {
         this.idSanPham = idSanPham;
         this.tenSanPham = tenSanPham;
@@ -42,9 +42,6 @@ public class SanPham {
         this.idKhuyenMai = idKhuyenMai;
         this.idChiNhanh = idChiNhanh;
     }
-    
-    
-    
 
     /**
      * @return the idSanPham

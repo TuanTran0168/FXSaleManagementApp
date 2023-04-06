@@ -80,7 +80,6 @@ public class SanPhamService {
 //
 //        return sanPhams;
 //    }
-
     public List<SanPham> getSanPham(String keyword_id, String keyword_tenSanPham, String keyword_gia, String keyword_donVi, String keyword_idChiNhanh) throws SQLException {
         List<SanPham> sanPhams = new ArrayList<>();
 
@@ -162,25 +161,23 @@ public class SanPhamService {
                 if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
                     query += " AND id_chi_nhanh = ?";
                 }
-            }
-            else {
+            } else {
                 if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
                     query += " WHERE id_chi_nhanh = ?";
                 }
             }
 
             PreparedStatement stm = conn.prepareCall(query);
-            
+
             if (keyword_tenSanPham != null && !keyword_tenSanPham.isEmpty()) {
-              
+
                 if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
                     stm.setString(1, keyword_tenSanPham);
-                     stm.setString(2, keyword_idChiNhanh);
+                    stm.setString(2, keyword_idChiNhanh);
                 }
-            }
-            else {
+            } else {
                 if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
-                     stm.setString(1, keyword_idChiNhanh);
+                    stm.setString(1, keyword_idChiNhanh);
                 }
             }
 
@@ -202,6 +199,34 @@ public class SanPhamService {
         return sanPhams;
     }
 
+//    public boolean addSanPham(SanPham sanPham) {
+//        try {
+//            try (Connection conn = JdbcUtils.getConn()) {
+//                conn.setAutoCommit(false);
+//                String query = "INSERT INTO SanPham(id_san_pham, ten_san_pham, gia, don_vi, id_khuyen_mai, id_chi_nhanh)"
+//                        + " VALUES(?, ?, ?, ?, ?, ?)";
+//
+//                PreparedStatement stm = conn.prepareCall(query);
+//
+//                stm.setInt(1, sanPham.getIdSanPham());
+//                stm.setString(2, sanPham.getTenSanPham());
+//                stm.setDouble(3, sanPham.getGia());
+//                stm.setString(4, sanPham.getDonVi());
+//                stm.setInt(5, sanPham.getIdKhuyenMai());
+//                stm.setInt(6, sanPham.getIdChiNhanh());
+//
+//                stm.executeUpdate();
+//
+//                conn.commit();
+//                return true;
+//            }
+//
+//        } catch (SQLException ex) {
+//            System.err.println(ex.getMessage());
+//            return false;
+//        }
+//
+//    }
     public boolean addSanPham(SanPham sanPham) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
             conn.setAutoCommit(false);
