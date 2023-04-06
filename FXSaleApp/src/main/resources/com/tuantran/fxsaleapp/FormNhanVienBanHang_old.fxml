@@ -172,11 +172,6 @@
                                                 <Insets />
                                              </HBox.margin>
                                           </TextField>
-                                          <Button fx:id="btnHuyDangKyThanhVien" mnemonicParsing="false" onAction="#huyApDungThanhVien" text="Hủy áp dụng" HBox.hgrow="ALWAYS">
-                                             <HBox.margin>
-                                                <Insets left="5.0" />
-                                             </HBox.margin>
-                                          </Button>
                                        </children>
                                        <VBox.margin>
                                           <Insets bottom="5.0" top="5.0" />
