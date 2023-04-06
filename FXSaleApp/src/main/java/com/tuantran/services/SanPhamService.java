@@ -21,65 +21,67 @@ import java.util.logging.Logger;
  */
 public class SanPhamService {
 
-    public List<SanPham> getSanPham() throws SQLException {
-        List<SanPham> sanPhams = new ArrayList<>();
+//    public List<SanPham> getSanPham() throws SQLException {
+//        List<SanPham> sanPhams = new ArrayList<>();
+//
+//        try (Connection conn = JdbcUtils.getConn()) {
+//            Statement stm = conn.createStatement();
+//
+//            String query = "SELECT * FROM SanPham";
+//            ResultSet rs = stm.executeQuery(query);
+//
+//            while (rs.next()) {
+//                int idSanPham = rs.getInt("id_san_pham");
+//                String tenSanPham = rs.getString("ten_san_pham");
+//                double gia = rs.getDouble("gia");
+//                String donVi = rs.getString("don_vi");
+//                int idKhuyenMai = rs.getInt("id_khuyen_mai");
+//                int idChiNhanh = rs.getInt("id_chi_nhanh");
+//
+//                SanPham sp = new SanPham(idSanPham, tenSanPham, gia, donVi, idKhuyenMai, idChiNhanh);
+//                sanPhams.add(sp);
+//            }
+//        }
+//
+//        return sanPhams;
+//    }
+//
+//    public List<SanPham> getSanPham(String keyword) throws SQLException {
+//        List<SanPham> sanPhams = new ArrayList<>();
+//
+//        try (Connection conn = JdbcUtils.getConn()) {
+//
+//            String query = "SELECT * FROM SanPham";
+//
+//            if (keyword != null && !keyword.isEmpty()) {
+//                query += " WHERE ten_san_pham LIKE concat('%', ?, '%')";
+//            }
+//
+//            PreparedStatement stm = conn.prepareCall(query);
+//
+//            if (keyword != null && !keyword.isEmpty()) {
+//                stm.setString(1, keyword);
+//            }
+//
+//            ResultSet rs = stm.executeQuery();
+//
+//            while (rs.next()) {
+//                int idSanPham = rs.getInt("id_san_pham");
+//                String tenSanPham = rs.getString("ten_san_pham");
+//                double gia = rs.getDouble("gia");
+//                String donVi = rs.getString("don_vi");
+//                int idKhuyenMai = rs.getInt("id_khuyen_mai");
+//                int idChiNhanh = rs.getInt("id_chi_nhanh");
+//
+//                SanPham sp = new SanPham(idSanPham, tenSanPham, gia, donVi, idKhuyenMai, idChiNhanh);
+//                sanPhams.add(sp);
+//            }
+//        }
+//
+//        return sanPhams;
+//    }
 
-        try (Connection conn = JdbcUtils.getConn()) {
-            Statement stm = conn.createStatement();
-
-            String query = "SELECT * FROM SanPham";
-            ResultSet rs = stm.executeQuery(query);
-
-            while (rs.next()) {
-                int idSanPham = rs.getInt("id_san_pham");
-                String tenSanPham = rs.getString("ten_san_pham");
-                double gia = rs.getDouble("gia");
-                String donVi = rs.getString("don_vi");
-                int idKhuyenMai = rs.getInt("id_khuyen_mai");
-
-                SanPham sp = new SanPham(idSanPham, tenSanPham, gia, donVi, idKhuyenMai);
-                sanPhams.add(sp);
-            }
-        }
-
-        return sanPhams;
-    }
-
-    public List<SanPham> getSanPham(String keyword) throws SQLException {
-        List<SanPham> sanPhams = new ArrayList<>();
-
-        try (Connection conn = JdbcUtils.getConn()) {
-
-            String query = "SELECT * FROM SanPham";
-
-            if (keyword != null && !keyword.isEmpty()) {
-                query += " WHERE ten_san_pham LIKE concat('%', ?, '%')";
-            }
-
-            PreparedStatement stm = conn.prepareCall(query);
-
-            if (keyword != null && !keyword.isEmpty()) {
-                stm.setString(1, keyword);
-            }
-
-            ResultSet rs = stm.executeQuery();
-
-            while (rs.next()) {
-                int idSanPham = rs.getInt("id_san_pham");
-                String tenSanPham = rs.getString("ten_san_pham");
-                double gia = rs.getDouble("gia");
-                String donVi = rs.getString("don_vi");
-                int idKhuyenMai = rs.getInt("id_khuyen_mai");
-
-                SanPham sp = new SanPham(idSanPham, tenSanPham, gia, donVi, idKhuyenMai);
-                sanPhams.add(sp);
-            }
-        }
-
-        return sanPhams;
-    }
-
-    public List<SanPham> getSanPham(String keyword_id, String keyword_tenSanPham, String keyword_gia, String keyword_donVi) throws SQLException {
+    public List<SanPham> getSanPham(String keyword_id, String keyword_tenSanPham, String keyword_gia, String keyword_donVi, String keyword_idChiNhanh) throws SQLException {
         List<SanPham> sanPhams = new ArrayList<>();
 
         try (Connection conn = JdbcUtils.getConn()) {
@@ -87,7 +89,7 @@ public class SanPhamService {
             String query = "SELECT * FROM SanPham";
 
             if (keyword_id != null && !keyword_id.isEmpty()) {
-                query += " WHERE id_san_pham LIKE concat('%', ?, '%')";
+                query += " WHERE id_san_pham = ?";
             }
 
             if (keyword_tenSanPham != null && !keyword_tenSanPham.isEmpty()) {
@@ -98,6 +100,9 @@ public class SanPhamService {
             }
             if (keyword_donVi != null && !keyword_donVi.isEmpty()) {
                 query += " WHERE don_vi LIKE concat('%', ?, '%')";
+            }
+            if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
+                query += " WHERE id_chi_nhanh = ?";
             }
 
             PreparedStatement stm = conn.prepareCall(query);
@@ -118,6 +123,10 @@ public class SanPhamService {
                 stm.setString(1, keyword_donVi);
             }
 
+            if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
+                stm.setString(1, keyword_idChiNhanh);
+            }
+
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
@@ -126,21 +135,78 @@ public class SanPhamService {
                 double gia = rs.getDouble("gia");
                 String donVi = rs.getString("don_vi");
                 int idKhuyenMai = rs.getInt("id_khuyen_mai");
+                int idChiNhanh = rs.getInt("id_chi_nhanh");
 
-                SanPham sp = new SanPham(idSanPham, tenSanPham, gia, donVi, idKhuyenMai);
+                SanPham sp = new SanPham(idSanPham, tenSanPham, gia, donVi, idKhuyenMai, idChiNhanh);
                 sanPhams.add(sp);
             }
         }
 
         return sanPhams;
     }
-    
+
+    public List<SanPham> getSanPhamTrongChiNhanh(String keyword_tenSanPham, String keyword_idChiNhanh) throws SQLException {
+        List<SanPham> sanPhams = new ArrayList<>();
+
+        try (Connection conn = JdbcUtils.getConn()) {
+
+            String query = "SELECT * FROM SanPham";
+
+//            if (keyword_tenSanPham != null && !keyword_tenSanPham.isEmpty() && keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
+//                query += " WHERE ten_san_pham LIKE concat('%', ?, '%') "
+//                        + "AND id_chi_nhanh = ?";
+//            }
+            if (keyword_tenSanPham != null && !keyword_tenSanPham.isEmpty()) {
+                query += " WHERE ten_san_pham LIKE concat('%', ?, '%')";
+//                        + "AND id_chi_nhanh = ?";
+                if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
+                    query += " AND id_chi_nhanh = ?";
+                }
+            }
+            else {
+                if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
+                    query += " WHERE id_chi_nhanh = ?";
+                }
+            }
+
+            PreparedStatement stm = conn.prepareCall(query);
+            
+            if (keyword_tenSanPham != null && !keyword_tenSanPham.isEmpty()) {
+              
+                if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
+                    stm.setString(1, keyword_tenSanPham);
+                     stm.setString(2, keyword_idChiNhanh);
+                }
+            }
+            else {
+                if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
+                     stm.setString(1, keyword_idChiNhanh);
+                }
+            }
+
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                int idSanPham = rs.getInt("id_san_pham");
+                String tenSanPham = rs.getString("ten_san_pham");
+                double gia = rs.getDouble("gia");
+                String donVi = rs.getString("don_vi");
+                int idKhuyenMai = rs.getInt("id_khuyen_mai");
+                int idChiNhanh = rs.getInt("id_chi_nhanh");
+
+                SanPham sp = new SanPham(idSanPham, tenSanPham, gia, donVi, idKhuyenMai, idChiNhanh);
+                sanPhams.add(sp);
+            }
+        }
+
+        return sanPhams;
+    }
+
     public boolean addSanPham(SanPham sanPham) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
             conn.setAutoCommit(false);
-            String query = "INSERT INTO SanPham(id_san_pham, ten_san_pham, gia, don_vi, id_khuyen_mai)"
-                    + " VALUES(?, ?, ?, ?, ?)";
-
+            String query = "INSERT INTO SanPham(id_san_pham, ten_san_pham, gia, don_vi, id_khuyen_mai, id_chi_nhanh)"
+                    + " VALUES(?, ?, ?, ?, ?, ?)";
 
             PreparedStatement stm = conn.prepareCall(query);
 
@@ -149,9 +215,10 @@ public class SanPhamService {
             stm.setDouble(3, sanPham.getGia());
             stm.setString(4, sanPham.getDonVi());
             stm.setInt(5, sanPham.getIdKhuyenMai());
-           
+            stm.setInt(6, sanPham.getIdChiNhanh());
+
             stm.executeUpdate();
-            
+
             try {
                 conn.commit();
                 return true;
@@ -161,33 +228,34 @@ public class SanPhamService {
             }
         }
     }
-    
+
     public boolean deleteSanPham(String id) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
             String query = "DELETE FROM SanPham WHERE id_san_pham = ?";
             PreparedStatement stm = conn.prepareCall(query);
             stm.setString(1, id);
-            
+
             return stm.executeUpdate() > 0;
         }
     }
-    
-    public boolean updateSanPham(String id, String tenSanPham, double gia, String donVi, int idKhuyenMai) throws SQLException {
+
+    public boolean updateSanPham(String id, String tenSanPham, double gia, String donVi, int idKhuyenMai, int idChiNhanh) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
             String query = "UPDATE SanPham SET ten_san_pham = ?, "
-                                                + "gia = ?, "
-                                                + "don_vi = ?, "
-                                                + "id_khuyen_mai = ? "
-                                                + "WHERE id_san_pham = ?";
-            
-            
+                    + "gia = ?, "
+                    + "don_vi = ?, "
+                    + "id_khuyen_mai = ?, "
+                    + "id_chi_nhanh = ? "
+                    + "WHERE id_san_pham = ?";
+
             PreparedStatement stm = conn.prepareCall(query);
             stm.setString(1, tenSanPham);
             stm.setDouble(2, gia);
             stm.setString(3, donVi);
             stm.setInt(4, idKhuyenMai);
-            stm.setString(5, id);
-            
+            stm.setInt(5, idChiNhanh);
+            stm.setString(6, id);
+
             return stm.executeUpdate() > 0;
         }
     }

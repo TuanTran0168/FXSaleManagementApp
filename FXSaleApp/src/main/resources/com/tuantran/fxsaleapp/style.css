@@ -10,14 +10,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 
 
-VBox {
-    -fx-background-color: linear-gradient(#02aab0, #00cdac);
+VBox.MyBackground {
+    -fx-background-color: linear-gradient(#B0F3F1, #FFCFDF);
+}
+
+VBox.Content {
+    
 }
 
 Label.Title {
-    -fx-text-fill:#336699;
+    -fx-text-fill:#224488;
     -fx-font-weight: bold;
-    -fx-font-size: 28;
+    -fx-font-size: 40;
 }
 
 Text.all_text {

@@ -1,7 +1,6 @@
 package com.tuantran.fxsaleapp;
 
 import com.tuantran.pojo.*;
-import com.tuantran.pojo.SanPham;
 import com.tuantran.services.ChiNhanhService;
 import com.tuantran.services.ChiTietHoaDonService;
 import com.tuantran.services.HoaDonService;
@@ -104,10 +103,13 @@ public class FormNhanVienBanHangController implements Initializable {
     private Button btnDangXuat;
     @FXML
     private Button btnDangKyThanhVien;
+    @FXML
+    private Button btnHuyDangKyThanhVien;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.txtTienThoi.setDisable(true);
+        this.btnHuyDangKyThanhVien.setDisable(true);
         if (this.nhanVienDiemDanh == null) {
             this.btnThanhToan.setDisable(true);
             this.btnDangKyThanhVien.setDisable(true);
@@ -129,7 +131,7 @@ public class FormNhanVienBanHangController implements Initializable {
             this.tbSanPhamDuocChon.setEditable(true);
             this.sanPhamDuocChon = new ArrayList<>();
 
-            this.loadTableDataSanPham(null, this.tbSanPhams);
+            this.loadTableDataSanPham(Integer.toString(this.nhanVienDiemDanh.getIdChiNhanh()), null, this.tbSanPhams);
             this.loadTableColumnsSanPham(this.tbSanPhams);
 
             this.addTextChangeSanPham(this.txtSearchSanPham, this.tbSanPhams);
@@ -204,7 +206,8 @@ public class FormNhanVienBanHangController implements Initializable {
         TableColumn colTenSanPham = new TableColumn("Tên sản phẩm");
         TableColumn colGia = new TableColumn("Giá sản phẩm");
         TableColumn colDonVi = new TableColumn("Đơn vị");
-        TableColumn colIdKhuyenMai = new TableColumn("Khuyến Mãi");
+        TableColumn colIdKhuyenMai = new TableColumn("Mã khuyến mãi");
+        TableColumn colIdChiNhanh = new TableColumn("Mã chi nhánh");
 
 //        pojo
         colIdSanPham.setCellValueFactory(new PropertyValueFactory("idSanPham"));
@@ -212,13 +215,14 @@ public class FormNhanVienBanHangController implements Initializable {
         colGia.setCellValueFactory(new PropertyValueFactory("gia"));
         colDonVi.setCellValueFactory(new PropertyValueFactory("donVi"));
         colIdKhuyenMai.setCellValueFactory(new PropertyValueFactory("idKhuyenMai"));
+        colIdChiNhanh.setCellValueFactory(new PropertyValueFactory("idChiNhanh"));
 
         TableColumn colLuaChon = new TableColumn("Lựa chọn");
 
         tableView.getColumns().clear();
-        tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai);
+        tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai, colIdChiNhanh);
 
-        this.themButtonVaoTableColumnSanPham(tableView, colLuaChon, "Chọn nha nha");
+        this.themButtonVaoTableColumnSanPham(tableView, colLuaChon, "Chọn nha");
     }
 
     private void loadTableColumnsSanPhamDuocChon(TableView tableView) {
@@ -226,8 +230,9 @@ public class FormNhanVienBanHangController implements Initializable {
         TableColumn colTenSanPham = new TableColumn("Tên sản phẩm");
         TableColumn colGia = new TableColumn("Giá sản phẩm");
         TableColumn colDonVi = new TableColumn("Đơn vị");
-        TableColumn colIdKhuyenMai = new TableColumn("Khuyến Mãi");
+        TableColumn colIdKhuyenMai = new TableColumn("Mã khuyến mãi");
         TableColumn<SanPham, Double> colSoLuong = new TableColumn<>("Số lượng");
+        TableColumn colIdChiNhanh = new TableColumn("Mã chi nhánh");
 
 //        pojo
         colIdSanPham.setCellValueFactory(new PropertyValueFactory("idSanPham"));
@@ -237,6 +242,7 @@ public class FormNhanVienBanHangController implements Initializable {
         colIdKhuyenMai.setCellValueFactory(new PropertyValueFactory("idKhuyenMai"));
         colSoLuong.setCellValueFactory(new PropertyValueFactory("soLuongTemp"));
         colSoLuong.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        colIdChiNhanh.setCellValueFactory(new PropertyValueFactory("idChiNhanh"));
 
         colSoLuong.setOnEditCommit((TableColumn.CellEditEvent<SanPham, Double> event) -> {
             SanPham sp = event.getTableView().getItems().get(event.getTablePosition().getRow());
@@ -255,7 +261,7 @@ public class FormNhanVienBanHangController implements Initializable {
         TableColumn colLuaChon = new TableColumn("Xóa");
 
         tableView.getColumns().clear();
-        tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai, colSoLuong);
+        tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai, colSoLuong, colIdChiNhanh);
 
         this.themButtonVaoTableColumnSanPhamDuocChon(tableView, colLuaChon, "Xóa");
 
@@ -287,9 +293,8 @@ public class FormNhanVienBanHangController implements Initializable {
         }
     }
 
-    private void loadTableDataSanPham(String keyword, TableView tableView) throws SQLException {
-        List<SanPham> sanPhams = sanPhamService.getSanPham(keyword);
-
+    private void loadTableDataSanPham(String keyword_idChiNhanh, String keyword_tenSanPham, TableView tableView) throws SQLException {
+        List<SanPham> sanPhams = sanPhamService.getSanPhamTrongChiNhanh(keyword_tenSanPham, keyword_idChiNhanh);
         tableView.getItems().clear();
         tableView.setItems(FXCollections.observableList(sanPhams));
     }
@@ -442,7 +447,7 @@ public class FormNhanVienBanHangController implements Initializable {
             }
 
             try {
-                this.loadTableDataSanPham(null, this.tbSanPhams); //Load lại cho nó đỡ bị ngáo
+                this.loadTableDataSanPham(Integer.toString(nhanVienDiemDanh.getIdNhanVien()), null, this.tbSanPhams); //Load lại cho nó đỡ bị ngáo
             } catch (SQLException ex) {
                 Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -587,7 +592,7 @@ public class FormNhanVienBanHangController implements Initializable {
 //                        MessageBox.getBox("Thông báo", "BẠN ĐÃ ĐƯỢC GIẢM 10% = " + this.PHAN_TRAM_DISCOUNT, Alert.AlertType.CONFIRMATION).show();
 //                    }
 //                }
-                if (soTienNhan > tongTien) {
+                if (soTienNhan >= tongTien) {
                     hoaDon.setTongTien(tongTien);
                     hoaDon.setSoTienNhan(soTienNhan);
 
@@ -600,7 +605,7 @@ public class FormNhanVienBanHangController implements Initializable {
                         Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
-                    MessageBox.getBox("Question", "Số tiền nhận từ khách phải lớn hơn tổng tiền!", Alert.AlertType.INFORMATION).show();
+                    MessageBox.getBox("Question", "Số tiền nhận từ khách phải lớn hơn hoặc bằng tổng tiền!", Alert.AlertType.INFORMATION).show();
                 }
 
             } else {
@@ -642,11 +647,11 @@ public class FormNhanVienBanHangController implements Initializable {
                     Button btnXuLy = (Button) evt.getSource();
                     TableCell cell = (TableCell) btnXuLy.getParent();
                     thanhVienDuocKhuyenMai = (ThanhVien) cell.getTableRow().getItem();
-                    
+
                     this.txtThanhVienApDung.setText(thanhVienDuocKhuyenMai.getHoThanhVien() + " " + thanhVienDuocKhuyenMai.getTenThanhVien());
-                    this.txtThanhTien.setText(this.tinhTongTien() +"");
+                    this.txtThanhTien.setText(this.tinhTongTien() + "");
                     MessageBox.getBox("Thông báo", "Đã chọn thành viên: " + thanhVienDuocKhuyenMai.getHoThanhVien() + " " + thanhVienDuocKhuyenMai.getTenThanhVien(), Alert.AlertType.CONFIRMATION).show();
-                    
+                    this.btnHuyDangKyThanhVien.setDisable(false);
                 }
             });
 
@@ -657,7 +662,7 @@ public class FormNhanVienBanHangController implements Initializable {
     private void addTextChangeSanPham(TextField textField, TableView tableView) {
         textField.textProperty().addListener(e -> {
             try {
-                this.loadTableDataSanPham(textField.getText(), tableView);
+                this.loadTableDataSanPham(Integer.toString(this.nhanVienDiemDanh.getIdChiNhanh()), textField.getText(), tableView);
             } catch (SQLException ex) {
                 Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -680,6 +685,20 @@ public class FormNhanVienBanHangController implements Initializable {
                 double thanhTien = Double.parseDouble(this.txtThanhTien.getText());
                 double soTienNhan = Double.parseDouble(textField_1.getText());
                 textField_2.setText(" " + (soTienNhan - thanhTien));
+            }
+        });
+    }
+
+    @FXML
+    public void huyApDungThanhVien() {
+        Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn hủy?", Alert.AlertType.CONFIRMATION);
+        a.showAndWait().ifPresent(res -> {
+            if (res == ButtonType.OK) {
+                if (this.thanhVienDuocKhuyenMai != null) {
+                    this.thanhVienDuocKhuyenMai = null;
+                    this.txtThanhVienApDung.setText("");
+                    this.btnHuyDangKyThanhVien.setDisable(true);
+                }
             }
         });
     }

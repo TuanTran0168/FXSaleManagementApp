@@ -14,6 +14,7 @@ public class SanPham {
     private double gia;
     private String donVi;
     private int idKhuyenMai;
+    private int idChiNhanh;
     
     private double soLuongTemp = 1;
 
@@ -25,13 +26,24 @@ public class SanPham {
     public SanPham() {
     }
 
-    public SanPham(int idSanPham, String tenSanPham, double gia, String donVi, int idKhuyenMai) {
+//    public SanPham(int idSanPham, String tenSanPham, double gia, String donVi, int idKhuyenMai) {
+//        this.idSanPham = idSanPham;
+//        this.tenSanPham = tenSanPham;
+//        this.gia = gia;
+//        this.donVi = donVi;
+//        this.idKhuyenMai = idKhuyenMai;
+//    }
+
+    public SanPham(int idSanPham, String tenSanPham, double gia, String donVi, int idKhuyenMai, int idChiNhanh) {
         this.idSanPham = idSanPham;
         this.tenSanPham = tenSanPham;
         this.gia = gia;
         this.donVi = donVi;
         this.idKhuyenMai = idKhuyenMai;
+        this.idChiNhanh = idChiNhanh;
     }
+    
+    
     
 
     /**
@@ -116,5 +128,19 @@ public class SanPham {
      */
     public void setSoLuongTemp(double soLuongTemp) {
         this.soLuongTemp = soLuongTemp;
+    }
+
+    /**
+     * @return the idChiNhanh
+     */
+    public int getIdChiNhanh() {
+        return idChiNhanh;
+    }
+
+    /**
+     * @param idChiNhanh the idChiNhanh to set
+     */
+    public void setIdChiNhanh(int idChiNhanh) {
+        this.idChiNhanh = idChiNhanh;
     }
 }
