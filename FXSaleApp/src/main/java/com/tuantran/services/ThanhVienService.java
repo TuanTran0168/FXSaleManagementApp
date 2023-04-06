@@ -74,7 +74,7 @@ public class ThanhVienService {
             }
 
             PreparedStatement stm = conn.prepareCall(query);
-            
+
             if (keyword_id != null && !keyword_id.isEmpty()) {
                 stm.setString(1, keyword_id);
             }
@@ -107,6 +107,33 @@ public class ThanhVienService {
         return thanhViens;
     }
 
+//    public boolean addThanhVien(ThanhVien thanhVien) {
+//        try {
+//            try (Connection conn = JdbcUtils.getConn()) {
+//                conn.setAutoCommit(false);
+//                String query = "INSERT INTO ThanhVien(id_thanh_vien, ho_thanh_vien, ten_thanh_vien, ngay_sinh_thanh_vien, so_dien_thoai)"
+//                        + " VALUES(?, ?, ?, ?, ?)";
+//
+//                PreparedStatement stm = conn.prepareCall(query);
+//
+//                stm.setInt(1, thanhVien.getIdThanhVien());
+//                stm.setString(2, thanhVien.getHoThanhVien());
+//                stm.setString(3, thanhVien.getTenThanhVien());
+//                stm.setDate(4, thanhVien.getNgaySinhThanhVien());
+//                stm.setString(5, thanhVien.getSoDienThoai());
+//
+//                stm.executeUpdate();
+//
+//                conn.commit();
+//                return true;
+//            }
+//
+//        } catch (SQLException ex) {
+//            System.err.println(ex.getMessage());
+//            return false;
+//        }
+//
+//    }
     public boolean addThanhVien(ThanhVien thanhVien) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
             conn.setAutoCommit(false);

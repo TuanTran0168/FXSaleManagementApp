@@ -56,7 +56,7 @@ public class KhuyenMaiService {
         try (Connection conn = JdbcUtils.getConn()) {
 
             String query = "SELECT * FROM KhuyenMai";
-            
+
             if (keyword_id != null && !keyword_id.isEmpty()) {
                 query += " WHERE id_khuyen_mai = ?";
             }
@@ -71,10 +71,10 @@ public class KhuyenMaiService {
 
             PreparedStatement stm = conn.prepareCall(query);
 
-             if (keyword_id != null && !keyword_id.isEmpty()) {
+            if (keyword_id != null && !keyword_id.isEmpty()) {
                 stm.setString(1, keyword_id);
             }
-             
+
             if (keyword_tenKhuyenMai != null && !keyword_tenKhuyenMai.isEmpty()) {
                 stm.setString(1, keyword_tenKhuyenMai);
             }
@@ -98,6 +98,32 @@ public class KhuyenMaiService {
         }
         return khuyenMais;
     }
+
+//    public boolean addKhuyenMai(KhuyenMai khuyenMai) {
+//        try {
+//            try (Connection conn = JdbcUtils.getConn()) {
+//                conn.setAutoCommit(false);
+//                String query = "INSERT INTO KhuyenMai(id_khuyen_mai, ten_khuyen_mai, gia_tri, ngay_bat_dau, ngay_ket_thuc)"
+//                        + " VALUES(?, ?, ?, ?, ?)";
+//
+//                PreparedStatement stm = conn.prepareCall(query);
+//
+//                stm.setInt(1, khuyenMai.getIdKhuyenMai());
+//                stm.setString(2, khuyenMai.getTenKhuyenMai());
+//                stm.setDouble(3, khuyenMai.getGiaTri());
+//                stm.setDate(4, khuyenMai.getNgayBatDau());
+//                stm.setDate(5, khuyenMai.getNgayKetThuc());
+//                stm.executeUpdate();
+//
+//                conn.commit();
+//                return true;
+//            }
+//
+//        } catch (SQLException ex) {
+//            System.err.println(ex.getMessage());
+//            return false;
+//        }
+//    }
 
     public boolean addKhuyenMai(KhuyenMai khuyenMai) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
@@ -124,6 +150,8 @@ public class KhuyenMaiService {
         }
     }
 
+    
+
     public boolean deleteKhuyenMai(String id) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
             String query = "DELETE FROM KhuyenMai WHERE id_khuyen_mai = ?";
@@ -137,11 +165,11 @@ public class KhuyenMaiService {
     public boolean updateKhuyenMai(String id, String tenKhuyenMai, double giaTri, Date ngayBatDau, Date ngayKetThuc) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
             String query = "UPDATE KhuyenMai SET ten_khuyen_mai = ?, "
-                                                + "gia_tri = ?, "
-                                                + "ngay_bat_dau = ?, "
-                                                + "ngay_ket_thuc = ? "
-                                                + "WHERE id_khuyen_mai = ?";
-            
+                    + "gia_tri = ?, "
+                    + "ngay_bat_dau = ?, "
+                    + "ngay_ket_thuc = ? "
+                    + "WHERE id_khuyen_mai = ?";
+
             PreparedStatement stm = conn.prepareCall(query);
             stm.setString(1, tenKhuyenMai);
             stm.setDouble(2, giaTri);

@@ -106,6 +106,7 @@ public class FormUtils {
     public void onlyDoubleNumbers(TextField textField) {
         textField.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
+            //^[0-9][0-9]*(\\.[0-9]*)?$
             if (newText.matches("^[0-9]*(\\.[0-9]*)?$")) {
                 return change;
             } else {

@@ -58,13 +58,56 @@ public class HoaDonService {
         return hoaDons;
     }
 
+//    public boolean addHoaDon(HoaDon hoaDon, List<ChiTietHoaDon> chiTietHoaDons) {
+//        try {
+//            try (Connection conn = JdbcUtils.getConn()) {
+//                conn.setAutoCommit(false);
+//                String query = "INSERT INTO HoaDon(id_hoa_don, id_nhan_vien, id_chi_nhanh, id_thanh_vien, tong_tien, so_tien_nhan, ngay_CT)"
+//                        + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+//
+//                PreparedStatement stm = conn.prepareCall(query);
+//
+//                stm.setInt(1, hoaDon.getIdHoaDon());
+//                stm.setInt(2, hoaDon.getIdNhanVien());
+//                stm.setInt(3, hoaDon.getIdChiNhanh());
+//                stm.setInt(4, hoaDon.getIdThanhVien());
+//                stm.setDouble(5, hoaDon.getTongTien());
+//                stm.setDouble(6, hoaDon.getSoTienNhan());
+//                stm.setDate(7, hoaDon.getNgayCT());
+//
+//                int row = stm.executeUpdate();
+//                if (row > 0) {
+//                    query = "INSERT INTO ChiTietHoaDon(id_CTHD, id_san_pham, id_hoa_don, so_luong, thanh_tien)"
+//                            + " VALUES (?, ?, ?, ?, ?)";
+//
+//                    PreparedStatement stm1 = conn.prepareCall(query);
+//
+////                Alert d = MessageBox.getBox("Question", "BUG" + query, Alert.AlertType.CONFIRMATION);
+////                d.show();
+//                    for (ChiTietHoaDon cthd : chiTietHoaDons) {
+//                        stm1.setInt(1, cthd.getIdCTHD());
+//                        stm1.setInt(2, cthd.getIdSanPham());
+//                        stm1.setInt(3, cthd.getIdHoaDon());
+//                        stm1.setDouble(4, cthd.getSoLuong());
+//                        stm1.setDouble(5, cthd.getThanhTien());
+//                        stm1.executeUpdate();
+//                    }
+//                }
+//                conn.commit();
+//                return true;
+//            }
+//        } catch (SQLException ex) {
+//            System.err.println(ex.getMessage());
+//            return false;
+//        }
+//
+//    }
     public boolean addHoaDon(HoaDon hoaDon, List<ChiTietHoaDon> chiTietHoaDons) throws SQLException {
 
         try (Connection conn = JdbcUtils.getConn()) {
             conn.setAutoCommit(false);
             String query = "INSERT INTO HoaDon(id_hoa_don, id_nhan_vien, id_chi_nhanh, id_thanh_vien, tong_tien, so_tien_nhan, ngay_CT)"
                     + " VALUES(?, ?, ?, ?, ?, ?, ?)";
-
 
             PreparedStatement stm = conn.prepareCall(query);
 
@@ -81,12 +124,10 @@ public class HoaDonService {
                 query = "INSERT INTO ChiTietHoaDon(id_CTHD, id_san_pham, id_hoa_don, so_luong, thanh_tien)"
                         + " VALUES (?, ?, ?, ?, ?)";
 
-
                 PreparedStatement stm1 = conn.prepareCall(query);
 
 //                Alert d = MessageBox.getBox("Question", "BUG" + query, Alert.AlertType.CONFIRMATION);
 //                d.show();
-
                 for (ChiTietHoaDon cthd : chiTietHoaDons) {
                     stm1.setInt(1, cthd.getIdCTHD());
                     stm1.setInt(2, cthd.getIdSanPham());
