@@ -108,7 +108,7 @@ public class QuanLyThanhVienController implements Initializable {
     }
 
     private void loadTableDataThanhVien(TableView tableView, String keyword) throws SQLException {
-        List<ThanhVien> thanhViens = thanhVienService.getThanhVien(keyword);
+        List<ThanhVien> thanhViens = thanhVienService.getThanhViens(keyword, keyword, keyword, keyword);
 
         tableView.getItems().clear();
         tableView.setItems(FXCollections.observableList(thanhViens));
@@ -126,7 +126,7 @@ public class QuanLyThanhVienController implements Initializable {
         if (!this.txtThanhVien_hoThanhVien.getText().isEmpty() && !this.txtThanhVien_tenThanhVien.getText().isEmpty()
                 && !this.txtThanhVien_soDienThoai.getText().isEmpty() && this.dpThanhVien_ngaySinh.getValue() != null) {
 
-            List<ThanhVien> thanhViens = thanhVienService.getThanhVien(null);
+            List<ThanhVien> thanhViens = thanhVienService.getThanhViens(null, null, null, null);
             int idThanhVien = thanhViens.get(thanhViens.size() - 1).getIdThanhVien() + 1;
 
             String hoThanhVien = this.txtThanhVien_hoThanhVien.getText();
@@ -134,16 +134,30 @@ public class QuanLyThanhVienController implements Initializable {
             String soDienThoai = this.txtThanhVien_soDienThoai.getText();
             LocalDate ngaySinh_LocalDate = this.dpThanhVien_ngaySinh.getValue();
             Date ngaySinh_Date = Date.valueOf(ngaySinh_LocalDate);
-            ThanhVien thanhVien = new ThanhVien(idThanhVien, hoThanhVien, tenThanhVien, ngaySinh_Date, soDienThoai);
 
-            try {
-                thanhVienService.addThanhVien(thanhVien);
-                this.loadTableDataThanhVien(this.tbThanhVien, null);
-                MessageBox.getBox("Question", "Thêm thành viên thành công", Alert.AlertType.INFORMATION).show();
-                this.loadALL();
-            } catch (SQLException ex) {
-                MessageBox.getBox("Question", "Thêm thành viên thất bại", Alert.AlertType.INFORMATION).show();
-                Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+            int count = 0;
+            for (ThanhVien thanhVien : thanhViens) {
+                if (thanhVien.getSoDienThoai().equals(soDienThoai)) {
+                    break;
+                } else {
+                    count++;
+                }
+            }
+
+            if (count == thanhViens.size()) {
+                ThanhVien thanhVien = new ThanhVien(idThanhVien, hoThanhVien, tenThanhVien, ngaySinh_Date, soDienThoai);
+
+                try {
+                    thanhVienService.addThanhVien(thanhVien);
+                    this.loadTableDataThanhVien(this.tbThanhVien, null);
+                    MessageBox.getBox("Question", "Thêm thành viên thành công", Alert.AlertType.INFORMATION).show();
+                    this.loadALL();
+                } catch (SQLException ex) {
+                    MessageBox.getBox("Question", "Thêm thành viên thất bại", Alert.AlertType.INFORMATION).show();
+                    Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                MessageBox.getBox("Thông báo", "Số điện thoại này đã tồn tại!", Alert.AlertType.CONFIRMATION).show();
             }
 
         } else {
@@ -166,7 +180,7 @@ public class QuanLyThanhVienController implements Initializable {
                         MessageBox.getBox("Question", "Bạn không được sửa giá trị này!", Alert.AlertType.INFORMATION).show();
                     } else {
                         try {
-                            thanhVienService.deleteNhanVien(Integer.toString(idThanhVien));
+                            thanhVienService.deleteThanhVien(Integer.toString(idThanhVien));
                             this.loadTableDataThanhVien(this.tbThanhVien, null);
                             MessageBox.getBox("Question", "Xóa thành viên thành công", Alert.AlertType.INFORMATION).show();
                         } catch (SQLException ex) {
@@ -220,7 +234,8 @@ public class QuanLyThanhVienController implements Initializable {
                         Date ngaySinh_Date = Date.valueOf(ngaySinh_LocalDate);
 
                         try {
-                            thanhVienService.updateNhanVien(idThanhVien, hoThanhVien, tenThanhVien, ngaySinh_Date, soDienThoai);
+                            thanhVienService.updateThanhVien(idThanhVien, hoThanhVien, tenThanhVien, ngaySinh_Date, soDienThoai);
+//                                thanhVienService.updateNhanVien(idThanhVien, hoThanhVien, tenThanhVien, ngaySinh_Date, soDienThoai);
                             this.loadTableDataThanhVien(this.tbThanhVien, null);
                             MessageBox.getBox("Question", "Cập nhật thành viên thành công", Alert.AlertType.INFORMATION).show();
                             this.loadALL();

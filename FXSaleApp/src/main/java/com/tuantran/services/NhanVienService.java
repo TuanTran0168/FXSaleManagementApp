@@ -211,26 +211,26 @@ public class NhanVienService {
         return nhanViens;
     }
 
-    public List<String> getQuanLy() throws SQLException {
-        List<String> nhanVienQuanLys = new ArrayList<>();
-        try (Connection conn = JdbcUtils.getConn()) {
-            Statement stm = conn.createStatement();
-
-            String query = "SELECT quan_ly FROM NhanVien";
-            ResultSet rs = stm.executeQuery(query);
-
-            while (rs.next()) {
-                boolean quanLy = rs.getBoolean("quan_ly");
-                if (quanLy == true) {
-                    nhanVienQuanLys.add("Quản lý");
-                } else {
-                    nhanVienQuanLys.add("Nhân viên");
-                }
-            }
-        }
-
-        return nhanVienQuanLys;
-    }
+//    public List<String> getQuanLy() throws SQLException {
+//        List<String> nhanVienQuanLys = new ArrayList<>();
+//        try (Connection conn = JdbcUtils.getConn()) {
+//            Statement stm = conn.createStatement();
+//
+//            String query = "SELECT quan_ly FROM NhanVien";
+//            ResultSet rs = stm.executeQuery(query);
+//
+//            while (rs.next()) {
+//                boolean quanLy = rs.getBoolean("quan_ly");
+//                if (quanLy == true) {
+//                    nhanVienQuanLys.add("Quản lý");
+//                } else {
+//                    nhanVienQuanLys.add("Nhân viên");
+//                }
+//            }
+//        }
+//
+//        return nhanVienQuanLys;
+//    }
 
 //    public boolean addNhanVien(NhanVien nhanVien) {
 //        try {

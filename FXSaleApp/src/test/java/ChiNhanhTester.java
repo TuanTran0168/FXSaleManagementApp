@@ -19,8 +19,6 @@ import java.util.logging.Logger;
  */
 public class ChiNhanhTester {
 
-//    ChiNhanhService chiNhanhService;
-//    Connection conn;
     private static Connection conn;
     private static ChiNhanhService chiNhanhService;
 
@@ -49,10 +47,10 @@ public class ChiNhanhTester {
     }
 
     @Test
-    public void testAddSuccessfull() throws SQLException {
+    public void testAddSuccessful() throws SQLException {
         List<ChiNhanh> listChiNhanh = chiNhanhService.getChiNhanhs(null, null);
         int idChiNhanh = listChiNhanh.get(listChiNhanh.size() - 1).getIdChiNhanh() + 1;
-        String diaChi = "DƯƠNG HỮU THÀNH";
+        String diaChi = "DƯƠNG HỮU THÀNH " + idChiNhanh;
         ChiNhanh chiNhanh = new ChiNhanh(idChiNhanh, diaChi);
 
 //        boolean check = true;
@@ -77,19 +75,69 @@ public class ChiNhanhTester {
     }
 
     @Test
-    public void testGetChiNhanh() throws SQLException {
-        String keyword_id = "5";
+    public void testSearchChiNhanh_byDiaChi() throws SQLException {
 //        String keyword_diaChi = "PHÃš NHUáº¬N";
-        String keyword_diaChi = "TEST PhÃº Nhuáº­n";
-        List<ChiNhanh> chiNhanhs_byId = chiNhanhService.getChiNhanhs(keyword_id, null);
-        List<ChiNhanh> chiNhanhs_byDiaChi = chiNhanhService.getChiNhanhs(null, keyword_diaChi);
+        String keyword_diaChi = "TEST";
 
-//        System.err.println(chiNhanhs_byId.get(0).getIdChiNhanh());
-//        Assertions.assertTrue(chiNhanhs_byId.get(0).getIdChiNhanh() == Integer.parseInt(keyword_id));
-        
-        for (ChiNhanh cn : chiNhanhs_byDiaChi) {
-            System.err.println(cn.getDiaChi());
-            Assertions.assertTrue(cn.getDiaChi().contains(keyword_diaChi));
+        List<ChiNhanh> chiNhanhs = chiNhanhService.getChiNhanhs(null, keyword_diaChi);
+
+        System.err.println("size cua List = " + chiNhanhs.size());
+        Assertions.assertEquals(18, chiNhanhs.size());
+
+        for (ChiNhanh chiNhanh : chiNhanhs) {
+            System.err.println(chiNhanh.getDiaChi());
+            Assertions.assertTrue(chiNhanh.getDiaChi().contains(keyword_diaChi));
+        }
+    }
+
+    @Test
+    public void testSearchChiNhanh_byId() throws SQLException {
+        String keyword_id = "5";
+        List<ChiNhanh> chiNhanhs = chiNhanhService.getChiNhanhs(keyword_id, null);
+
+        System.err.println("size cua List = " + chiNhanhs.size());
+        Assertions.assertEquals(1, chiNhanhs.size());
+        System.err.println("id cua ChiNhanh = " + chiNhanhs.get(0).getIdChiNhanh());
+        Assertions.assertTrue(chiNhanhs.get(0).getIdChiNhanh() == Integer.parseInt(keyword_id));
+    }
+
+    @Test
+    public void testDelete() {
+        String keyword_id = "36";
+        boolean check;
+        try {
+            check = chiNhanhService.deleteChiNhanh(keyword_id);
+            Assertions.assertTrue(check);
+
+            String query = "SELECT * FROM ChiNhanh WHERE id_chi_nhanh = ?";
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setString(1, keyword_id);
+            ResultSet rs = stm.executeQuery();
+            Assertions.assertFalse(rs.next());
+        } catch (SQLException ex) {
+            Logger.getLogger(ChiNhanhTester.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Test
+    public void testUpdateSuccessful() {
+        String id = "35";
+        String tenChiNhanhNew = "TRẦN ĐĂNG TUẤN";
+        boolean check;
+        try {
+            check = chiNhanhService.updateChiNhanh(id, tenChiNhanhNew);
+            Assertions.assertTrue(check);
+
+            String query = "SELECT * FROM ChiNhanh WHERE id_chi_nhanh = ?";
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            Assertions.assertNotNull(rs.next());
+            System.err.println("Dia chi moi = " + rs.getString("dia_chi"));
+            Assertions.assertEquals(tenChiNhanhNew, rs.getString("dia_chi"));
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ChiNhanhTester.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

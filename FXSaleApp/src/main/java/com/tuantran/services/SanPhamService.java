@@ -80,7 +80,7 @@ public class SanPhamService {
 //
 //        return sanPhams;
 //    }
-    public List<SanPham> getSanPham(String keyword_id, String keyword_tenSanPham, String keyword_gia, String keyword_donVi, String keyword_idChiNhanh) throws SQLException {
+    public List<SanPham> getSanPham(String keyword_id, String keyword_tenSanPham, String keyword_gia, String keyword_donVi, String keyword_idChiNhanh, String keyword_idKhuyenMai) throws SQLException {
         List<SanPham> sanPhams = new ArrayList<>();
 
         try (Connection conn = JdbcUtils.getConn()) {
@@ -103,6 +103,10 @@ public class SanPhamService {
             if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
                 query += " WHERE id_chi_nhanh = ?";
             }
+            
+             if (keyword_idKhuyenMai != null && !keyword_idKhuyenMai.isEmpty()) {
+                query += " WHERE id_khuyen_mai = ?";
+            }
 
             PreparedStatement stm = conn.prepareCall(query);
 
@@ -124,6 +128,10 @@ public class SanPhamService {
 
             if (keyword_idChiNhanh != null && !keyword_idChiNhanh.isEmpty()) {
                 stm.setString(1, keyword_idChiNhanh);
+            }
+            
+             if (keyword_idKhuyenMai != null && !keyword_idKhuyenMai.isEmpty()) {
+                stm.setString(1, keyword_idKhuyenMai);
             }
 
             ResultSet rs = stm.executeQuery();

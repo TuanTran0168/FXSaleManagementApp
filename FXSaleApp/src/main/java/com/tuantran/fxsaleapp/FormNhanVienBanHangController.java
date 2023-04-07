@@ -300,7 +300,7 @@ public class FormNhanVienBanHangController implements Initializable {
     }
 
     private void loadTableDataThanhVien(String keyword, TableView tableView) throws SQLException {
-        List<ThanhVien> thanhViens = thanhVienService.getThanhVien(keyword);
+        List<ThanhVien> thanhViens = thanhVienService.getThanhViens(keyword, keyword, keyword, keyword);
         if (!thanhViens.isEmpty()) {
             if (thanhViens.get(0).getIdThanhVien() == 0) {
                 thanhViens.remove(0);
