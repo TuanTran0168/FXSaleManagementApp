@@ -25,64 +25,67 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+public class PrimaryController implements Initializable {
 
-public class PrimaryController implements Initializable{
-    @FXML private TextField txtTaiKhoan;
-    @FXML private TextField txtMatKhau;
-    @FXML private Button btnDangNhap;
+    @FXML
+    private TextField txtTaiKhoan;
+    @FXML
+    private TextField txtMatKhau;
+    @FXML
+    private Button btnDangNhap;
     int countLogin;
-    
+
     private static Scene scene;
     private final FormUtils FORM_UTILS = new FormUtils();
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        
     }
-    
+
     public void dangNhap(ActionEvent evt) throws IOException {
         this.countLogin = 0;
-        String tk = this.txtTaiKhoan.getText();
-        String mk = this.txtMatKhau.getText();
-        NhanVienService nhanVienService = new NhanVienService();
-        
-        List<NhanVien> nhanViens;
-        try {
-            nhanViens = nhanVienService.getNhanViens();
-            for (NhanVien nv : nhanViens) {
-                if (nv.getTaiKhoan().equals(tk) && nv.getMatKhau().equals(mk)) {
-                    if (nv.isQuanLy())
-                    {
-                        String formName = "FormQuanLyBanHang";
-                        String formTilte = "Quản lý bán hàng";
-                        
-//                        FORM_UTILS.newForm(formName, formTilte);
-                        FORM_UTILS.newForm(formName, formTilte, nv);
-                        Stage oldStage = (Stage) btnDangNhap.getScene().getWindow(); 
-                        
-                        oldStage.close();
-                    }
-                    else {
-                        String formName = "FormNhanVienBanHang";
-                        String formTilte = "Nhân viên bán hàng";
-                        
-                        FORM_UTILS.newForm(formName, formTilte, nv);
-                        Stage oldStage = (Stage) btnDangNhap.getScene().getWindow(); 
-                        oldStage.close();
-                    }
+        if (!this.txtTaiKhoan.getText().isEmpty() && !this.txtMatKhau.getText().isEmpty()) {
+            String tk = this.txtTaiKhoan.getText();
+            String mk = this.txtMatKhau.getText();
+            NhanVienService nhanVienService = new NhanVienService();
 
-                    break;
+            List<NhanVien> nhanViens;
+            try {
+                nhanViens = nhanVienService.getNhanViens();
+                for (NhanVien nv : nhanViens) {
+                    if (nv.getTaiKhoan().equals(tk) && nv.getMatKhau().equals(mk)) {
+                        if (nv.isQuanLy()) {
+                            String formName = "FormQuanLyBanHang";
+                            String formTilte = "Quản lý bán hàng";
+
+//                        FORM_UTILS.newForm(formName, formTilte);
+                            FORM_UTILS.newForm(formName, formTilte, nv);
+                            Stage oldStage = (Stage) btnDangNhap.getScene().getWindow();
+
+                            oldStage.close();
+                        } else {
+                            String formName = "FormNhanVienBanHang";
+                            String formTilte = "Nhân viên bán hàng";
+
+                            FORM_UTILS.newForm(formName, formTilte, nv);
+                            Stage oldStage = (Stage) btnDangNhap.getScene().getWindow();
+                            oldStage.close();
+                        }
+
+                        break;
+                    } else {
+                        this.countLogin++;
+                    }
                 }
-                else {
-                    this.countLogin++;
+                if (this.countLogin == nhanViens.size()) {
+                    MessageBox.getBox("Cảnh báo", "Sai tài khoản hoặc mật khẩu", Alert.AlertType.INFORMATION).show();
                 }
+            } catch (SQLException ex) {
+                Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (this.countLogin == nhanViens.size()) {
-                MessageBox.getBox("Cảnh báo", "Sai tài khoản hoặc mật khẩu", Alert.AlertType.INFORMATION).show();
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            MessageBox.getBox("Thông báo", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.CONFIRMATION).show();
         }
     }
 }
