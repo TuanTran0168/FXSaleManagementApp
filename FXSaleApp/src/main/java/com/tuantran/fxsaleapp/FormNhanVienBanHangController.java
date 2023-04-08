@@ -184,7 +184,7 @@ public class FormNhanVienBanHangController implements Initializable {
             this.txtDiaChi.setText(cn.get(0).getDiaChi());
             this.btnThanhToan.setDisable(false);
             this.btnDangKyThanhVien.setDisable(false);
-            Alert a = MessageBox.getBox("Question", nhanVienDiemDanh.getTenNhanVien(), Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Điểm danh thành công! chào " + nhanVienDiemDanh.getTenNhanVien(), Alert.AlertType.CONFIRMATION);
             a.show();
 
             this.loadALL();

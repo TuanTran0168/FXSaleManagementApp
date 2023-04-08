@@ -57,7 +57,7 @@ public class PrimaryController implements Initializable {
                     if (nv.getTaiKhoan().equals(tk) && nv.getMatKhau().equals(mk)) {
                         if (nv.isQuanLy()) {
                             String formName = "FormQuanLyBanHang";
-                            String formTilte = "Quản lý bán hàng";
+                            String formTilte = "Quản lý hệ thống I'MPROOK MART";
 
 //                        FORM_UTILS.newForm(formName, formTilte);
                             FORM_UTILS.newForm(formName, formTilte, nv);
@@ -66,7 +66,7 @@ public class PrimaryController implements Initializable {
                             oldStage.close();
                         } else {
                             String formName = "FormNhanVienBanHang";
-                            String formTilte = "Nhân viên bán hàng";
+                            String formTilte = "Thanh toán hóa đơn";
 
                             FORM_UTILS.newForm(formName, formTilte, nv);
                             Stage oldStage = (Stage) btnDangNhap.getScene().getWindow();
