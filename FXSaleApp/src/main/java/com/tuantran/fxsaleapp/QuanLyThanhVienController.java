@@ -233,16 +233,37 @@ public class QuanLyThanhVienController implements Initializable {
                         LocalDate ngaySinh_LocalDate = this.dpThanhVien_ngaySinh.getValue();
                         Date ngaySinh_Date = Date.valueOf(ngaySinh_LocalDate);
 
+                        List<ThanhVien> thanhViens;
                         try {
-                            thanhVienService.updateThanhVien(idThanhVien, hoThanhVien, tenThanhVien, ngaySinh_Date, soDienThoai);
+                            thanhViens = thanhVienService.getThanhViens(null, null, null, null);
+                            int count = 0;
+                            for (ThanhVien thanhVien : thanhViens) {
+                                if (thanhVien.getSoDienThoai().equals(soDienThoai) && !Integer.toString(thanhVien.getIdThanhVien()).equals(idThanhVien)) {
+                                    break;
+                                } else {
+                                    count++;
+                                }
+                            }
+
+                            if (count == thanhViens.size()) {
+                                try {
+                                    thanhVienService.updateThanhVien(idThanhVien, hoThanhVien, tenThanhVien, ngaySinh_Date, soDienThoai);
 //                                thanhVienService.updateNhanVien(idThanhVien, hoThanhVien, tenThanhVien, ngaySinh_Date, soDienThoai);
-                            this.loadTableDataThanhVien(this.tbThanhVien, null);
-                            MessageBox.getBox("Question", "Cập nhật thành viên thành công", Alert.AlertType.INFORMATION).show();
-                            this.loadALL();
+                                    this.loadTableDataThanhVien(this.tbThanhVien, null);
+                                    MessageBox.getBox("Thông báo", "Cập nhật thành viên thành công!", Alert.AlertType.INFORMATION).show();
+                                    this.loadALL();
+                                } catch (SQLException ex) {
+                                    MessageBox.getBox("Thông báo", "Cập nhật thành viên thất bại!", Alert.AlertType.INFORMATION).show();
+                                    Logger.getLogger(QuanLyThanhVienController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            } else {
+                                MessageBox.getBox("Thông báo", "Số điện thoại này đã tồn tại!", Alert.AlertType.CONFIRMATION).show();
+                            }
+
                         } catch (SQLException ex) {
-                            MessageBox.getBox("Question", "Cập nhật thành viên thất bại", Alert.AlertType.INFORMATION).show();
-                            Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(QuanLyThanhVienController.class.getName()).log(Level.SEVERE, null, ex);
                         }
+
                     } else {
                         MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
                     }
