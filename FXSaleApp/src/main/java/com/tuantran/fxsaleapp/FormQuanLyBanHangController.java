@@ -5,10 +5,12 @@
 package com.tuantran.fxsaleapp;
 
 import com.tuantran.pojo.ChiNhanh;
+import com.tuantran.pojo.HoaDon;
 import com.tuantran.pojo.KhuyenMai;
 import com.tuantran.pojo.NhanVien;
 import com.tuantran.pojo.SanPham;
 import com.tuantran.services.ChiNhanhService;
+import com.tuantran.services.HoaDonService;
 import com.tuantran.services.KhuyenMaiService;
 import com.tuantran.services.NhanVienService;
 import com.tuantran.services.SanPhamService;
@@ -53,6 +55,7 @@ public class FormQuanLyBanHangController implements Initializable {
     static final NhanVienService nhanVienService = new NhanVienService();
     static final KhuyenMaiService khuyenMaiService = new KhuyenMaiService();
     static final SanPhamService sanPhamService = new SanPhamService();
+    static final HoaDonService hoaDonService = new HoaDonService();
     private final FormUtils FORM_UTILS = new FormUtils();
 
     @FXML
@@ -295,6 +298,28 @@ public class FormQuanLyBanHangController implements Initializable {
         tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai, colIdChiNhanh);
     }
 
+    private void loadTableColumnHoaDon(TableView tableView) {
+        TableColumn colIdHoaDon = new TableColumn("Mã hóa đơn");
+        TableColumn colIdNhanVien = new TableColumn("Mã nhân viên");
+        TableColumn colIdChiNhanh = new TableColumn("Mã chi nhánh");
+        TableColumn colIdThanhVien = new TableColumn("Mã thành viên");
+        TableColumn colTongTien = new TableColumn("Tổng tiền");
+        TableColumn colSoTienNhan = new TableColumn("Tiền nhận");
+        TableColumn colNgayCT = new TableColumn("Ngày CT");
+
+//        pojo
+        colIdHoaDon.setCellValueFactory(new PropertyValueFactory("idSanPham"));
+        colIdNhanVien.setCellValueFactory(new PropertyValueFactory("idNhanVien"));
+        colIdChiNhanh.setCellValueFactory(new PropertyValueFactory("idChiNhanh"));
+        colIdThanhVien.setCellValueFactory(new PropertyValueFactory("idThanhVien"));
+        colTongTien.setCellValueFactory(new PropertyValueFactory("tongTien"));
+        colSoTienNhan.setCellValueFactory(new PropertyValueFactory("soTienNhan"));
+        colNgayCT.setCellValueFactory(new PropertyValueFactory("ngayCT"));
+
+        tableView.getColumns().clear();
+        tableView.getColumns().addAll(colIdHoaDon, colIdNhanVien, colIdChiNhanh, colIdThanhVien, colTongTien, colSoTienNhan, colNgayCT);
+    }
+
     private void loadTableDataChiNhanh(TableView tableView, String keyword) throws SQLException {
         List<ChiNhanh> chiNhanhs = chiNhanhService.getChiNhanhs(null, keyword);
 
@@ -341,6 +366,13 @@ public class FormQuanLyBanHangController implements Initializable {
 
         tableView.getItems().clear();
         tableView.setItems(FXCollections.observableList(sanPhams));
+    }
+
+    private void loadTableDataHoaDon(TableView tableView, String keyword) throws SQLException {
+        List<HoaDon> hoaDons = hoaDonService.getHoaDon(keyword);
+
+        tableView.getItems().clear();
+        tableView.setItems(FXCollections.observableList(hoaDons));
     }
 
     private void addTextChangeChiNhanh(TextField textField, TableView tableView) {
@@ -482,6 +514,16 @@ public class FormQuanLyBanHangController implements Initializable {
                 }
             });
         }
+    }
+
+    private void addTextChangeHoaDon(TextField textField, TableView tableView) {
+        textField.textProperty().addListener(e -> {
+            try {
+                this.loadTableDataHoaDon(tableView, textField.getText());
+            } catch (SQLException ex) {
+                Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
 
     @FXML
@@ -759,8 +801,7 @@ public class FormQuanLyBanHangController implements Initializable {
                                     MessageBox.getBox("Question", "Cập nhật nhân viên thất bại", Alert.AlertType.INFORMATION).show();
                                     Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            }
-                            else {
+                            } else {
                                 MessageBox.getBox("Thông báo", "Tài khoản này đã tồn tại!", Alert.AlertType.CONFIRMATION).show();
                             }
                         } catch (SQLException ex) {

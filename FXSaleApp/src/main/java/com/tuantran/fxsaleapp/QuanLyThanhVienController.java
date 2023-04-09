@@ -177,21 +177,21 @@ public class QuanLyThanhVienController implements Initializable {
                     int idThanhVien = thanhVien.getIdThanhVien();
 
                     if (idThanhVien == 0) {
-                        MessageBox.getBox("Question", "Bạn không được sửa giá trị này!", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Bạn không được sửa giá trị này!", Alert.AlertType.INFORMATION).show();
                     } else {
                         try {
                             thanhVienService.deleteThanhVien(Integer.toString(idThanhVien));
                             this.loadTableDataThanhVien(this.tbThanhVien, null);
-                            MessageBox.getBox("Question", "Xóa thành viên thành công", Alert.AlertType.INFORMATION).show();
+                            MessageBox.getBox("Thông báo", "Xóa thành viên thành công", Alert.AlertType.INFORMATION).show();
                         } catch (SQLException ex) {
-                            MessageBox.getBox("Question", "Xóa thành viên thất bại", Alert.AlertType.INFORMATION).show();
+                            MessageBox.getBox("Thông báo", "Xóa thành viên thất bại", Alert.AlertType.INFORMATION).show();
                             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
             });
         } else {
-            MessageBox.getBox("Question", "Hãy chọn khuyến mãi cần xóa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Question", "Hãy chọn thành viên cần xóa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -271,7 +271,7 @@ public class QuanLyThanhVienController implements Initializable {
             });
 
         } else {
-            MessageBox.getBox("Question", "Hãy chọn sản phẩm cần cập nhật", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Question", "Hãy chọn thành viên cần cập nhật", Alert.AlertType.INFORMATION).show();
         }
     }
 
