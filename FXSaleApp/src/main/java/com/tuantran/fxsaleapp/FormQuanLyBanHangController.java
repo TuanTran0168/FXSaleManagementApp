@@ -143,6 +143,17 @@ public class FormQuanLyBanHangController implements Initializable {
     private TextField txtHoaDon_tienNhan;
     @FXML
     private TextField txtHoaDon_timKiem;
+    @FXML
+    private TextField txtHoaDon_chiNhanh;
+    
+    @FXML
+    private Button btnUpdateChiNhanh;
+    @FXML
+    private Button btnUpdateNhanVien;
+    @FXML
+    private Button btnUpdateKhuyenMai;
+    @FXML
+    private Button btnUpdateSanPham;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -159,6 +170,11 @@ public class FormQuanLyBanHangController implements Initializable {
 
     private void loadALL() {
         try {
+            this.btnUpdateChiNhanh.setDisable(true);
+            this.btnUpdateNhanVien.setDisable(true);
+            this.btnUpdateKhuyenMai.setDisable(true);
+            this.btnUpdateSanPham.setDisable(true);
+            
             this.txtChiNhanh_diaChi.setText("");
             this.txtChiNhanh_id.setText("");
 
@@ -275,6 +291,7 @@ public class FormQuanLyBanHangController implements Initializable {
                 this.dpHoaDon_ngayCT.setValue(hoaDon.getNgayCT().toLocalDate());
                 this.txtHoaDon_tenNhanVien.setText(nhanVien.getTenNhanVien());
                 this.txtHoaDon_tenThanhVien.setText(thanhVien.getTenThanhVien());
+                this.txtHoaDon_chiNhanh.setText(chiNhanh.getDiaChi());
                 
                 this.txtHoaDon_tongTien.setText(Double.toString(hoaDon.getTongTien()));
                 this.txtHoaDon_tienNhan.setText(Double.toString(hoaDon.getSoTienNhan()));
@@ -303,7 +320,7 @@ public class FormQuanLyBanHangController implements Initializable {
                 Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            MessageBox.getBox("Question", "Hãy chọn hóa đơn cần xem!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn hóa đơn cần xem!", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -703,10 +720,10 @@ public class FormQuanLyBanHangController implements Initializable {
                             try {
                                 chiNhanhService.deleteChiNhanh(Integer.toString(idChiNhanh));
                                 this.loadTableDataChiNhanh(this.tbChiNhanh, null);
-                                MessageBox.getBox("Question", "Xóa chi nhánh thành công", Alert.AlertType.INFORMATION).show();
+                                MessageBox.getBox("Thông báo", "Xóa chi nhánh thành công", Alert.AlertType.INFORMATION).show();
                                 this.loadALL();
                             } catch (SQLException ex) {
-                                MessageBox.getBox("Question", "Xóa chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
+                                MessageBox.getBox("Thông báo", "Xóa chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
                                 Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         } else {
@@ -730,15 +747,16 @@ public class FormQuanLyBanHangController implements Initializable {
             ChiNhanh chiNhanh = (ChiNhanh) selectedObject;
             this.txtChiNhanh_diaChi.setText(chiNhanh.getDiaChi());
             this.txtChiNhanh_id.setText(Integer.toString(chiNhanh.getIdChiNhanh()));
+            this.btnUpdateChiNhanh.setDisable(false);
         } else {
-            MessageBox.getBox("Question", "Hãy chọn chi nhánh cần sửa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn chi nhánh cần sửa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
     @FXML
     public void updateChiNhanh(ActionEvent evt) throws SQLException {
         if (!this.txtChiNhanh_id.getText().isEmpty()) {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
 
@@ -754,11 +772,11 @@ public class FormQuanLyBanHangController implements Initializable {
 
                             this.loadALL();
                         } catch (SQLException ex) {
-                            MessageBox.getBox("Question", "Cập nhật chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
+                            MessageBox.getBox("Thông báo", "Cập nhật chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
                             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else {
-                        MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
                     }
                 }
             });
@@ -861,7 +879,7 @@ public class FormQuanLyBanHangController implements Initializable {
                 }
             });
         } else {
-            MessageBox.getBox("Question", "Hãy chọn nhân viên cần xóa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn nhân viên cần xóa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -882,15 +900,16 @@ public class FormQuanLyBanHangController implements Initializable {
             this.cbChiNhanh_NhanVien.setValue(chiNhanh.get(0)); // Chỗ này ảo ma???? Khi vừa loaddAll xong thì lần đầu nó k hiển thị đc value
             this.cbNhanVien.setValue(loaiNhanVien);
             MessageBox.getBox(loaiNhanVien, chiNhanh.get(0).getIdChiNhanh() + chiNhanh.get(0).getDiaChi(), Alert.AlertType.CONFIRMATION).show();
+            this.btnUpdateNhanVien.setDisable(false);
         } else {
-            MessageBox.getBox("Question", "Hãy chọn nhân viên cần sửa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn nhân viên cần sửa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
     @FXML
     public void updateNhanVien(ActionEvent evt) {
         if (!this.txtNhanVien_id.getText().isEmpty()) {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
 
@@ -922,10 +941,10 @@ public class FormQuanLyBanHangController implements Initializable {
                                 try {
                                     nhanVienService.updateNhanVien(idNhanVien, hoNhanVienNew, tenNhanVienNew, idChiNhanh, taiKhoan, matKhau, quanLy);
                                     this.loadTableDataNhanVien(this.tbNhanVien, null);
-                                    MessageBox.getBox("Question", "Cập nhật nhân viên thành công", Alert.AlertType.INFORMATION).show();
+                                    MessageBox.getBox("Thông báo", "Cập nhật nhân viên thành công", Alert.AlertType.INFORMATION).show();
                                     this.loadALL();
                                 } catch (SQLException ex) {
-                                    MessageBox.getBox("Question", "Cập nhật nhân viên thất bại", Alert.AlertType.INFORMATION).show();
+                                    MessageBox.getBox("Thông báo", "Cập nhật nhân viên thất bại", Alert.AlertType.INFORMATION).show();
                                     Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             } else {
@@ -971,15 +990,15 @@ public class FormQuanLyBanHangController implements Initializable {
             try {
                 khuyenMaiService.addKhuyenMai(khuyenMai);
                 this.loadTableDataKhuyenMai(this.tbKhuyenMai, null);
-                MessageBox.getBox("Question", "Thêm khuyến mãi thành công", Alert.AlertType.INFORMATION).show();
+                MessageBox.getBox("Thông báo", "Thêm khuyến mãi thành công", Alert.AlertType.INFORMATION).show();
                 this.loadALL();
             } catch (SQLException ex) {
-                MessageBox.getBox("Question", "Thêm khuyến mãi thất bại", Alert.AlertType.INFORMATION).show();
+                MessageBox.getBox("Thông báo", "Thêm khuyến mãi thất bại", Alert.AlertType.INFORMATION).show();
                 Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } else {
-            MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -988,12 +1007,12 @@ public class FormQuanLyBanHangController implements Initializable {
         Object selectedObject = this.tbKhuyenMai.getSelectionModel().getSelectedItem();
 
         if (selectedObject != null) {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
                     KhuyenMai khuyenMai = (KhuyenMai) selectedObject;
                     if (khuyenMai.getIdKhuyenMai() == 0) {
-                        MessageBox.getBox("Question", "Bạn không được sửa giá trị này!", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Bạn không được sửa giá trị này!", Alert.AlertType.INFORMATION).show();
                     } else {
                         int idKhuyenMai = khuyenMai.getIdKhuyenMai();
                         List<SanPham> listSanPham;
@@ -1003,9 +1022,9 @@ public class FormQuanLyBanHangController implements Initializable {
                                 try {
                                     khuyenMaiService.deleteKhuyenMai(Integer.toString(idKhuyenMai));
                                     this.loadTableDataKhuyenMai(this.tbKhuyenMai, null);
-                                    MessageBox.getBox("Question", "Xóa khuyến mãi thành công", Alert.AlertType.INFORMATION).show();
+                                    MessageBox.getBox("Thông báo", "Xóa khuyến mãi thành công", Alert.AlertType.INFORMATION).show();
                                 } catch (SQLException ex) {
-                                    MessageBox.getBox("Question", "Xóa khuyến mãi thất bại", Alert.AlertType.INFORMATION).show();
+                                    MessageBox.getBox("Thông báo", "Xóa khuyến mãi thất bại", Alert.AlertType.INFORMATION).show();
                                     Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             } else {
@@ -1049,7 +1068,7 @@ public class FormQuanLyBanHangController implements Initializable {
         if (selectedObject != null) {
             KhuyenMai khuyenMai = (KhuyenMai) selectedObject;
             if (khuyenMai.getIdKhuyenMai() == 0) {
-                MessageBox.getBox("Question", "Bạn không được sửa giá trị này!", Alert.AlertType.INFORMATION).show();
+                MessageBox.getBox("Thông báo", "Bạn không được sửa giá trị này!", Alert.AlertType.INFORMATION).show();
             } else {
                 this.txtKhuyenMai_id.setText(Integer.toString(khuyenMai.getIdKhuyenMai()));
                 this.txtKhuyenMai_tenKhuyenMai.setText(khuyenMai.getTenKhuyenMai());
@@ -1059,16 +1078,17 @@ public class FormQuanLyBanHangController implements Initializable {
 //            LocalDate ngayBatDau = instantNgayBatDau.atZone(ZoneId.systemDefault()).toLocalDate();
                 this.dpKhuyenMai_ngayBatDau.setValue(khuyenMai.getNgayBatDau().toLocalDate());
                 this.dpKhuyenMai_ngayKetThuc.setValue(khuyenMai.getNgayKetThuc().toLocalDate());
+                this.btnUpdateKhuyenMai.setDisable(false);
             }
         } else {
-            MessageBox.getBox("Question", "Hãy chọn khuyến mãi cần sửa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn khuyến mãi cần sửa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
     @FXML
     public void updateKhuyenMai(ActionEvent evt) {
         if (!this.txtKhuyenMai_id.getText().isEmpty()) {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
 
@@ -1093,13 +1113,13 @@ public class FormQuanLyBanHangController implements Initializable {
                             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else {
-                        MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
                     }
                 }
             });
 
         } else {
-            MessageBox.getBox("Question", "Hãy chọn khuyến mãi cần cập nhật", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn khuyến mãi cần cập nhật", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -1110,7 +1130,7 @@ public class FormQuanLyBanHangController implements Initializable {
                 Date ngayBatDau = Date.valueOf(datePicker1.getValue());
                 Date ngayKetThuc = Date.valueOf(datePicker2.getValue());
                 if (ngayBatDau.compareTo(ngayKetThuc) > 0) {
-                    MessageBox.getBox("Question", "Ngày bắt đầu phải nhỏ hơn ngày kết thúc", Alert.AlertType.INFORMATION).show();
+                    MessageBox.getBox("Thông báo", "Ngày bắt đầu phải nhỏ hơn ngày kết thúc", Alert.AlertType.INFORMATION).show();
                     this.dpKhuyenMai_ngayBatDau.setValue(ngayKetThuc.toLocalDate().minusDays(1));
                 }
             }
@@ -1121,7 +1141,7 @@ public class FormQuanLyBanHangController implements Initializable {
                 Date ngayBatDau = Date.valueOf(datePicker1.getValue());
                 Date ngayKetThuc = Date.valueOf(datePicker2.getValue());
                 if (ngayBatDau.compareTo(ngayKetThuc) > 0) {
-                    MessageBox.getBox("Question", "Ngày kết thúc phải lớn hơn ngày bắt đầu", Alert.AlertType.INFORMATION).show();
+                    MessageBox.getBox("Thông báo", "Ngày kết thúc phải lớn hơn ngày bắt đầu", Alert.AlertType.INFORMATION).show();
                     this.dpKhuyenMai_ngayKetThuc.setValue(ngayBatDau.toLocalDate().plusDays(1));
                 }
             }
@@ -1150,15 +1170,15 @@ public class FormQuanLyBanHangController implements Initializable {
             try {
                 sanPhamService.addSanPham(sanPham);
                 this.loadTableDataSanPham(this.tbSanPham, null);
-                MessageBox.getBox("Question", "Thêm sản phẩm thành công", Alert.AlertType.INFORMATION).show();
+                MessageBox.getBox("Thông báo", "Thêm sản phẩm thành công", Alert.AlertType.INFORMATION).show();
                 this.loadALL();
             } catch (SQLException ex) {
-                MessageBox.getBox("Question", "Thêm sản phẩm thất bại", Alert.AlertType.INFORMATION).show();
+                MessageBox.getBox("Thông báo", "Thêm sản phẩm thất bại", Alert.AlertType.INFORMATION).show();
                 Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } else {
-            MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -1167,7 +1187,7 @@ public class FormQuanLyBanHangController implements Initializable {
         Object selectedObject = this.tbSanPham.getSelectionModel().getSelectedItem();
 
         if (selectedObject != null) {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
                     SanPham sanPham = (SanPham) selectedObject;
@@ -1176,15 +1196,15 @@ public class FormQuanLyBanHangController implements Initializable {
                     try {
                         sanPhamService.deleteSanPham(Integer.toString(idSanPham));
                         this.loadTableDataSanPham(this.tbSanPham, null);
-                        MessageBox.getBox("Question", "Xóa khuyến mãi thành công", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Xóa khuyến mãi thành công", Alert.AlertType.INFORMATION).show();
                     } catch (SQLException ex) {
-                        MessageBox.getBox("Question", "Xóa khuyến mãi thất bại", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Xóa khuyến mãi thất bại", Alert.AlertType.INFORMATION).show();
                         Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });
         } else {
-            MessageBox.getBox("Question", "Hãy chọn khuyến mãi cần xóa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn khuyến mãi cần xóa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -1201,15 +1221,16 @@ public class FormQuanLyBanHangController implements Initializable {
             List<ChiNhanh> chiNhanh = chiNhanhService.getChiNhanhs(Integer.toString(sanPham.getIdChiNhanh()), null);
             this.cbKhuyenMai.setValue(khuyenMai.get(0));
             this.cbChiNhanh_SanPham.setValue(chiNhanh.get(0));
+            this.btnUpdateSanPham.setDisable(false);
         } else {
-            MessageBox.getBox("Question", "Hãy chọn sản phẩm cần sửa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn sản phẩm cần sửa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
     @FXML
     public void updateSanPham(ActionEvent evt) {
         if (!this.txtSanPham_id.getText().isEmpty()) {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
 
@@ -1226,10 +1247,10 @@ public class FormQuanLyBanHangController implements Initializable {
                         try {
                             sanPhamService.updateSanPham(idSanPham, tenSanPham, gia, donVi, idKhuyenMai, idChiNhanh);
                             this.loadTableDataKhuyenMai(this.tbKhuyenMai, null);
-                            MessageBox.getBox("Question", "Cập nhật sản phẩm thành công", Alert.AlertType.INFORMATION).show();
+                            MessageBox.getBox("Thông báo", "Cập nhật sản phẩm thành công", Alert.AlertType.INFORMATION).show();
                             this.loadALL();
                         } catch (SQLException ex) {
-                            MessageBox.getBox("Question", "Cập nhật sản phẩm thất bại", Alert.AlertType.INFORMATION).show();
+                            MessageBox.getBox("Thông báo", "Cập nhật sản phẩm thất bại", Alert.AlertType.INFORMATION).show();
                             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else {
@@ -1239,7 +1260,7 @@ public class FormQuanLyBanHangController implements Initializable {
             });
 
         } else {
-            MessageBox.getBox("Question", "Hãy chọn sản phẩm cần cập nhật", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn sản phẩm cần cập nhật", Alert.AlertType.INFORMATION).show();
         }
     }
 }
