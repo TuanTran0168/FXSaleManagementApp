@@ -77,7 +77,7 @@ public class HoaDonTester {
 
         int soLuong = 2;
 
-        List<ChiTietHoaDon> l = chiTietHoaDonService.getChiTietHoaDon(null);
+        List<ChiTietHoaDon> l = chiTietHoaDonService.getChiTietHoaDon(null, null);
         int idChiTietHoaDon = l.get(l.size() - 1).getIdCTHD();
         List<ChiTietHoaDon> listChiTietHoaDon = new ArrayList<>();
 

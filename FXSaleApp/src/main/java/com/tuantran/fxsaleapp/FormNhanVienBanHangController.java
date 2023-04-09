@@ -281,6 +281,7 @@ public class FormNhanVienBanHangController implements Initializable {
         colNgaySinhThanhVien.setCellValueFactory(new PropertyValueFactory("ngaySinhThanhVien"));
         colSoDienThoai.setCellValueFactory(new PropertyValueFactory("soDienThoai"));
 
+        tableView.getColumns().clear();
         tableView.getColumns().addAll(colIdThanhVien, colHoThanhVien, colTenThanhVien, colNgaySinhThanhVien, colSoDienThoai);
         this.themButtonVaoTableColumnThanhVien(tableView, colLayId, "Áp dụng");
     }
@@ -430,7 +431,7 @@ public class FormNhanVienBanHangController implements Initializable {
             } else {
                 for (SanPham sp : sanPhamDuocChon) {
                     if (s.getIdSanPham() == sp.getIdSanPham()) {
-                        Alert c = MessageBox.getBox("Question", "Đã tồn tại sản phẩm", Alert.AlertType.CONFIRMATION);
+                        Alert c = MessageBox.getBox("Thông báo", "Đã tồn tại sản phẩm", Alert.AlertType.CONFIRMATION);
                         c.show();
                         count = 0;
                         break;
@@ -447,7 +448,7 @@ public class FormNhanVienBanHangController implements Initializable {
             }
 
             try {
-                this.loadTableDataSanPham(Integer.toString(nhanVienDiemDanh.getIdNhanVien()), null, this.tbSanPhams); //Load lại cho nó đỡ bị ngáo
+                this.loadTableDataSanPham(Integer.toString(nhanVienDiemDanh.getIdChiNhanh()), null, this.tbSanPhams); //Load lại cho nó đỡ bị ngáo
             } catch (SQLException ex) {
                 Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
             }

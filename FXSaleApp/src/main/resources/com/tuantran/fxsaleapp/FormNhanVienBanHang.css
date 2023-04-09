@@ -18,3 +18,7 @@ Button.btnUtilities {
 Button.btnLogout {
     -fx-background-color: red;
 }
+
+AnchorPane {
+    -fx-background-color: linear-gradient(#B0F3F1, #FFCFDF);
+}

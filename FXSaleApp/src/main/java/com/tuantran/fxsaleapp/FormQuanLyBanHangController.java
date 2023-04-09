@@ -5,15 +5,20 @@
 package com.tuantran.fxsaleapp;
 
 import com.tuantran.pojo.ChiNhanh;
+import com.tuantran.pojo.ChiTietHoaDon;
+import com.tuantran.pojo.ChiTietHoaDonHienThi;
 import com.tuantran.pojo.HoaDon;
 import com.tuantran.pojo.KhuyenMai;
 import com.tuantran.pojo.NhanVien;
 import com.tuantran.pojo.SanPham;
+import com.tuantran.pojo.ThanhVien;
 import com.tuantran.services.ChiNhanhService;
+import com.tuantran.services.ChiTietHoaDonService;
 import com.tuantran.services.HoaDonService;
 import com.tuantran.services.KhuyenMaiService;
 import com.tuantran.services.NhanVienService;
 import com.tuantran.services.SanPhamService;
+import com.tuantran.services.ThanhVienService;
 import com.tuantran.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
@@ -56,6 +61,8 @@ public class FormQuanLyBanHangController implements Initializable {
     static final KhuyenMaiService khuyenMaiService = new KhuyenMaiService();
     static final SanPhamService sanPhamService = new SanPhamService();
     static final HoaDonService hoaDonService = new HoaDonService();
+    static final ThanhVienService thanhVienService = new ThanhVienService();
+    static final ChiTietHoaDonService chiTietHoaDonService = new ChiTietHoaDonService();
     private final FormUtils FORM_UTILS = new FormUtils();
 
     @FXML
@@ -66,6 +73,10 @@ public class FormQuanLyBanHangController implements Initializable {
     private TableView<KhuyenMai> tbKhuyenMai;
     @FXML
     private TableView<SanPham> tbSanPham;
+    @FXML
+    private TableView<HoaDon> tbHoaDon;
+    @FXML
+    private TableView<ChiTietHoaDonHienThi> tbChiTietHoaDon;
 
     @FXML
     private TextField txtChiNhanh_id;
@@ -115,6 +126,23 @@ public class FormQuanLyBanHangController implements Initializable {
 
     @FXML
     private Button btnDangXuat;
+    @FXML
+    private Button btnXemHoaDon;
+
+    @FXML
+    private TextField txtHoaDon_maHoaDon;
+    @FXML
+    DatePicker dpHoaDon_ngayCT;
+    @FXML
+    private TextField txtHoaDon_tenNhanVien;
+    @FXML
+    private TextField txtHoaDon_tenThanhVien;
+    @FXML
+    private TextField txtHoaDon_tongTien;
+    @FXML
+    private TextField txtHoaDon_tienNhan;
+    @FXML
+    private TextField txtHoaDon_timKiem;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -122,6 +150,7 @@ public class FormQuanLyBanHangController implements Initializable {
         FORM_UTILS.formatDate(FORM_UTILS.MY_DATE_FORMAT, dpKhuyenMai_ngayKetThuc);
         FORM_UTILS.onlyDoubleNumbers(this.txtSanPham_gia);
         FORM_UTILS.onlyDoubleNumbers(this.txtKhuyenMai_giaTri);
+        FORM_UTILS.onlyDoubleNumbers(this.txtHoaDon_timKiem);
 
 //        LocalDate localDate = LocalDate.of(2023, 4, 3);
 //        this.dpKhuyenMai_ngayBatDau.setValue(localDate);
@@ -155,17 +184,20 @@ public class FormQuanLyBanHangController implements Initializable {
             this.loadTableColumnNhanVien(tbNhanVien);
             this.loadTableColumnKhuyenMai(tbKhuyenMai);
             this.loadTableColumnSanPham(tbSanPham);
+            this.loadTableColumnHoaDon(this.tbHoaDon);
 
             this.loadTableDataChiNhanh(tbChiNhanh, null);
             this.loadTableDataNhanVien(tbNhanVien, null);
             this.loadTableDataKhuyenMai(tbKhuyenMai, null);
             this.loadTableDataSanPham(tbSanPham, null);
+            this.loadTableDataHoaDon(this.tbHoaDon, null);
 
             this.addTextChangeChiNhanh(this.txtChiNhanh_diaChi, tbChiNhanh);
             this.addTextChangeNhanVien(this.txtNhanVien_hoNhanVien, this.txtNhanVien_tenNhanVien, this.txtNhanVien_taiKhoan, this.txtNhanVien_matKhau, tbNhanVien);
             this.addTextChangeKhuyenMai(this.txtKhuyenMai_tenKhuyenMai, this.txtKhuyenMai_giaTri, tbKhuyenMai);
             this.addTextChangeSanPham(null, this.txtSanPham_tenSanPham, this.txtSanPham_gia, this.txtSanPham_donVi, this.tbSanPham);
-
+            this.addTextChangeHoaDon(this.txtHoaDon_timKiem, this.tbHoaDon);
+            
             List<String> listLoaiNhanVien = new ArrayList<>();
             listLoaiNhanVien.add("Nhân viên");
             listLoaiNhanVien.add("Quản lý");
@@ -218,13 +250,61 @@ public class FormQuanLyBanHangController implements Initializable {
 //        datePicker.setConverter(converter);
 //    }
     @FXML
-    private void dangXuat() throws IOException {
+    public void dangXuat() throws IOException {
         String formName = "Primary";
         String titleForm = "Đăng nhập";
         FORM_UTILS.newForm(formName, titleForm);
         Stage oldStage = (Stage) btnDangXuat.getScene().getWindow();
 
         oldStage.close();
+    }
+
+    @FXML
+    public void xemHoaDon() {
+        Object selectedObject = this.tbHoaDon.getSelectionModel().getSelectedItem();
+        if (selectedObject != null) {
+            try {
+                this.loadTableColumnChiTietHoaDonHienThi(this.tbChiTietHoaDon);
+                HoaDon hoaDon = (HoaDon) selectedObject;
+                NhanVien nhanVien = nhanVienService.getNhanViens(Integer.toString(hoaDon.getIdNhanVien()), null, null, null, null, null).get(0);
+                ChiNhanh chiNhanh = chiNhanhService.getChiNhanhs(Integer.toString(hoaDon.getIdChiNhanh()), null).get(0);
+                ThanhVien thanhVien = thanhVienService.getThanhViens(Integer.toString(hoaDon.getIdThanhVien()), null, null, null).get(0);
+                List<ChiTietHoaDon> listChiTietHoaDon = chiTietHoaDonService.getChiTietHoaDon(null, Integer.toString(hoaDon.getIdHoaDon()));
+
+                this.txtHoaDon_maHoaDon.setText(Integer.toString(hoaDon.getIdHoaDon()));
+                this.dpHoaDon_ngayCT.setValue(hoaDon.getNgayCT().toLocalDate());
+                this.txtHoaDon_tenNhanVien.setText(nhanVien.getTenNhanVien());
+                this.txtHoaDon_tenThanhVien.setText(thanhVien.getTenThanhVien());
+                
+                this.txtHoaDon_tongTien.setText(Double.toString(hoaDon.getTongTien()));
+                this.txtHoaDon_tienNhan.setText(Double.toString(hoaDon.getSoTienNhan()));
+                
+                List<ChiTietHoaDonHienThi> listChiTietHoaDonHienThi = new ArrayList<>();
+
+                int soThuTu = 0;
+                for (ChiTietHoaDon chiTietHoaDon : listChiTietHoaDon) {
+                    soThuTu++;
+                    String idCTHD = Integer.toString(chiTietHoaDon.getIdCTHD());
+                    String tenSanPham = sanPhamService.getSanPham(Integer.toString(chiTietHoaDon.getIdSanPham()), null, null, null, null, null).get(0).getTenSanPham();
+                    String soLuong = Double.toString(chiTietHoaDon.getSoLuong());
+                    double giaGoc = sanPhamService.getSanPham(Integer.toString(chiTietHoaDon.getIdSanPham()), null, null, null, null, null).get(0).getGia();
+                    double giaDaGiam = chiTietHoaDon.getThanhTien() / (Double.parseDouble(soLuong));
+//                    MessageBox.getBox("CC", " " + chiTietHoaDon.getThanhTien() + soLuong, Alert.AlertType.CONFIRMATION).show();
+//                    double giaDaGiam = 5.7;
+                    
+                    String thanhTien = Double.toString(chiTietHoaDon.getThanhTien());
+                    listChiTietHoaDonHienThi.add(new ChiTietHoaDonHienThi(Integer.toString(soThuTu), idCTHD, tenSanPham, soLuong, Double.toString(giaGoc), Double.toString(giaDaGiam), thanhTien));
+                }
+
+                this.tbChiTietHoaDon.getItems().clear();
+                this.tbChiTietHoaDon.setItems(FXCollections.observableList(listChiTietHoaDonHienThi));
+
+            } catch (SQLException ex) {
+                Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            MessageBox.getBox("Question", "Hãy chọn hóa đơn cần xem!", Alert.AlertType.INFORMATION).show();
+        }
     }
 
     private void loadTableColumnChiNhanh(TableView tableView) {
@@ -308,7 +388,7 @@ public class FormQuanLyBanHangController implements Initializable {
         TableColumn colNgayCT = new TableColumn("Ngày CT");
 
 //        pojo
-        colIdHoaDon.setCellValueFactory(new PropertyValueFactory("idSanPham"));
+        colIdHoaDon.setCellValueFactory(new PropertyValueFactory("idHoaDon"));
         colIdNhanVien.setCellValueFactory(new PropertyValueFactory("idNhanVien"));
         colIdChiNhanh.setCellValueFactory(new PropertyValueFactory("idChiNhanh"));
         colIdThanhVien.setCellValueFactory(new PropertyValueFactory("idThanhVien"));
@@ -318,6 +398,28 @@ public class FormQuanLyBanHangController implements Initializable {
 
         tableView.getColumns().clear();
         tableView.getColumns().addAll(colIdHoaDon, colIdNhanVien, colIdChiNhanh, colIdThanhVien, colTongTien, colSoTienNhan, colNgayCT);
+    }
+
+    private void loadTableColumnChiTietHoaDonHienThi(TableView tableView) {
+        TableColumn colSoThuTu = new TableColumn("Số thứ tự");
+        TableColumn colIdChiTietHoaDon = new TableColumn("Mã chi tiết");
+        TableColumn colTenSanPham = new TableColumn("Tên sản phẩm");
+        TableColumn colSoLuong = new TableColumn("Số lượng");
+        TableColumn colGiaGoc = new TableColumn("Giá gốc");
+        TableColumn colGiaDaGiam = new TableColumn("Giá đã giảm");
+        TableColumn colThanhTien = new TableColumn("Thành tiền");
+
+        //        pojo
+        colSoThuTu.setCellValueFactory(new PropertyValueFactory("soThuTu"));
+        colIdChiTietHoaDon.setCellValueFactory(new PropertyValueFactory("idCTHD"));
+        colTenSanPham.setCellValueFactory(new PropertyValueFactory("tenSanPham"));
+        colSoLuong.setCellValueFactory(new PropertyValueFactory("soLuong"));
+        colGiaGoc.setCellValueFactory(new PropertyValueFactory("giaGoc"));
+        colGiaDaGiam.setCellValueFactory(new PropertyValueFactory("giaDaGiam"));
+        colThanhTien.setCellValueFactory(new PropertyValueFactory("thanhTien"));
+
+        tableView.getColumns().clear();
+        tableView.getColumns().addAll(colSoThuTu, colIdChiTietHoaDon, colTenSanPham, colSoLuong, colGiaGoc, colGiaDaGiam, colThanhTien);
     }
 
     private void loadTableDataChiNhanh(TableView tableView, String keyword) throws SQLException {
@@ -684,7 +786,7 @@ public class FormQuanLyBanHangController implements Initializable {
 
             int count = 0;
             for (NhanVien nhanVien : nhanViens) {
-                if (nhanVien.getTaiKhoan().equals(taiKhoan)) {
+                if (nhanVien.getTaiKhoan() != null && nhanVien.getTaiKhoan().equals(taiKhoan)) {
                     break;
                 } else {
                     count++;
@@ -717,18 +819,43 @@ public class FormQuanLyBanHangController implements Initializable {
 
         if (selectedObject != null) {
 
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
                     NhanVien nhanVien = (NhanVien) selectedObject;
                     int idNhanVien = nhanVien.getIdNhanVien();
-
                     try {
-                        nhanVienService.deleteNhanVien(Integer.toString(idNhanVien));
-                        this.loadTableDataNhanVien(this.tbNhanVien, null);
-                        MessageBox.getBox("Question", "Xóa nhân viên thành công", Alert.AlertType.INFORMATION).show();
+                        List<HoaDon> hoaDons = hoaDonService.getHoaDon(null);
+                        int countIdNhanVien = 0;
+                        for (HoaDon hoaDon : hoaDons) {
+                            if (Integer.toString(idNhanVien).equals(Integer.toString(hoaDon.getIdNhanVien()))) {
+                                break;
+                            } else {
+                                countIdNhanVien++;
+                            }
+                        }
+
+                        if (countIdNhanVien == hoaDons.size()) {
+                            try {
+                                nhanVienService.deleteNhanVien(Integer.toString(idNhanVien));
+                                this.loadTableDataNhanVien(this.tbNhanVien, null);
+                                MessageBox.getBox("Thông báo", "Xóa nhân viên thành công", Alert.AlertType.INFORMATION).show();
+                            } catch (SQLException ex) {
+                                MessageBox.getBox("Thông báo", "Xóa nhân viên thất bại", Alert.AlertType.INFORMATION).show();
+                                Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else {
+                            try {
+                                nhanVienService.updateNhanVien(Integer.toString(idNhanVien), nhanVien.getHoNhanVien(), nhanVien.getTenNhanVien(), nhanVien.getIdChiNhanh(), null, null, nhanVien.isQuanLy());
+                                this.loadTableDataNhanVien(this.tbNhanVien, null);
+                                MessageBox.getBox("Thông báo", "Nhân viên này đã không thể làm việc được nữa!", Alert.AlertType.INFORMATION).show();
+                            } catch (SQLException ex) {
+                                MessageBox.getBox("Thông báo", "Xóa nhân viên thất bại", Alert.AlertType.INFORMATION).show();
+                                Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
                     } catch (SQLException ex) {
-                        MessageBox.getBox("Question", "Xóa nhân viên thất bại", Alert.AlertType.INFORMATION).show();
                         Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -784,7 +911,7 @@ public class FormQuanLyBanHangController implements Initializable {
                             nhanViens = nhanVienService.getNhanViens(null, null, null, null, null, null);
                             int count = 0;
                             for (NhanVien nhanVien : nhanViens) {
-                                if (nhanVien.getTaiKhoan().equals(taiKhoan) && Integer.toString(nhanVien.getIdNhanVien()).equals(idNhanVien) == false) {
+                                if (nhanVien.getTaiKhoan() != null && nhanVien.getTaiKhoan().equals(taiKhoan) && Integer.toString(nhanVien.getIdNhanVien()).equals(idNhanVien) == false) {
                                     break;
                                 } else {
                                     count++;

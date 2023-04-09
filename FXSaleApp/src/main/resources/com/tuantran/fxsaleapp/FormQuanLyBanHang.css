@@ -7,7 +7,29 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     Author     : Sy_Tuan
 */
 
-Hbox.btnLogout {
+Button.btnLogout {
     -fx-background-color: red;
+    -fx-font-weight: bold;
 }
 
+Button.Untilities {
+    -fx-background-color: lightblue;
+    -fx-font-weight: bold;
+}
+
+AnchorPane {
+    -fx-background-color: linear-gradient(#B0F3F1, #FFCFDF);
+}
+
+TabPane {
+    -fx-background-color: #B0F3F1;
+    -fx-tab-background-color: #B0F3F1;
+}
+
+.tab-header-area {
+    -fx-tab-border-color: #B0F3F1;
+}
+
+TableView {
+    -fx-background-color: linear-gradient(#B0F3F1, #FFCFDF);
+}

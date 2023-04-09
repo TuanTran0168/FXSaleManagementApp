@@ -55,7 +55,7 @@ public class ChiTietHoaDonTester {
 
     @Test
     public void testAddSuccessful() throws SQLException {
-        List<ChiTietHoaDon> listChiTietHoaDon = chiTietHoaDonService.getChiTietHoaDon(null);
+        List<ChiTietHoaDon> listChiTietHoaDon = chiTietHoaDonService.getChiTietHoaDon(null, null);
         int idChiTietHoaDon = listChiTietHoaDon.get(listChiTietHoaDon.size() - 1).getIdCTHD() + 1;
         int idSanPham = 1;
         int idHoaDon = 1;
@@ -110,6 +110,32 @@ public class ChiTietHoaDonTester {
 
         } catch (SQLException ex) {
             Logger.getLogger(ThanhVienTester.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Test
+    public void testSearchChiTietHoaDon_byId() throws SQLException {
+        String keyword_id = "5";
+        List<ChiTietHoaDon> chiTietHoaDons = chiTietHoaDonService.getChiTietHoaDon(keyword_id, null);
+        
+        System.err.println("size cua List = " + chiTietHoaDons.size());
+        Assertions.assertEquals(1, chiTietHoaDons.size());
+        System.err.println("id cua chi tiet hoa don = " + chiTietHoaDons.get(0).getIdCTHD());
+        Assertions.assertTrue(chiTietHoaDons.get(0).getIdCTHD()== Integer.parseInt(keyword_id));
+    }
+    
+    @Test
+    public void testSearchChiTietHoaDon_byIdHoaDon() throws SQLException {
+        String keyword_idHoaDon = "5";
+        
+         List<ChiTietHoaDon> chiTietHoaDons = chiTietHoaDonService.getChiTietHoaDon(null, keyword_idHoaDon);
+        
+        System.err.println("size cua List = " + chiTietHoaDons.size());
+        Assertions.assertEquals(2, chiTietHoaDons.size());
+        
+        for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDons) {
+            System.err.println(chiTietHoaDon.getIdHoaDon());
+            Assertions.assertTrue(Integer.toString(chiTietHoaDon.getIdHoaDon()).contains(keyword_idHoaDon));
         }
     }
 }
