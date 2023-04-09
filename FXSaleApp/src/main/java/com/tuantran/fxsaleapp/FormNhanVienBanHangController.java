@@ -300,7 +300,7 @@ public class FormNhanVienBanHangController implements Initializable {
     }
 
     private void loadTableDataThanhVien(String keyword, TableView tableView) throws SQLException {
-        List<ThanhVien> thanhViens = thanhVienService.getThanhViens(keyword, keyword, keyword, keyword);
+        List<ThanhVien> thanhViens = thanhVienService.getThanhViens(null, null, keyword, null);
         if (!thanhViens.isEmpty()) {
             if (thanhViens.get(0).getIdThanhVien() == 0) {
                 thanhViens.remove(0);
@@ -551,7 +551,7 @@ public class FormNhanVienBanHangController implements Initializable {
         List<HoaDon> listHoaDon = hoaDonService.getHoaDon(null);
         int idHoaDon = listHoaDon.get(listHoaDon.size() - 1).getIdHoaDon() + 1;
 
-        List<ChiTietHoaDon> listChiTietHoaDon = chiTietHoaDonService.getChiTietHoaDon(null);
+        List<ChiTietHoaDon> listChiTietHoaDon = chiTietHoaDonService.getChiTietHoaDon(null, null);
         int idChiTietHoaDon = listChiTietHoaDon.get(listChiTietHoaDon.size() - 1).getIdCTHD();
 
 //        Lấy id thành viên được chọn trong hệ thống để tiến hành giảm giá
@@ -701,6 +701,7 @@ public class FormNhanVienBanHangController implements Initializable {
                     this.thanhVienDuocKhuyenMai = null;
                     this.txtThanhVienApDung.setText("");
                     this.btnHuyDangKyThanhVien.setDisable(true);
+                    this.txtThanhTien.setText(this.tinhTongTien() +"");
                 }
             }
         });

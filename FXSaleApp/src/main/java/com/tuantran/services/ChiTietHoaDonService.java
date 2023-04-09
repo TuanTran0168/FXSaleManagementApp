@@ -17,21 +17,25 @@ import java.util.List;
  * @author TuanTran
  */
 public class ChiTietHoaDonService {
-    public List<ChiTietHoaDon> getChiTietHoaDon(String keyword) throws SQLException {
+    public List<ChiTietHoaDon> getChiTietHoaDon(String keyword_id, String keyword_idHoaDon) throws SQLException {
         List<ChiTietHoaDon> chiTietHoaDons = new ArrayList<>();
 
         try (Connection conn = JdbcUtils.getConn()) {
             
             String query = "SELECT * FROM ChiTietHoaDon";
             
-            if (keyword != null && !keyword.isEmpty()) {
-                query += " WHERE id_CTHD LIKE concat('%', ?, '%')";
+            if (keyword_id != null && !keyword_id.isEmpty()) {
+                query += " WHERE id_CTHD = ?";
+            }
+            
+            if (keyword_idHoaDon != null && !keyword_idHoaDon.isEmpty()) {
+                query += " WHERE id_hoa_don = ?";
             }
             
             PreparedStatement stm = conn.prepareCall(query);
             
-            if (keyword != null && !keyword.isEmpty()) {
-                stm.setString(1, keyword);
+            if (keyword_idHoaDon != null && !keyword_idHoaDon.isEmpty()) {
+                stm.setString(1, keyword_idHoaDon);
             }
             
             ResultSet rs = stm.executeQuery();

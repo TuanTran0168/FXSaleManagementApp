@@ -30,7 +30,7 @@ public class HoaDonService {
             String query = "SELECT * FROM HoaDon";
 
             if (keyword != null && !keyword.isEmpty()) {
-                query += " WHERE id_hoa_don LIKE concat('%', ?, '%')";
+                query += " WHERE tong_tien >= ?";
             }
 
             PreparedStatement stm = conn.prepareCall(query);
