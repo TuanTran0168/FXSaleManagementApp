@@ -11,7 +11,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="50.0" styleClass="MyBackground" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tuantran.fxsaleapp.PrimaryController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="890.0" spacing="50.0" styleClass="MyBackground" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tuantran.fxsaleapp.PrimaryController">
    <children>
       <HBox alignment="CENTER" prefHeight="143.0" prefWidth="600.0">
          <children>
@@ -57,20 +57,17 @@
                   </TextField>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="111.0" prefWidth="615.0">
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="111.0" prefWidth="615.0">
                <children>
-                  <Label alignment="CENTER" text="Mật khẩu:" textFill="#224488" HBox.hgrow="ALWAYS">
+                  <Label maxWidth="-Infinity" prefWidth="117.6" text="Mật khẩu:" textFill="#224488" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets right="7.0" />
-                     </HBox.margin>
                   </Label>
                   <TextField fx:id="txtMatKhau" prefWidth="640.0">
-                     <HBox.margin>
-                        <Insets left="48.0" />
-                     </HBox.margin>
                      <font>
                         <Font size="16.0" />
                      </font>
