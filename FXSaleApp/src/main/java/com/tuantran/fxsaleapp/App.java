@@ -28,6 +28,7 @@ public class App extends Application {
 
         scene = new Scene(loadFXML("primary"), screenWidth, screenHeight);
         stage.setScene(scene);
+//        stage.setFullScreen(true);
         stage.show();
     }
 

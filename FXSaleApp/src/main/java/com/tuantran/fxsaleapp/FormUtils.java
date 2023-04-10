@@ -50,6 +50,7 @@ public class FormUtils {
         formStage.setTitle(titleForm);
         formStage.setWidth(screenWidth);
         formStage.setHeight(screenHeight);
+//        formStage.setFullScreen(true);
         formStage.show();
     }
 
