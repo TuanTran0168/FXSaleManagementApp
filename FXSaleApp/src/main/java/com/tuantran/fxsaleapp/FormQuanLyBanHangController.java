@@ -145,7 +145,7 @@ public class FormQuanLyBanHangController implements Initializable {
     private TextField txtHoaDon_timKiem;
     @FXML
     private TextField txtHoaDon_chiNhanh;
-    
+
     @FXML
     private Button btnUpdateChiNhanh;
     @FXML
@@ -174,7 +174,7 @@ public class FormQuanLyBanHangController implements Initializable {
             this.btnUpdateNhanVien.setDisable(true);
             this.btnUpdateKhuyenMai.setDisable(true);
             this.btnUpdateSanPham.setDisable(true);
-            
+
             this.txtChiNhanh_diaChi.setText("");
             this.txtChiNhanh_id.setText("");
 
@@ -213,7 +213,7 @@ public class FormQuanLyBanHangController implements Initializable {
             this.addTextChangeKhuyenMai(this.txtKhuyenMai_tenKhuyenMai, this.txtKhuyenMai_giaTri, tbKhuyenMai);
             this.addTextChangeSanPham(null, this.txtSanPham_tenSanPham, this.txtSanPham_gia, this.txtSanPham_donVi, this.tbSanPham);
             this.addTextChangeHoaDon(this.txtHoaDon_timKiem, this.tbHoaDon);
-            
+
             List<String> listLoaiNhanVien = new ArrayList<>();
             listLoaiNhanVien.add("Nhân viên");
             listLoaiNhanVien.add("Quản lý");
@@ -292,10 +292,10 @@ public class FormQuanLyBanHangController implements Initializable {
                 this.txtHoaDon_tenNhanVien.setText(nhanVien.getTenNhanVien());
                 this.txtHoaDon_tenThanhVien.setText(thanhVien.getTenThanhVien());
                 this.txtHoaDon_chiNhanh.setText(chiNhanh.getDiaChi());
-                
+
                 this.txtHoaDon_tongTien.setText(Double.toString(hoaDon.getTongTien()));
                 this.txtHoaDon_tienNhan.setText(Double.toString(hoaDon.getSoTienNhan()));
-                
+
                 List<ChiTietHoaDonHienThi> listChiTietHoaDonHienThi = new ArrayList<>();
 
                 int soThuTu = 0;
@@ -308,7 +308,7 @@ public class FormQuanLyBanHangController implements Initializable {
                     double giaDaGiam = chiTietHoaDon.getThanhTien() / (Double.parseDouble(soLuong));
 //                    MessageBox.getBox("CC", " " + chiTietHoaDon.getThanhTien() + soLuong, Alert.AlertType.CONFIRMATION).show();
 //                    double giaDaGiam = 5.7;
-                    
+
                     String thanhTien = Double.toString(chiTietHoaDon.getThanhTien());
                     listChiTietHoaDonHienThi.add(new ChiTietHoaDonHienThi(Integer.toString(soThuTu), idCTHD, tenSanPham, soLuong, Double.toString(giaGoc), Double.toString(giaDaGiam), thanhTien));
                 }
@@ -703,36 +703,80 @@ public class FormQuanLyBanHangController implements Initializable {
         Object selectedObject = this.tbChiNhanh.getSelectionModel().getSelectedItem();
 
         if (selectedObject != null) {
-
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
                     ChiNhanh chiNhanh = (ChiNhanh) selectedObject;
                     int idChiNhanh = chiNhanh.getIdChiNhanh();
 
-//                    List<NhanVien> listNhanVien = new ArrayList<>();
-//                    List<SanPham> listSanPham = new ArrayList<>();
-                    try {
-                        List<NhanVien> listNhanVien = nhanVienService.getNhanViens(null, null, null, null, null, Integer.toString(idChiNhanh));
-                        List<SanPham> listSanPham = sanPhamService.getSanPham(null, null, null, null, Integer.toString(idChiNhanh), null);
+                    if (idChiNhanh == 0) {
+                        MessageBox.getBox("Thông báo", "Bạn không được sửa giá trị này?", Alert.AlertType.CONFIRMATION).show();
+                    } else {
+                        try {
+                            List<NhanVien> listNhanVien = nhanVienService.getNhanViens(null, null, null, null, null, Integer.toString(idChiNhanh));
+                            List<SanPham> listSanPham = sanPhamService.getSanPham(null, null, null, null, Integer.toString(idChiNhanh), null);
 
-                        if (listNhanVien.isEmpty() && listSanPham.isEmpty()) {
-                            try {
-                                chiNhanhService.deleteChiNhanh(Integer.toString(idChiNhanh));
-                                this.loadTableDataChiNhanh(this.tbChiNhanh, null);
-                                MessageBox.getBox("Thông báo", "Xóa chi nhánh thành công", Alert.AlertType.INFORMATION).show();
-                                this.loadALL();
-                            } catch (SQLException ex) {
-                                MessageBox.getBox("Thông báo", "Xóa chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
-                                Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                            if (listNhanVien.isEmpty() && listSanPham.isEmpty()) {
+                                try {
+                                    chiNhanhService.deleteChiNhanh(Integer.toString(idChiNhanh));
+                                    this.loadTableDataChiNhanh(this.tbChiNhanh, null);
+                                    MessageBox.getBox("Thông báo", "Xóa chi nhánh thành công", Alert.AlertType.INFORMATION).show();
+                                    this.loadALL();
+                                } catch (SQLException ex) {
+                                    MessageBox.getBox("Thông báo", "Xóa chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
+                                    Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            } else {
+//                                MessageBox.getBox("Thông báo", "Vẫn còn nhân viên và sản phẩm thuộc chi nhánh này", Alert.AlertType.CONFIRMATION).show();
+                                Alert b = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn xóa?"
+                                        + "\nVẫn còn nhân viên và sản phẩm thuộc chi nhánh này!"
+                                        + "\nNếu tiếp tục thì các nhân viên và sản phẩm này "
+                                        + "\nsẽ không còn ở chi nhánh đó nữa!", Alert.AlertType.CONFIRMATION);
+                                b.showAndWait().ifPresent(res1 -> {
+                                    if (res1 == ButtonType.OK) {
+                                        int countResetSanPham = 0;
+                                        int countResetNhanVien = 0;
+
+                                        for (SanPham sanPham : listSanPham) {
+                                            try {
+                                                sanPhamService.updateSanPham(Integer.toString(sanPham.getIdSanPham()), sanPham.getTenSanPham(), sanPham.getGia(), sanPham.getDonVi(), sanPham.getIdKhuyenMai(), 0);
+                                                countResetSanPham++;
+                                            } catch (SQLException ex) {
+                                                Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        }
+
+                                        for (NhanVien nhanVien : listNhanVien) {
+                                            try {
+                                                nhanVienService.updateNhanVien(Integer.toString(nhanVien.getIdNhanVien()), nhanVien.getHoNhanVien(), nhanVien.getTenNhanVien(), 0, nhanVien.getTaiKhoan(), nhanVien.getMatKhau(), nhanVien.isQuanLy());
+                                                countResetNhanVien++;
+                                            } catch (SQLException ex) {
+                                                Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        }
+
+                                        if (countResetNhanVien == listNhanVien.size() && countResetSanPham == listSanPham.size()) {
+                                            try {
+                                                chiNhanhService.deleteChiNhanh(Integer.toString(idChiNhanh));
+                                                this.loadTableDataChiNhanh(this.tbChiNhanh, null);
+                                                MessageBox.getBox("Thông báo", "Xóa chi nhánh thành công!"
+                                                        + "\nNhững sản phẩm và nhân viên thuộc chi nhánh này"
+                                                        + "\nđã không còn ở chi nhánh này nữa!", Alert.AlertType.CONFIRMATION).show();
+                                                this.loadALL();
+                                            } catch (SQLException ex) {
+                                                Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        } else {
+                                            MessageBox.getBox("Thông báo", "Có lỗi xảy ra!", Alert.AlertType.CONFIRMATION).show();
+                                        }
+
+                                    }
+                                });
                             }
-                        } else {
-                            MessageBox.getBox("Thông báo", "Vẫn còn nhân viên và sản phẩm thuộc chi nhánh này", Alert.AlertType.CONFIRMATION).show();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } catch (SQLException ex) {
-                        Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
                 }
             });
         } else {
@@ -745,9 +789,14 @@ public class FormQuanLyBanHangController implements Initializable {
         Object selectedObject = this.tbChiNhanh.getSelectionModel().getSelectedItem();
         if (selectedObject != null) {
             ChiNhanh chiNhanh = (ChiNhanh) selectedObject;
-            this.txtChiNhanh_diaChi.setText(chiNhanh.getDiaChi());
-            this.txtChiNhanh_id.setText(Integer.toString(chiNhanh.getIdChiNhanh()));
-            this.btnUpdateChiNhanh.setDisable(false);
+            if (chiNhanh.getIdChiNhanh() == 0) {
+                MessageBox.getBox("Thông báo", "Bạn không được sửa giá trị này", Alert.AlertType.CONFIRMATION);
+            } else {
+                this.txtChiNhanh_diaChi.setText(chiNhanh.getDiaChi());
+                this.txtChiNhanh_id.setText(Integer.toString(chiNhanh.getIdChiNhanh()));
+                this.btnUpdateChiNhanh.setDisable(false);
+            }
+
         } else {
             MessageBox.getBox("Thông báo", "Hãy chọn chi nhánh cần sửa!", Alert.AlertType.INFORMATION).show();
         }
@@ -782,14 +831,14 @@ public class FormQuanLyBanHangController implements Initializable {
             });
 
         } else {
-            MessageBox.getBox("Question", "Hãy chọn chi nhánh cần cập nhật", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn chi nhánh cần cập nhật", Alert.AlertType.INFORMATION).show();
         }
     }
 
     @FXML
     public void addNhanVien(ActionEvent evt) throws SQLException {
         if (!this.txtNhanVien_hoNhanVien.getText().isEmpty() && !this.txtNhanVien_tenNhanVien.getText().isEmpty()
-                && !this.txtNhanVien_taiKhoan.getText().isEmpty() && !this.txtNhanVien_matKhau.getText().isEmpty()
+                && this.txtNhanVien_taiKhoan != null && this.txtNhanVien_matKhau != null
                 && this.cbChiNhanh_NhanVien.getValue() != null) {
 
             List<NhanVien> nhanViens = nhanVienService.getNhanViens(null, null, null, null, null, null);
@@ -864,7 +913,8 @@ public class FormQuanLyBanHangController implements Initializable {
                             }
                         } else {
                             try {
-                                nhanVienService.updateNhanVien(Integer.toString(idNhanVien), nhanVien.getHoNhanVien(), nhanVien.getTenNhanVien(), nhanVien.getIdChiNhanh(), null, null, nhanVien.isQuanLy());
+//                                nhanVienService.updateNhanVien(Integer.toString(idNhanVien), nhanVien.getHoNhanVien(), nhanVien.getTenNhanVien(), nhanVien.getIdChiNhanh(), null, null, nhanVien.isQuanLy());
+                                nhanVienService.updateNhanVien(Integer.toString(idNhanVien), nhanVien.getHoNhanVien(), nhanVien.getTenNhanVien(), 0, null, null, nhanVien.isQuanLy());
                                 this.loadTableDataNhanVien(this.tbNhanVien, null);
                                 MessageBox.getBox("Thông báo", "Nhân viên này đã không thể làm việc được nữa!", Alert.AlertType.INFORMATION).show();
                             } catch (SQLException ex) {
@@ -894,6 +944,13 @@ public class FormQuanLyBanHangController implements Initializable {
             this.txtNhanVien_taiKhoan.setText(nhanVien.getTaiKhoan());
             this.txtNhanVien_matKhau.setText(nhanVien.getMatKhau());
 
+//            if (this.txtNhanVien_taiKhoan == null && this.txtNhanVien_matKhau == null) {
+//                this.txtNhanVien_taiKhoan.setText("");
+//                this.txtNhanVien_matKhau.setText("");
+//            } else {
+//                this.txtNhanVien_taiKhoan.setText(nhanVien.getTaiKhoan());
+//                this.txtNhanVien_matKhau.setText(nhanVien.getMatKhau());
+//            }
             List<ChiNhanh> chiNhanh = chiNhanhService.getChiNhanhs(Integer.toString(nhanVien.getIdChiNhanh()), null);
             String loaiNhanVien = Boolean.toString(nhanVien.isQuanLy()).equals("true") ? "Quản lý" : "Nhân viên";
 
@@ -913,8 +970,13 @@ public class FormQuanLyBanHangController implements Initializable {
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
 
-                    if (!this.txtNhanVien_hoNhanVien.getText().isEmpty() && !this.txtNhanVien_tenNhanVien.getText().isEmpty()
+                    /*
+                        !this.txtNhanVien_hoNhanVien.getText().isEmpty() && !this.txtNhanVien_tenNhanVien.getText().isEmpty()
                             && !this.txtNhanVien_taiKhoan.getText().isEmpty() && !this.txtNhanVien_matKhau.getText().isEmpty()
+                            && this.cbChiNhanh_NhanVien.getValue() != null
+                     */
+                    if (!this.txtNhanVien_hoNhanVien.getText().isEmpty() && !this.txtNhanVien_tenNhanVien.getText().isEmpty()
+                            && this.txtNhanVien_taiKhoan != null && this.txtNhanVien_matKhau != null
                             && this.cbChiNhanh_NhanVien.getValue() != null) {
 
                         String idNhanVien = this.txtNhanVien_id.getText();
@@ -1028,7 +1090,8 @@ public class FormQuanLyBanHangController implements Initializable {
                                     Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             } else {
-                                Alert b = MessageBox.getBox("Thông báo", "Những sản phẩm đang áp dụng khuyến mãi này sẽ bị hủy!", Alert.AlertType.CONFIRMATION);
+                                Alert b = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn xóa?"
+                                        + "\nNhững sản phẩm đang áp dụng khuyến mãi này sẽ bị hủy khuyến mãi!", Alert.AlertType.CONFIRMATION);
                                 b.showAndWait().ifPresent(res1 -> {
                                     if (res1 == ButtonType.OK) {
                                         int countResetKhuyenMai = 0;
@@ -1042,8 +1105,15 @@ public class FormQuanLyBanHangController implements Initializable {
                                         }
 
                                         if (countResetKhuyenMai == listSanPham.size()) {
-                                            MessageBox.getBox("Thông báo", "Các sản phẩm có khuyến mãi này đã được hủy!", Alert.AlertType.CONFIRMATION).show();
-                                            this.loadALL();
+                                            try {
+                                                khuyenMaiService.deleteKhuyenMai(Integer.toString(idKhuyenMai));
+                                                this.loadTableDataKhuyenMai(this.tbKhuyenMai, null);
+                                                MessageBox.getBox("Thông báo", "Xóa khuyến mãi thành công!"
+                                                        + "\nCác sản phẩm có khuyến mãi này đã được hủy khuyến mãi!", Alert.AlertType.CONFIRMATION).show();
+                                                this.loadALL();
+                                            } catch (SQLException ex) {
+                                                Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
                                         } else {
                                             MessageBox.getBox("Thông báo", "Có lỗi xảy ra!", Alert.AlertType.CONFIRMATION).show();
                                         }

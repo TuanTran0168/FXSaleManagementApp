@@ -54,7 +54,7 @@ public class PrimaryController implements Initializable {
             try {
                 nhanViens = nhanVienService.getNhanViens();
                 for (NhanVien nv : nhanViens) {
-                    if (nv.getTaiKhoan().equals(tk) && nv.getMatKhau().equals(mk)) {
+                    if (nv.getTaiKhoan() != null && nv.getTaiKhoan().equals(tk) && nv.getMatKhau().equals(mk)) {
                         if (nv.isQuanLy()) {
                             String formName = "FormQuanLyBanHang";
                             String formTilte = "Quản lý hệ thống I'MPROOK MART";
