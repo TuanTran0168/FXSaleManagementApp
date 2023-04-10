@@ -59,6 +59,8 @@ public class QuanLyThanhVienController implements Initializable {
 
     @FXML
     private Button btnThoat;
+    @FXML
+    private Button btnUpdate;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -69,6 +71,7 @@ public class QuanLyThanhVienController implements Initializable {
 
     private void loadALL() {
         try {
+             this.btnUpdate.setDisable(true);
             this.txtThanhVien_id.setText("");
             this.txtThanhVien_hoThanhVien.setText("");
             this.txtThanhVien_tenThanhVien.setText("");
@@ -209,6 +212,7 @@ public class QuanLyThanhVienController implements Initializable {
                 this.txtThanhVien_tenThanhVien.setText(thanhVien.getTenThanhVien());
                 this.txtThanhVien_soDienThoai.setText(thanhVien.getSoDienThoai());
                 this.dpThanhVien_ngaySinh.setValue(thanhVien.getNgaySinhThanhVien().toLocalDate());
+                this.btnUpdate.setDisable(false);
             }
         } else {
             MessageBox.getBox("Question", "Hãy chọn thành viên cần sửa!", Alert.AlertType.INFORMATION).show();

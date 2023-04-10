@@ -94,7 +94,7 @@
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font></Button>
-                        <Button mnemonicParsing="false" onAction="#updateThanhVien" prefHeight="25.0" prefWidth="117.0" styleClass="Utilities" text="Cập nhật" HBox.hgrow="ALWAYS">
+                        <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#updateThanhVien" prefHeight="25.0" prefWidth="117.0" styleClass="Utilities" text="Cập nhật" HBox.hgrow="ALWAYS">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font></Button>

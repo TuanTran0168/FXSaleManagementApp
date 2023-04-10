@@ -60,8 +60,8 @@ public class FormNhanVienBanHangController implements Initializable {
     private static final ThanhVienService thanhVienService = new ThanhVienService();
     private static final KhuyenMaiService khuyenMaiService = new KhuyenMaiService();
     private final FormUtils FORM_UTILS = new FormUtils();
-//    private final double SO_TIEN_GIAM_GIA_THEO_QUY_DINH = 1000000;
-//    private final double PHAN_TRAM_DISCOUNT = 10 / (100 * 1.0);
+
+    double tongTienDiscountChoThanhVien;
 
     private List<SanPham> sanPhamDuocChon;
     private List<String> listSoLuongSanPhamDuocChon;
@@ -108,6 +108,7 @@ public class FormNhanVienBanHangController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.tongTienDiscountChoThanhVien = 0;
         this.txtTienThoi.setDisable(true);
         this.btnHuyDangKyThanhVien.setDisable(true);
         if (this.nhanVienDiemDanh == null) {
@@ -127,6 +128,7 @@ public class FormNhanVienBanHangController implements Initializable {
             this.txtTienThoi.setText("");
             this.txtThanhTien.setText("");
             this.txtThanhVienApDung.setText("");
+            this.txtTienNhan.setText("0");
 
             this.tbSanPhamDuocChon.setEditable(true);
             this.sanPhamDuocChon = new ArrayList<>();
@@ -513,21 +515,21 @@ public class FormNhanVienBanHangController implements Initializable {
     }
 
     private double tinhTongTien() {
-        double tong = 0;
+        this.tongTienDiscountChoThanhVien = 0;
         LocalDate today = LocalDate.now();
         ObservableList<SanPham> listSP = FXCollections.observableArrayList();
         listSP.addAll(tbSanPhamDuocChon.getItems());
         for (SanPham sp : listSP) {
-            tong += sp.getGia() * sp.getSoLuongTemp();
+            tongTienDiscountChoThanhVien += sp.getGia() * sp.getSoLuongTemp();
         }
 
         if (thanhVienDuocKhuyenMai != null) {
             LocalDate ngaySinhThanhVien = thanhVienDuocKhuyenMai.getNgaySinhThanhVien().toLocalDate();
             if ((ngaySinhThanhVien.getMonthValue() == today.getMonthValue()
                     && ngaySinhThanhVien.getDayOfMonth() == today.getDayOfMonth())
-                    && tong > FORM_UTILS.SO_TIEN_GIAM_GIA_THEO_QUY_DINH) {
-                tong = tong - tong * FORM_UTILS.PHAN_TRAM_DISCOUNT;
-                MessageBox.getBox("Thông báo", "BẠN ĐÃ ĐƯỢC GIẢM " + FORM_UTILS.PHAN_TRAM_DISCOUNT_TEXT + ", SỐ TIỀN CỦA BẠN LÀ = " + tong, Alert.AlertType.CONFIRMATION).show();
+                    && tongTienDiscountChoThanhVien > FORM_UTILS.SO_TIEN_GIAM_GIA_THEO_QUY_DINH) {
+                tongTienDiscountChoThanhVien = tongTienDiscountChoThanhVien - tongTienDiscountChoThanhVien * FORM_UTILS.PHAN_TRAM_DISCOUNT;
+                MessageBox.getBox("Thông báo", "BẠN ĐÃ ĐƯỢC GIẢM " + FORM_UTILS.PHAN_TRAM_DISCOUNT_TEXT + ", SỐ TIỀN CỦA BẠN LÀ = " + tongTienDiscountChoThanhVien, Alert.AlertType.CONFIRMATION).show();
             }
         }
 
@@ -536,7 +538,7 @@ public class FormNhanVienBanHangController implements Initializable {
 //        } else {
 //            this.txtTienNhan.setDisable(false);
 //        }
-        return tong;
+        return tongTienDiscountChoThanhVien;
     }
 
     @FXML
@@ -593,8 +595,8 @@ public class FormNhanVienBanHangController implements Initializable {
 //                        MessageBox.getBox("Thông báo", "BẠN ĐÃ ĐƯỢC GIẢM 10% = " + this.PHAN_TRAM_DISCOUNT, Alert.AlertType.CONFIRMATION).show();
 //                    }
 //                }
-                if (soTienNhan >= tongTien) {
-                    hoaDon.setTongTien(tongTien);
+                if (soTienNhan >= this.tongTienDiscountChoThanhVien) {
+                    hoaDon.setTongTien(tongTienDiscountChoThanhVien);
                     hoaDon.setSoTienNhan(soTienNhan);
 
 //                    hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
@@ -602,21 +604,21 @@ public class FormNhanVienBanHangController implements Initializable {
 //                    this.loadALL();
                     try {
                         hoaDonService.addHoaDon(hoaDon, chiTietHoaDons);
-                        MessageBox.getBox("Question", "Thêm hóa đơn thành công", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Thêm hóa đơn thành công", Alert.AlertType.INFORMATION).show();
                         this.loadALL();
                     } catch (SQLException ex) {
-                        MessageBox.getBox("Question", "Thêm hóa đơn thất bại", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Thêm hóa đơn thất bại", Alert.AlertType.INFORMATION).show();
                         Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
-                    MessageBox.getBox("Question", "Số tiền nhận từ khách phải lớn hơn hoặc bằng tổng tiền!", Alert.AlertType.INFORMATION).show();
+                    MessageBox.getBox("Thông báo", "Số tiền nhận từ khách phải lớn hơn hoặc bằng tổng tiền!", Alert.AlertType.INFORMATION).show();
                 }
 
             } else {
-                MessageBox.getBox("Question", "Hãy chọn sản phẩm", Alert.AlertType.INFORMATION).show();
+                MessageBox.getBox("Thông báo", "Hãy chọn sản phẩm", Alert.AlertType.INFORMATION).show();
             }
         } else {
-            MessageBox.getBox("Question", "Hãy nhập số tiền nhận", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy nhập số tiền nhận", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -702,7 +704,7 @@ public class FormNhanVienBanHangController implements Initializable {
                     this.thanhVienDuocKhuyenMai = null;
                     this.txtThanhVienApDung.setText("");
                     this.btnHuyDangKyThanhVien.setDisable(true);
-                    this.txtThanhTien.setText(this.tinhTongTien() +"");
+                    this.txtThanhTien.setText(this.tinhTongTien() + "");
                 }
             }
         });

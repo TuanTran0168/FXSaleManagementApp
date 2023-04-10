@@ -306,8 +306,6 @@ public class FormQuanLyBanHangController implements Initializable {
                     String soLuong = Double.toString(chiTietHoaDon.getSoLuong());
                     double giaGoc = sanPhamService.getSanPham(Integer.toString(chiTietHoaDon.getIdSanPham()), null, null, null, null, null).get(0).getGia();
                     double giaDaGiam = chiTietHoaDon.getThanhTien() / (Double.parseDouble(soLuong));
-//                    MessageBox.getBox("CC", " " + chiTietHoaDon.getThanhTien() + soLuong, Alert.AlertType.CONFIRMATION).show();
-//                    double giaDaGiam = 5.7;
 
                     String thanhTien = Double.toString(chiTietHoaDon.getThanhTien());
                     listChiTietHoaDonHienThi.add(new ChiTietHoaDonHienThi(Integer.toString(soThuTu), idCTHD, tenSanPham, soLuong, Double.toString(giaGoc), Double.toString(giaDaGiam), thanhTien));
@@ -659,15 +657,15 @@ public class FormQuanLyBanHangController implements Initializable {
                 chiNhanhService.addChiNhanh(chiNhanh);
                 this.loadTableDataChiNhanh(this.tbChiNhanh, null);
                 this.txtChiNhanh_diaChi.setText("");
-                MessageBox.getBox("Question", "Thêm chi nhánh thành công", Alert.AlertType.INFORMATION).show();
+                MessageBox.getBox("Thông báo", "Thêm chi nhánh thành công", Alert.AlertType.INFORMATION).show();
                 this.loadALL();
             } catch (SQLException ex) {
 //                MessageBox.getBox(Boolean.toString(check), Boolean.toString(check), Alert.AlertType.CONFIRMATION).show();
-                MessageBox.getBox("Question", "Thêm chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
+                MessageBox.getBox("Thông báo", "Thêm chi nhánh thất bại", Alert.AlertType.INFORMATION).show();
                 Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -1128,7 +1126,7 @@ public class FormQuanLyBanHangController implements Initializable {
                 }
             });
         } else {
-            MessageBox.getBox("Question", "Hãy chọn khuyến mãi cần xóa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn khuyến mãi cần xóa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -1161,7 +1159,6 @@ public class FormQuanLyBanHangController implements Initializable {
             Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
-
                     if (!this.txtKhuyenMai_tenKhuyenMai.getText().isEmpty() && !this.txtKhuyenMai_giaTri.getText().isEmpty()
                             && this.dpKhuyenMai_ngayBatDau.getValue() != null && this.dpKhuyenMai_ngayKetThuc.getValue() != null) {
 
@@ -1176,10 +1173,10 @@ public class FormQuanLyBanHangController implements Initializable {
                         try {
                             khuyenMaiService.updateKhuyenMai(idKhuyenMai, tenKhuyenMai, giaTri, ngayBatDau, ngayKetThuc);
                             this.loadTableDataKhuyenMai(this.tbKhuyenMai, null);
-                            MessageBox.getBox("Question", "Cập nhật khuyến mãi thành công", Alert.AlertType.INFORMATION).show();
+                            MessageBox.getBox("Thông báo", "Cập nhật khuyến mãi thành công", Alert.AlertType.INFORMATION).show();
                             this.loadALL();
                         } catch (SQLException ex) {
-                            MessageBox.getBox("Question", "Cập nhật khuyến mãi thất bại", Alert.AlertType.INFORMATION).show();
+                            MessageBox.getBox("Thông báo", "Cập nhật khuyến mãi thất bại", Alert.AlertType.INFORMATION).show();
                             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else {
@@ -1266,15 +1263,15 @@ public class FormQuanLyBanHangController implements Initializable {
                     try {
                         sanPhamService.deleteSanPham(Integer.toString(idSanPham));
                         this.loadTableDataSanPham(this.tbSanPham, null);
-                        MessageBox.getBox("Thông báo", "Xóa khuyến mãi thành công", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Xóa sản phẩm thành công", Alert.AlertType.INFORMATION).show();
                     } catch (SQLException ex) {
-                        MessageBox.getBox("Thông báo", "Xóa khuyến mãi thất bại", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Xóa sản phẩm thất bại", Alert.AlertType.INFORMATION).show();
                         Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });
         } else {
-            MessageBox.getBox("Thông báo", "Hãy chọn khuyến mãi cần xóa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn sản phẩm cần xóa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -1324,7 +1321,7 @@ public class FormQuanLyBanHangController implements Initializable {
                             Logger.getLogger(FormQuanLyBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else {
-                        MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
                     }
                 }
             });
