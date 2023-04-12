@@ -114,6 +114,8 @@ public class FormNhanVienBanHangController implements Initializable {
         if (this.nhanVienDiemDanh == null) {
             this.btnThanhToan.setDisable(true);
             this.btnDangKyThanhVien.setDisable(true);
+            this.txtSearchSanPham.setDisable(true);
+            this.txtSearchThanhVien.setDisable(true);
         }
 
         if (this.txtThanhTien.getText().isEmpty() || this.txtThanhTien.getText().compareTo("0") == 1) {
@@ -186,6 +188,8 @@ public class FormNhanVienBanHangController implements Initializable {
             this.txtDiaChi.setText(cn.get(0).getDiaChi());
             this.btnThanhToan.setDisable(false);
             this.btnDangKyThanhVien.setDisable(false);
+            this.txtSearchSanPham.setDisable(false);
+            this.txtSearchThanhVien.setDisable(false);
             Alert a = MessageBox.getBox("Thông báo", "Điểm danh thành công! chào " + nhanVienDiemDanh.getTenNhanVien(), Alert.AlertType.CONFIRMATION);
             a.show();
 
