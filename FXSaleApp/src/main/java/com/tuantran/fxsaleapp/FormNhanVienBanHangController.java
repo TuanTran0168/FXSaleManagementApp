@@ -249,7 +249,7 @@ public class FormNhanVienBanHangController implements Initializable {
         colSoLuong.setCellValueFactory(new PropertyValueFactory("soLuongTemp"));
         colSoLuong.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         colIdChiNhanh.setCellValueFactory(new PropertyValueFactory("idChiNhanh"));
-
+        TableColumn colLuaChon = new TableColumn("Xóa");
         colSoLuong.setOnEditCommit((TableColumn.CellEditEvent<SanPham, Double> event) -> {
             SanPham sp = event.getTableView().getItems().get(event.getTablePosition().getRow());
 
@@ -257,14 +257,16 @@ public class FormNhanVienBanHangController implements Initializable {
                 sp.setSoLuongTemp(event.getNewValue());
                 this.txtThanhTien.setText(" " + this.tinhTongTien());
             } else {
-                MessageBox.getBox("Question", "Số lượng phải lớn hơn 0", Alert.AlertType.INFORMATION).show();
+                tableView.getColumns().clear();
+                MessageBox.getBox("Thông báo", "Số lượng phải lớn hơn 0", Alert.AlertType.INFORMATION).show();
                 sp.setSoLuongTemp(1);
+                tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai, colSoLuong, colIdChiNhanh);
+                
+                this.themButtonVaoTableColumnSanPhamDuocChon(tableView, colLuaChon, "Xóa");
             }
         });
 
         colSoLuong.setEditable(true);
-
-        TableColumn colLuaChon = new TableColumn("Xóa");
 
         tableView.getColumns().clear();
         tableView.getColumns().addAll(colIdSanPham, colTenSanPham, colDonVi, colGia, colIdKhuyenMai, colSoLuong, colIdChiNhanh);
@@ -628,7 +630,7 @@ public class FormNhanVienBanHangController implements Initializable {
 
     private void xuLyButtonXoaSanPham(Button button) {
         button.setOnAction(evt -> {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn xóa?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn xóa?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
                     Button btnXuLy = (Button) evt.getSource();
@@ -651,7 +653,7 @@ public class FormNhanVienBanHangController implements Initializable {
 
     private void xuLyButtonThemIdThanhVien(Button button) {
         button.setOnAction(evt -> {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn chọn?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn chọn?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
                     Button btnXuLy = (Button) evt.getSource();
@@ -701,7 +703,7 @@ public class FormNhanVienBanHangController implements Initializable {
 
     @FXML
     public void huyApDungThanhVien() {
-        Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn hủy?", Alert.AlertType.CONFIRMATION);
+        Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn hủy?", Alert.AlertType.CONFIRMATION);
         a.showAndWait().ifPresent(res -> {
             if (res == ButtonType.OK) {
                 if (this.thanhVienDuocKhuyenMai != null) {

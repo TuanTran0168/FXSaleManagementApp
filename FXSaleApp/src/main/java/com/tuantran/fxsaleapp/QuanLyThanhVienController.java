@@ -153,10 +153,10 @@ public class QuanLyThanhVienController implements Initializable {
                 try {
                     thanhVienService.addThanhVien(thanhVien);
                     this.loadTableDataThanhVien(this.tbThanhVien, null);
-                    MessageBox.getBox("Question", "Thêm thành viên thành công", Alert.AlertType.INFORMATION).show();
+                    MessageBox.getBox("Thông báo", "Thêm thành viên thành công", Alert.AlertType.INFORMATION).show();
                     this.loadALL();
                 } catch (SQLException ex) {
-                    MessageBox.getBox("Question", "Thêm thành viên thất bại", Alert.AlertType.INFORMATION).show();
+                    MessageBox.getBox("Thông báo", "Thêm thành viên thất bại", Alert.AlertType.INFORMATION).show();
                     Logger.getLogger(FormNhanVienBanHangController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
@@ -164,7 +164,7 @@ public class QuanLyThanhVienController implements Initializable {
             }
 
         } else {
-            MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -173,7 +173,7 @@ public class QuanLyThanhVienController implements Initializable {
         Object selectedObject = this.tbThanhVien.getSelectionModel().getSelectedItem();
 
         if (selectedObject != null) {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
                     ThanhVien thanhVien = (ThanhVien) selectedObject;
@@ -194,7 +194,7 @@ public class QuanLyThanhVienController implements Initializable {
                 }
             });
         } else {
-            MessageBox.getBox("Question", "Hãy chọn thành viên cần xóa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn thành viên cần xóa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -204,7 +204,7 @@ public class QuanLyThanhVienController implements Initializable {
         if (selectedObject != null) {
             ThanhVien thanhVien = (ThanhVien) selectedObject;
             if (thanhVien.getIdThanhVien() == 0) {
-                MessageBox.getBox("Question", "Bạn không được xóa giá trị này!", Alert.AlertType.INFORMATION).show();
+                MessageBox.getBox("Thông báo", "Bạn không được xóa giá trị này!", Alert.AlertType.INFORMATION).show();
             } else {
 
                 this.txtThanhVien_id.setText(Integer.toString(thanhVien.getIdThanhVien()));
@@ -215,14 +215,14 @@ public class QuanLyThanhVienController implements Initializable {
                 this.btnUpdate.setDisable(false);
             }
         } else {
-            MessageBox.getBox("Question", "Hãy chọn thành viên cần sửa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn thành viên cần sửa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
     @FXML
     public void updateThanhVien(ActionEvent evt) {
         if (!this.txtThanhVien_id.getText().isEmpty()) {
-            Alert a = MessageBox.getBox("Question", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
+            Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn sửa không?", Alert.AlertType.CONFIRMATION);
             a.showAndWait().ifPresent(res -> {
                 if (res == ButtonType.OK) {
 
@@ -269,13 +269,13 @@ public class QuanLyThanhVienController implements Initializable {
                         }
 
                     } else {
-                        MessageBox.getBox("Question", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
+                        MessageBox.getBox("Thông báo", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.INFORMATION).show();
                     }
                 }
             });
 
         } else {
-            MessageBox.getBox("Question", "Hãy chọn thành viên cần cập nhật", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn thành viên cần cập nhật", Alert.AlertType.INFORMATION).show();
         }
     }
 
