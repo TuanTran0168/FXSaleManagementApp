@@ -778,7 +778,7 @@ public class FormQuanLyBanHangController implements Initializable {
                 }
             });
         } else {
-            MessageBox.getBox("Question", "Hãy chọn chi nhánh cần xóa!", Alert.AlertType.INFORMATION).show();
+            MessageBox.getBox("Thông báo", "Hãy chọn chi nhánh cần xóa!", Alert.AlertType.INFORMATION).show();
         }
     }
 
@@ -788,7 +788,7 @@ public class FormQuanLyBanHangController implements Initializable {
         if (selectedObject != null) {
             ChiNhanh chiNhanh = (ChiNhanh) selectedObject;
             if (chiNhanh.getIdChiNhanh() == 0) {
-                MessageBox.getBox("Thông báo", "Bạn không được sửa giá trị này", Alert.AlertType.CONFIRMATION);
+                MessageBox.getBox("Thông báo", "Bạn không được sửa giá trị này", Alert.AlertType.CONFIRMATION).show();
             } else {
                 this.txtChiNhanh_diaChi.setText(chiNhanh.getDiaChi());
                 this.txtChiNhanh_id.setText(Integer.toString(chiNhanh.getIdChiNhanh()));
@@ -814,7 +814,7 @@ public class FormQuanLyBanHangController implements Initializable {
                         try {
                             chiNhanhService.updateChiNhanh(idChiNhanh, tenChiNhanhNew);
                             this.loadTableDataChiNhanh(this.tbChiNhanh, null);
-                            MessageBox.getBox("Question", "Cập nhật chi nhánh thành công", Alert.AlertType.INFORMATION).show();
+                            MessageBox.getBox("Thông báo", "Cập nhật chi nhánh thành công", Alert.AlertType.INFORMATION).show();
                             this.loadTableDataChiNhanh(this.tbChiNhanh, null);
 
                             this.loadALL();
@@ -881,7 +881,6 @@ public class FormQuanLyBanHangController implements Initializable {
     @FXML
     public void deleteNhanVien(ActionEvent evt) {
         Object selectedObject = this.tbNhanVien.getSelectionModel().getSelectedItem();
-
         if (selectedObject != null) {
 
             Alert a = MessageBox.getBox("Thông báo", "Bạn có chắc chắn muốn xóa không?", Alert.AlertType.CONFIRMATION);

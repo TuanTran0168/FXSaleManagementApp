@@ -271,12 +271,12 @@
                                                 <Insets />
                                              </HBox.margin>
                                           </TextField>
-                                          <DatePicker fx:id="dpKhuyenMai_ngayBatDau" promptText="Ngày bắt đầu" HBox.hgrow="ALWAYS">
+                                          <DatePicker fx:id="dpKhuyenMai_ngayBatDau" editable="false" promptText="Ngày bắt đầu" HBox.hgrow="ALWAYS">
                                              <HBox.margin>
                                                 <Insets left="10.0" />
                                              </HBox.margin>
                                           </DatePicker>
-                                          <DatePicker fx:id="dpKhuyenMai_ngayKetThuc" promptText="Ngày kết thúc" HBox.hgrow="ALWAYS">
+                                          <DatePicker fx:id="dpKhuyenMai_ngayKetThuc" editable="false" promptText="Ngày kết thúc" HBox.hgrow="ALWAYS">
                                              <HBox.margin>
                                                 <Insets left="10.0" />
                                              </HBox.margin>
