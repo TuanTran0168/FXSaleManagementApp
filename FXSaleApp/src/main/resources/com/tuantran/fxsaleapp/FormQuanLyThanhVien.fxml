@@ -61,7 +61,7 @@
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin></Label>
-                              <DatePicker fx:id="dpThanhVien_ngaySinh" maxWidth="1.7976931348623157E308" promptText="Nhập ngày sinh..." HBox.hgrow="ALWAYS" />
+                              <DatePicker fx:id="dpThanhVien_ngaySinh" editable="false" maxWidth="1.7976931348623157E308" promptText="Nhập ngày sinh..." HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox prefHeight="95.0" prefWidth="200.0">
