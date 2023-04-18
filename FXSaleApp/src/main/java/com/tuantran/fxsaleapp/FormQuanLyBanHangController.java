@@ -289,8 +289,8 @@ public class FormQuanLyBanHangController implements Initializable {
 
                 this.txtHoaDon_maHoaDon.setText(Integer.toString(hoaDon.getIdHoaDon()));
                 this.dpHoaDon_ngayCT.setValue(hoaDon.getNgayCT().toLocalDate());
-                this.txtHoaDon_tenNhanVien.setText(nhanVien.getTenNhanVien());
-                this.txtHoaDon_tenThanhVien.setText(thanhVien.getTenThanhVien());
+                this.txtHoaDon_tenNhanVien.setText(nhanVien.getHoNhanVien() + " " + nhanVien.getTenNhanVien());
+                this.txtHoaDon_tenThanhVien.setText(thanhVien.getHoThanhVien() + " " + thanhVien.getTenThanhVien());
                 this.txtHoaDon_chiNhanh.setText(chiNhanh.getDiaChi());
 
                 this.txtHoaDon_tongTien.setText(Double.toString(hoaDon.getTongTien()));

@@ -66,9 +66,9 @@ public class HoaDonTester {
     public void testAddSuccessful() throws SQLException {
         List<HoaDon> listHoaDon = hoaDonService.getHoaDon(null);
         int idHoaDon = listHoaDon.get(listHoaDon.size() - 1).getIdHoaDon() + 1;
-        int idNhanVien = 1;
+        int idNhanVien = 2;
         int idChiNhanh = 1;
-        int idThanhVien = 1;
+        int idThanhVien = 0;
         double tongTien;
         int soTienNhan = 999999;
         Date ngayCT = Date.valueOf(LocalDate.now());
@@ -141,12 +141,12 @@ public class HoaDonTester {
 
     @Test
     public void testSearchHoaDon_byTongTien() throws SQLException {
-        String keyword_tongTien = "20000";
+        String keyword_tongTien = "9999999999";
         List<HoaDon> hoaDons = hoaDonService.getHoaDon(keyword_tongTien);
         hoaDons.sort((hd1, hd2) -> (int)(hd1.getTongTien() - hd2.getTongTien()) );
 
         System.err.println("size cua List = " + hoaDons.size());
-        Assertions.assertEquals(21, hoaDons.size());
+        Assertions.assertEquals(1, hoaDons.size());
         
        for (HoaDon hoaDon : hoaDons) {
            System.err.println("Tong tien = " + hoaDon.getTongTien());

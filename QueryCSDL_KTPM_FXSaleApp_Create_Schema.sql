@@ -37,7 +37,7 @@ CREATE TABLE `chinhanh` (
 
 LOCK TABLES `chinhanh` WRITE;
 /*!40000 ALTER TABLE `chinhanh` DISABLE KEYS */;
-INSERT INTO `chinhanh` VALUES (0,'Không có chi nhánh'),(1,'371 Nguyễn Kiệm, Q. Gò Vấp, TP. Hồ Chí Minh'),(2,'97 Võ Văn Tần, Q. 3, TP. Hồ Chí Minh'),(3,'35 Hồ Hảo Hớn, Q. 1, TP. Hồ Chí Minh'),(4,'101 Nguyễn Hiền, Q. Hai Bà Trưng, TP. Hà Nội'),(5,'99 Hùng Vương, Q. Hải Châu, TP. Đà Nẵng');
+INSERT INTO `chinhanh` VALUES (0,'Không có chi nhánh'),(1,'371 Nguyễn Kiệm, Q. Gò Vấp, TP. Hồ Chí Minh'),(2,'97 Võ Văn Tần, Q. 3, TP. Hồ Chí Minh'),(3,'35 Hồ Hảo Hớn, Q. 1, TP. Hồ Chí Minh'),(4,'101 Nguyễn Hiền, Q. Hai Bà Trưng, TP. Hà Nội'),(5,'99 Hùng Vương, Q. Hải Châu, TP. Đà Nẵng'),(6,'Texas, USA'),(7,'California, USA'),(8,'Florida, USA'),(9,'Kyoto, Japan'),(10,'Osaka, Japan');
 /*!40000 ALTER TABLE `chinhanh` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -68,7 +68,7 @@ CREATE TABLE `chitiethoadon` (
 
 LOCK TABLES `chitiethoadon` WRITE;
 /*!40000 ALTER TABLE `chitiethoadon` DISABLE KEYS */;
-INSERT INTO `chitiethoadon` VALUES (1,1,1,2,400000),(2,2,2,6,960000),(3,7,2,5,700000),(4,22,2,2,120000),(5,32,2,1,6000),(6,32,3,8,48000),(7,37,3,1,34000),(8,22,3,5,300000),(9,7,3,7,980000),(10,2,3,3,480000),(11,2,4,1,160000),(12,17,5,6,840000),(13,22,5,5,300000),(14,2,5,1,160000),(15,5,6,3,42000),(16,10,6,5,520000),(17,14,6,8,224000),(18,20,6,9,189000),(19,25,6,2,4000),(20,35,7,10,300000),(21,39,7,10,1080000),(22,20,7,1,21000),(23,8,8,1,86000),(24,15,8,6,84000),(25,19,8,5,50000),(26,24,8,5,540000),(27,34,8,2,760000),(28,30,8,9,0),(29,4,8,1,84000),(30,4,9,9,756000),(31,8,9,6,516000),(32,15,9,1,14000),(33,19,9,5,50000);
+INSERT INTO `chitiethoadon` VALUES (1,1,1,2,400000),(2,2,2,6,960000),(3,7,2,5,700000),(4,22,2,2,120000),(5,32,2,1,6000),(6,32,3,8,48000),(7,37,3,1,34000),(8,22,3,5,300000),(9,7,3,7,980000),(10,2,3,3,480000),(11,2,4,1,160000),(12,17,5,6,840000),(13,22,5,5,300000),(14,2,5,1,160000),(15,5,6,3,42000),(16,10,6,5,520000),(17,14,6,8,224000),(18,20,6,9,189000),(19,25,6,2,4000),(20,35,7,10,300000),(21,39,7,10,1080000),(22,20,7,1,21000),(23,8,8,1,86000),(24,15,8,6,84000),(25,19,8,5,50000),(26,24,8,5,540000),(27,34,8,2,760000),(28,30,8,9,0),(29,4,8,1,84000),(30,4,9,9,756000),(31,8,9,6,516000),(32,15,9,1,14000),(33,19,9,5,50000),(34,1,1,2,999999),(35,1,10,2,212000),(36,2,10,2,380000),(37,3,10,2,56000);
 /*!40000 ALTER TABLE `chitiethoadon` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,7 +103,7 @@ CREATE TABLE `hoadon` (
 
 LOCK TABLES `hoadon` WRITE;
 /*!40000 ALTER TABLE `hoadon` DISABLE KEYS */;
-INSERT INTO `hoadon` VALUES (1,1,1,1,120000,150000,'2022-03-22'),(2,2,2,1,1786000,3000000,'2023-04-15'),(3,2,2,1,1842000,2000000,'2023-04-15'),(4,2,2,1,160000,200000,'2023-04-15'),(5,2,2,9,1300000,9000000,'2023-04-15'),(6,5,5,6,979000,1000000,'2023-04-15'),(7,5,5,15,1260900,1300000,'2023-04-15'),(8,9,4,0,1604000,1700000,'2023-04-15'),(9,9,4,0,1336000,1400000,'2023-04-15');
+INSERT INTO `hoadon` VALUES (1,1,1,1,120000,150000,'2022-03-22'),(2,2,2,1,1786000,3000000,'2023-04-15'),(3,2,2,1,1842000,2000000,'2023-04-15'),(4,2,2,1,160000,200000,'2023-04-15'),(5,2,2,9,1300000,9000000,'2023-04-15'),(6,5,5,6,979000,1000000,'2023-04-15'),(7,5,5,15,1260900,1300000,'2023-04-15'),(8,9,4,0,1604000,1700000,'2023-04-15'),(9,9,4,0,1336000,1400000,'2023-04-15'),(10,2,1,0,9999999999,999999,'2023-04-18');
 /*!40000 ALTER TABLE `hoadon` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,7 +130,7 @@ CREATE TABLE `khuyenmai` (
 
 LOCK TABLES `khuyenmai` WRITE;
 /*!40000 ALTER TABLE `khuyenmai` DISABLE KEYS */;
-INSERT INTO `khuyenmai` VALUES (0,'Không có khuyến mãi',0,'1000-01-01','1000-01-01'),(1,'Giảm 10%',10000,'2023-01-19','2023-02-23'),(2,'Giảm 15%',15000,'2023-02-02','2023-03-29'),(3,'Giảm 20%',40000,'2023-03-15','2023-04-22'),(4,'Giảm 25%',20000,'2023-04-10','2023-05-02'),(5,'Giảm 30%',60000,'2023-04-01','2023-04-24'),(6,'Giảm 35%',80000,'2023-06-06','2023-06-24'),(7,'Giảm 40%',35000,'2023-07-05','2023-08-28'),(8,'Giảm 45%',30000,'2023-03-18','2023-04-17'),(9,'Giảm 50%',90000,'2023-10-15','2023-11-20'),(10,'Giảm 55%',50000,'2023-11-11','2023-12-24'),(11,'Giảm  60%',100000,'2023-03-31','2023-04-30');
+INSERT INTO `khuyenmai` VALUES (0,'Không có khuyến mãi',0,'1000-01-01','1000-01-01'),(1,'Tết Đoàn Viên',10000,'2023-01-19','2023-02-23'),(2,'Lễ Tình Nhân',15000,'2023-02-02','2023-03-29'),(3,'Quốc Tế Phụ Nữ',40000,'2023-03-15','2023-04-22'),(4,'Tuần Lễ Vàng',20000,'2023-04-10','2023-05-02'),(5,'Tháng 4 Là Lời Nói Dối Của Em',60000,'2023-04-01','2023-04-24'),(6,'Quốc Tế Thiếu Nhi',80000,'2023-06-06','2023-06-24'),(7,'Lễ Thất Tịch',35000,'2023-07-05','2023-08-28'),(8,'Giờ Trái Đất',30000,'2023-03-18','2023-04-17'),(9,'Phụ Nữ Việt Nam',90000,'2023-10-15','2023-11-20'),(10,'Nhà Giáo Việt Nam',50000,'2023-11-11','2023-12-24'),(11,'Thích Là Giảm',100000,'2023-03-31','2023-04-30'),(12,'Hello World',15000,'2023-04-01','2023-04-30'),(13,'ArrayList',25000,'2023-04-18','2023-05-01'),(14,'ListView',35000,'2023-04-08','2023-05-31'),(15,'TableView',45000,'2023-05-10','2023-06-01'),(16,'DataGridView',9999,'2023-03-01','2023-03-05'),(17,'Khuyen Mai UnitTest By Tuan Tran 17',8888888,'2023-04-28','2023-05-17');
 /*!40000 ALTER TABLE `khuyenmai` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,7 +162,7 @@ CREATE TABLE `nhanvien` (
 
 LOCK TABLES `nhanvien` WRITE;
 /*!40000 ALTER TABLE `nhanvien` DISABLE KEYS */;
-INSERT INTO `nhanvien` VALUES (1,'Dương Hữu',' Thành',1,'thanh','1',1),(2,'Trần Đăng',' Tuấn',2,'tuan','1',0),(3,'Nguyễn Thanh',' Hải',3,'hai','1',0),(4,'Hoàng Thị Thúy',' Quỳnh',4,'quynh','1',0),(5,'Bạch Thị Cẩm',' Tú',5,'tu','1',0),(6,'Nguyễn Thùy',' Chi',1,'chi','1',0),(7,'Cao Quốc',' Bảo',2,'bao','1',0),(8,'Mai Kim',' Trí',3,'tri','1',0),(9,'Lê Thị Huỳnh',' Như',4,'nhu','1',0),(10,'Nguyễn Vũ Diễm',' My',5,'my','1',0),(11,'Ngô Bá',' Khá',1,'kha','1',1),(12,'Thái Thị Thanh',' Nga',2,'nga','1',0),(13,'Lê Hoài',' Việt',3,'viet','1',0),(14,'Võ Minh',' Hiếu',4,'hieu','1',0),(15,'Nguyễn Văn',' Bảy',5,'bay','1',0);
+INSERT INTO `nhanvien` VALUES (1,'Dương Hữu',' Thành',1,'thanh','1',1),(2,'Trần Đăng',' Tuấn',2,'tuan','1',0),(3,'Nguyễn Thanh',' Hải',3,'hai','1',0),(4,'Hoàng Thị Thúy',' Quỳnh',4,'quynh','1',0),(5,'Bạch Thị Cẩm',' Tú',5,'tu','1',0),(6,'Nguyễn Thùy',' Chi',1,'chi','1',0),(7,'Cao Quốc',' Bảo',2,'bao','1',0),(8,'Mai Kim',' Trí',3,'tri','1',0),(9,'Lê Thị Huỳnh',' Như',4,'nhu','1',0),(10,'Nguyễn Vũ Diễm',' My',5,'my','1',0),(11,'Ngô Bá',' Khá',1,'kha','1',1),(12,'Thái Thị Thanh',' Nga',2,'nga','1',0),(13,'Lê Hoài',' Việt',3,'viet','1',0),(14,'Võ Minh',' Hiếu',4,'hieu','1',0),(15,'Nguyễn Văn',' Bảy',5,'bay','1',0),(16,'Kamisato','Ayaka',9,'ayaka','1',0),(17,'Kamisato','Ayato',10,'ayato','1',0),(18,'Kamisato','Asuka',6,'asuka','1',0);
 /*!40000 ALTER TABLE `nhanvien` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +194,7 @@ CREATE TABLE `sanpham` (
 
 LOCK TABLES `sanpham` WRITE;
 /*!40000 ALTER TABLE `sanpham` DISABLE KEYS */;
-INSERT INTO `sanpham` VALUES (1,'Ức gà phi lê',106000,'kg',8,1),(2,'Tôm càng xanh',190000,'kg',8,2),(3,'Trứng gà Happy Egg',28000,'hộp 10 quả',NULL,3),(4,'Phô mai que sữa',84000,'gói',7,4),(5,'Nấm bào ngư trắng',14000,'hộp',6,5),(6,'Thanh long đỏ',48000,'kg',NULL,1),(7,'Dầu đậu nhà Simply',140000,'chai 2 lít',9,2),(8,'Hạt nêm Knor',86000,'gói 900g',NULL,4),(9,'Kem khoai môn Vinamilk',82000,'hộp 500g',4,3),(10,'Gạo thơm lài',104000,'túi 5kg',2,5),(11,'Mì lẫu thái tôm',180000,'thùng 24 ly',5,1),(12,'Strongbow dâu đen',390000,'thùng 24 lon',10,2),(13,'Coca cola Zero',132000,'thùng 24 chai',9,3),(14,'Trà hoa cúc green',28000,'hộp',NULL,5),(15,'TH true water',14000,'hộp',7,4),(16,'Sữa bột Anlene',420000,'lon',6,1),(17,'Dầu gội Rejoice',200000,'chai',5,2),(18,'Nước giặt Downy',86000,'gói',NULL,3),(19,'Kem đánh răng Closeup',30000,'hộp',4,4),(20,'Xúc xích heo Ponnie',21000,'gói',NULL,5),(21,'Kim chi cải thảo',23000,'gói',NULL,1),(22,'Chả mực Hạ Long',80000,'gói',4,2),(23,'Cá ngừ đại dương',166000,'kg',6,3),(24,'Cafe phố',108000,'gói',7,4),(25,'Bông cải trắng',62000,'kg',5,5),(26,'Snack tôm hùm',50000,'lon',11,1),(27,'Nước tương Chinsu',19000,'chai',NULL,2),(28,'String gold',180000,'thùng 24 lon',4,3),(29,'Nước lau sàn Sunlight',64000,'chai',4,5),(30,'Lotte Xylitol Mint',34000,'hộp',11,4),(31,'Kitkat matcha',52000,'gói',NULL,1),(32,'Cơm nắm mayo',26000,'gói',4,2),(33,'Bánh caro hoàng kim',70000,'túi',6,3),(34,'Bia tiger crystal',380000,'thùng 24 lon',7,4),(35,'Pizza phô mai',90000,'hộp',5,5),(36,'Bánh bao trứng muối',58000,'gói',11,1),(37,'Váng sữa monte',34000,'lốc',NULL,2),(38,'Chân gà rút xương',120000,'gói',4,3),(39,'Kem chống nắng sunplay',128000,'hộp',4,5),(40,'Ô gấp Improok',150000,'chiếc',3,1);
+INSERT INTO `sanpham` VALUES (1,'Ức gà phi lê',106000,'kg',8,1),(2,'Tôm càng xanh',190000,'kg',8,2),(3,'Trứng gà Happy Egg',28000,'hộp 10 quả',0,3),(4,'Phô mai que sữa',84000,'gói',7,4),(5,'Nấm bào ngư trắng',14000,'hộp',6,5),(6,'Thanh long đỏ',48000,'kg',0,1),(7,'Dầu đậu nành Simply',140000,'chai 2 lít',9,2),(8,'Hạt nêm Knor',86000,'gói 900g',0,4),(9,'Kem khoai môn Vinamilk',82000,'hộp 500g',4,3),(10,'Gạo thơm lài',104000,'túi 5kg',2,5),(11,'Mì lẫu thái tôm',180000,'thùng 24 ly',5,1),(12,'Strongbow dâu đen',390000,'thùng 24 lon',10,2),(13,'Coca cola Zero',132000,'thùng 24 chai',9,3),(14,'Trà hoa cúc green',28000,'hộp',0,5),(15,'TH true water',14000,'hộp',7,4),(16,'Sữa bột Anlene',420000,'lon',6,1),(17,'Dầu gội Rejoice',200000,'chai',5,2),(18,'Nước giặt Downy',86000,'gói',0,3),(19,'Kem đánh răng Closeup',30000,'hộp',4,4),(20,'Xúc xích heo Ponnie',21000,'gói',0,5),(21,'Kim chi cải thảo',23000,'gói',0,1),(22,'Chả mực Hạ Long',80000,'gói',4,2),(23,'Cá ngừ đại dương',166000,'kg',6,3),(24,'Cafe phố',108000,'gói',7,4),(25,'Bông cải trắng',62000,'kg',5,5),(26,'Snack tôm hùm',50000,'lon',11,1),(27,'Nước tương Chinsu',19000,'chai',0,2),(28,'String gold',180000,'thùng 24 lon',4,3),(29,'Nước lau sàn Sunlight',64000,'chai',4,5),(30,'Lotte Xylitol Mint',34000,'hộp',11,4),(31,'Kitkat matcha',52000,'gói',0,1),(32,'Cơm nắm mayo',26000,'gói',4,2),(33,'Bánh caro hoàng kim',70000,'túi',6,3),(34,'Bia tiger crystal',380000,'thùng 24 lon',7,4),(35,'Pizza phô mai',90000,'hộp',5,5),(36,'Bánh bao trứng muối',58000,'gói',11,1),(37,'Váng sữa monte',34000,'lốc',0,2),(38,'Chân gà rút xương',120000,'gói',4,3),(39,'Kem chống nắng sunplay',128000,'hộp',4,5),(40,'Ô gấp Improok',150000,'chiếc',3,1),(41,'TH true tea',25000,'chai',8,2),(42,'TH true beer',30000,'chai',1,2),(43,'TH true milk',10000,'chai',16,2),(44,'TH true coffee',30000,'chai',12,2);
 /*!40000 ALTER TABLE `sanpham` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +222,7 @@ CREATE TABLE `thanhvien` (
 
 LOCK TABLES `thanhvien` WRITE;
 /*!40000 ALTER TABLE `thanhvien` DISABLE KEYS */;
-INSERT INTO `thanhvien` VALUES (0,'NULL NULL',' NULL','1900-01-01','0000000000'),(1,'Nguyễn Lệ Nam',' Em','1996-01-15','0123456789'),(2,'Nguyễn Thị Thanh',' Thảo','2002-01-03','0987654321'),(3,'Hồ Quỳnh',' Hương','1980-10-16','0912345678'),(4,'Dương Hoàng',' Yến','1991-06-15','0999999999'),(5,'Võ Vũ Trường',' Giang','1983-04-20','0966666666'),(6,'Lý Huỳnh',' My','1994-11-26','0933333333'),(7,'Huỳnh Tấn',' Đạt','1993-07-17','0977777777'),(8,'Đặng Thu',' Hà','2000-11-15','09667898989'),(9,'Lê Thành',' Dương','1988-07-05','0944444444'),(10,'Đàm Vĩnh',' Hưng','1971-10-02','0911111111'),(11,'Mai Thị Tuyết',' Trinh','1992-04-04','0211111111'),(12,'Nguyễn Cao Thảo',' Nguyên','2002-09-04','0466666666'),(13,'Nguyễn Tiến',' Đạt','1965-08-26','0522222222'),(14,'Nguyễn Thị Mộng',' Tuyền','1974-11-28','0788888888'),(15,'Lâm Tâm',' Như','1978-04-15','0399999999');
+INSERT INTO `thanhvien` VALUES (0,'NULL NULL',' NULL','1900-01-01','0000000000'),(1,'Nguyễn Lệ Nam',' Em','1996-01-15','0123456789'),(2,'Trần Thị Thu',' Thảo','2002-01-03','0987654321'),(3,'Hồ Quỳnh',' Hương','1980-10-16','0912345678'),(4,'Dương Hoàng',' Yến','1991-06-15','0999999999'),(5,'Võ Vũ Trường',' Giang','1983-04-20','0966666666'),(6,'Lý Huỳnh',' My','1994-11-26','0933333333'),(7,'Huỳnh Tấn',' Đạt','1993-07-17','0977777777'),(8,'Đặng Thu',' Hà','2000-11-15','09667898989'),(9,'Lê Thành',' Dương','1988-07-05','0944444444'),(10,'Đàm Vĩnh',' Hưng','1971-10-02','0911111111'),(11,'Mai Thị Tuyết',' Trinh','1992-04-04','0211111111'),(12,'Nguyễn Cao Thảo',' Nguyên','2002-09-04','0466666666'),(13,'Nguyễn Tiến',' Đạt','1965-08-26','0522222222'),(14,'Nguyễn Thị Mộng',' Tuyền','1974-11-28','0788888888'),(15,'Lâm Tâm',' Như','1978-04-15','0399999999'),(16,'Raiden','Shogun','1978-04-15','2051050549'),(17,'Raiden','Makoto','1978-04-15','0211153333'),(18,'Son','Goku','1965-08-26','2051055555'),(19,'Son','Goten','1974-11-28','0123129312'),(20,'Son','Gohan','1974-11-28','0128129182'),(21,'Ve','Geta','1992-04-04','0129382231'),(22,'Tran Dang 22','Tuan UnitTest 22','2023-04-28','222051050549');
 /*!40000 ALTER TABLE `thanhvien` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -235,4 +235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-15 16:57:22
+-- Dump completed on 2023-04-18 17:20:12
