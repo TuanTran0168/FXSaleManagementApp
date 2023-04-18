@@ -50,11 +50,9 @@ public class ChiNhanhTester {
     public void testAddSuccessful() throws SQLException {
         List<ChiNhanh> listChiNhanh = chiNhanhService.getChiNhanhs(null, null);
         int idChiNhanh = listChiNhanh.get(listChiNhanh.size() - 1).getIdChiNhanh() + 1;
-        String diaChi = "DƯƠNG HỮU THÀNH " + idChiNhanh;
+        String diaChi = "Chi Nhánh UnitTest " + idChiNhanh;
         ChiNhanh chiNhanh = new ChiNhanh(idChiNhanh, diaChi);
 
-//        boolean check = true;
-//        Assertions.assertTrue(check);
         try {
             boolean check = chiNhanhService.addChiNhanh(chiNhanh);
             Assertions.assertTrue(check);
@@ -69,6 +67,8 @@ public class ChiNhanhTester {
 
             Assertions.assertEquals(diaChi, rs.getString("dia_chi"));
 
+            chiNhanhService.deleteChiNhanh(Integer.toString(idChiNhanh));
+
         } catch (SQLException ex) {
             Logger.getLogger(ChiNhanhTester.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -77,12 +77,12 @@ public class ChiNhanhTester {
     @Test
     public void testSearchChiNhanh_byDiaChi() throws SQLException {
 //        String keyword_diaChi = "PHÃš NHUáº¬N";
-        String keyword_diaChi = "TEST";
+        String keyword_diaChi = "USA";
 
         List<ChiNhanh> chiNhanhs = chiNhanhService.getChiNhanhs(null, keyword_diaChi);
 
         System.err.println("size cua List = " + chiNhanhs.size());
-        Assertions.assertEquals(18, chiNhanhs.size());
+        Assertions.assertEquals(3, chiNhanhs.size());
 
         for (ChiNhanh chiNhanh : chiNhanhs) {
             System.err.println(chiNhanh.getDiaChi());
@@ -92,7 +92,7 @@ public class ChiNhanhTester {
 
     @Test
     public void testSearchChiNhanh_byId() throws SQLException {
-        String keyword_id = "5";
+        String keyword_id = "6";
         List<ChiNhanh> chiNhanhs = chiNhanhService.getChiNhanhs(keyword_id, null);
 
         System.err.println("size cua List = " + chiNhanhs.size());
@@ -102,8 +102,12 @@ public class ChiNhanhTester {
     }
 
     @Test
-    public void testDelete() {
-        String keyword_id = "36";
+    public void testDelete() throws SQLException {
+        List<ChiNhanh> listChiNhanh = chiNhanhService.getChiNhanhs(null, null);
+        String keyword_id = Integer.toString(listChiNhanh.get(listChiNhanh.size() - 1).getIdChiNhanh() + 1);
+
+        chiNhanhService.addChiNhanh(new ChiNhanh(Integer.parseInt(keyword_id), "Địa Chỉ UnitTest"));
+
         boolean check;
         try {
             check = chiNhanhService.deleteChiNhanh(keyword_id);
@@ -120,21 +124,25 @@ public class ChiNhanhTester {
     }
 
     @Test
-    public void testUpdateSuccessful() {
-        String id = "35";
-        String tenChiNhanhNew = "TRẦN ĐĂNG TUẤN";
+    public void testUpdateSuccessful() throws SQLException {
+        List<ChiNhanh> listChiNhanh = chiNhanhService.getChiNhanhs(null, null);
+        String keyword_id = Integer.toString(listChiNhanh.get(listChiNhanh.size() - 1).getIdChiNhanh() + 1);
+        chiNhanhService.addChiNhanh(new ChiNhanh(Integer.parseInt(keyword_id), "Địa Chỉ UnitTest"));
+        String tenChiNhanhNew = "Địa Chỉ UnitTest By Tuấn Trần";
         boolean check;
         try {
-            check = chiNhanhService.updateChiNhanh(id, tenChiNhanhNew);
+            check = chiNhanhService.updateChiNhanh(keyword_id, tenChiNhanhNew);
             Assertions.assertTrue(check);
 
             String query = "SELECT * FROM ChiNhanh WHERE id_chi_nhanh = ?";
             PreparedStatement stm = conn.prepareCall(query);
-            stm.setString(1, id);
+            stm.setString(1, keyword_id);
             ResultSet rs = stm.executeQuery();
             Assertions.assertNotNull(rs.next());
             System.err.println("Dia chi moi = " + rs.getString("dia_chi"));
             Assertions.assertEquals(tenChiNhanhNew, rs.getString("dia_chi"));
+
+            chiNhanhService.deleteChiNhanh(keyword_id);
 
         } catch (SQLException ex) {
             Logger.getLogger(ChiNhanhTester.class.getName()).log(Level.SEVERE, null, ex);

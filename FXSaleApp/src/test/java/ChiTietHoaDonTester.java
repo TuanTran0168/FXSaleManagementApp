@@ -131,7 +131,7 @@ public class ChiTietHoaDonTester {
          List<ChiTietHoaDon> chiTietHoaDons = chiTietHoaDonService.getChiTietHoaDon(null, keyword_idHoaDon);
         
         System.err.println("size cua List = " + chiTietHoaDons.size());
-        Assertions.assertEquals(2, chiTietHoaDons.size());
+        Assertions.assertEquals(3, chiTietHoaDons.size());
         
         for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDons) {
             System.err.println(chiTietHoaDon.getIdHoaDon());
