@@ -953,7 +953,7 @@ public class FormQuanLyBanHangController implements Initializable {
 
             this.cbChiNhanh_NhanVien.setValue(chiNhanh.get(0)); // Chỗ này ảo ma???? Khi vừa loaddAll xong thì lần đầu nó k hiển thị đc value
             this.cbNhanVien.setValue(loaiNhanVien);
-            MessageBox.getBox(loaiNhanVien, chiNhanh.get(0).getIdChiNhanh() + chiNhanh.get(0).getDiaChi(), Alert.AlertType.CONFIRMATION).show();
+//            MessageBox.getBox(loaiNhanVien, chiNhanh.get(0).getIdChiNhanh() + chiNhanh.get(0).getDiaChi(), Alert.AlertType.CONFIRMATION).show();
             this.btnUpdateNhanVien.setDisable(false);
         } else {
             MessageBox.getBox("Thông báo", "Hãy chọn nhân viên cần sửa!", Alert.AlertType.INFORMATION).show();
